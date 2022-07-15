@@ -1,28 +1,31 @@
-import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:render/amplify.dart';
 import 'package:render/auth_model.dart';
+import 'package:render/models/user.dart';
 // Pages (Screens)
 import 'package:render/home.dart';
 import 'package:render/login.dart';
 
-class RenderApp extends HookWidget {
+class RenderApp extends HookConsumerWidget {
   const RenderApp({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     // Default status bar to 'light'
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
-    final user = useState(AuthUser(userId: "", username: ""));
+    final user = ref.watch(userProvider);
+    final setCurrentUser = ref.read(userProvider.notifier).setCurrentUser;
     final isLoading = useState(true);
+    final userId = user.authUser?.userId ?? '';
 
     Future<void> _init() async {
       await RenderAmplify.configure();
-      final result = await AuthModel.getCurrentUser();
-      if (result.userId.isNotEmpty) {
-        user.value = result;
+      final authUser = await AuthModel.getCurrentUser();
+      if (authUser.userId.isNotEmpty) {
+        setCurrentUser(RenderUser(authUser: authUser));
       }
       isLoading.value = false;
     }
@@ -39,12 +42,10 @@ class RenderApp extends HookWidget {
       debugShowCheckedModeBanner: false,
       home: (isLoading.value)
           ? const Center(child: CircularProgressIndicator())
-          : (user.value.userId.isEmpty)
+          : (userId.isEmpty)
               ? const LoginScreen()
               : const HomeScreen(),
       onGenerateRoute: (settings) {
-        debugPrint("${user.value.userId.isEmpty} ${settings.name}");
-
         switch (settings.name) {
           default:
             return MaterialPageRoute(

@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:render/auth_model.dart';
+import 'package:render/models/user.dart';
 
-class RenderDrawer extends StatelessWidget {
+class RenderDrawer extends HookConsumerWidget {
   const RenderDrawer({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final clearUser = ref.read(userProvider.notifier).clearUser;
+
     return SizedBox(
         width: MediaQuery.of(context).size.width,
         child: Drawer(
@@ -20,7 +24,8 @@ class RenderDrawer extends StatelessWidget {
                 // Logout
                 TextButton(
                     onPressed: () {
-                      AuthModel.logout();
+                      AuthModel.logout()
+                          .then((value) => {if (value) clearUser()});
                     },
                     child: const Text("LOGOUT",
                         style: TextStyle(

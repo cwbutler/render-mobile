@@ -27,7 +27,7 @@
          <dict>
              <key>CFBundleURLSchemes</key>
              <array>
-                 <string>render://</string>
+                 <string>render</string>
              </array>
          </dict>
      </array>

@@ -30,7 +30,7 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name="com.amplifyframework.auth.cognito.activities.HostedUIRedirectActivity">
+        <activity android:exported="true" android:name="com.amplifyframework.auth.cognito.activities.HostedUIRedirectActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />

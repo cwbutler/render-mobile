@@ -1,7 +1,9 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:amplify_flutter/amplify_flutter.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:render/auth_model.dart';
+import 'package:render/models/user.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -26,19 +28,16 @@ class LoginScreen extends StatelessWidget {
   }
 }
 
-class LoginBody extends StatelessWidget {
+class LoginBody extends HookConsumerWidget {
   const LoginBody({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final setCurrentUser = ref.read(userProvider.notifier).setCurrentUser;
+
     Future<void> signInWithGoogle() async {
-      try {
-        final result =
-            await Amplify.Auth.signInWithWebUI(provider: AuthProvider.google);
-        debugPrint('Result: ${result.toString()}');
-      } on AmplifyException catch (e) {
-        debugPrint(e.message);
-      }
+      final authUser = await AuthModel.signInWithGoogle();
+      setCurrentUser(RenderUser(authUser: authUser));
     }
 
     return SafeArea(
