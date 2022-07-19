@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:render/auth_model.dart';
-import 'package:render/models/user.dart';
+import 'package:render/models/auth.dart';
 
 class RenderDrawer extends HookConsumerWidget {
   const RenderDrawer({Key? key}) : super(key: key);

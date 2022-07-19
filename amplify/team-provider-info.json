@@ -14,6 +14,22 @@
     "categories": {
       "auth": {
         "render": {}
+      },
+      "function": {
+        "addRenderUser": {
+          "airtableApiKey": "keygh9rYVmOMPYc35",
+          "deploymentBucketName": "amplify-render-dev-134928-deployment",
+          "s3Key": "amplify-builds/addRenderUser-4a6f7162574964616736-build.zip"
+        },
+        "getRenderUser": {
+          "airtableApiKey": "keygh9rYVmOMPYc35",
+          "deploymentBucketName": "amplify-render-dev-134928-deployment",
+          "s3Key": "amplify-builds/getRenderUser-7258377a59584f654c63-build.zip"
+        },
+        "renderutils": {
+          "deploymentBucketName": "amplify-render-dev-134928-deployment",
+          "s3Key": "amplify-builds/renderutils-LambdaLayerVersion5ecd12a0-build.zip"
+        }
       }
     }
   }

@@ -4,7 +4,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:render/amplify.dart';
 import 'package:render/auth_model.dart';
-import 'package:render/models/user.dart';
+import 'package:render/models/auth.dart';
 // Pages (Screens)
 import 'package:render/home.dart';
 import 'package:render/login.dart';

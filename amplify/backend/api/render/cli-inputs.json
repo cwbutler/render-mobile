@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "serviceConfiguration": {
+    "apiName": "render",
+    "serviceName": "AppSync",
+    "gqlSchemaPath": "/Users/cwbutler/Projects/render/amplify/backend/api/render/schema.graphql",
+    "defaultAuthType": {
+      "mode": "API_KEY",
+      "expirationTime": 365,
+      "apiKeyExpirationDate": "2023-07-15T16:57:21.217Z",
+      "keyDescription": "Render graph api key"
+    },
+    "additionalAuthTypes": [
+      {
+        "mode": "AMAZON_COGNITO_USER_POOLS",
+        "cognitoUserPoolId": "authrender"
+      }
+    ]
+  }
+}
