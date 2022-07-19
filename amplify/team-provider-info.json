@@ -19,7 +19,7 @@
         "addRenderUser": {
           "airtableApiKey": "keygh9rYVmOMPYc35",
           "deploymentBucketName": "amplify-render-dev-134928-deployment",
-          "s3Key": "amplify-builds/addRenderUser-4a6f7162574964616736-build.zip"
+          "s3Key": "amplify-builds/addRenderUser-2f667162523045793467-build.zip"
         },
         "getRenderUser": {
           "airtableApiKey": "keygh9rYVmOMPYc35",
