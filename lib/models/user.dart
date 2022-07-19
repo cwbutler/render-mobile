@@ -26,7 +26,7 @@ import 'package:flutter/foundation.dart';
 /** This is an auto generated class representing the User type in your schema. */
 @immutable
 class User {
-  final String id;
+  final String? _cognito_id;
   final String? _first_name;
   final String? _last_name;
   final String? _email;
@@ -40,6 +40,19 @@ class User {
   final TemporalDateTime? _createdAt;
   final TemporalDateTime? _modifiedAt;
 
+  String get cognito_id {
+    try {
+      return _cognito_id!;
+    } catch(e) {
+      throw new AmplifyCodeGenModelException(
+          AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion:
+            AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString()
+          );
+    }
+  }
+  
   String? get first_name {
     return _first_name;
   }
@@ -88,11 +101,11 @@ class User {
     return _modifiedAt;
   }
   
-  const User._internal({required this.id, first_name, last_name, email, phone, linkedin_profile, website, resume_url, profile_picture, createdBy, modifiedBy, createdAt, modifiedAt}): _first_name = first_name, _last_name = last_name, _email = email, _phone = phone, _linkedin_profile = linkedin_profile, _website = website, _resume_url = resume_url, _profile_picture = profile_picture, _createdBy = createdBy, _modifiedBy = modifiedBy, _createdAt = createdAt, _modifiedAt = modifiedAt;
+  const User._internal({required cognito_id, first_name, last_name, email, phone, linkedin_profile, website, resume_url, profile_picture, createdBy, modifiedBy, createdAt, modifiedAt}): _cognito_id = cognito_id, _first_name = first_name, _last_name = last_name, _email = email, _phone = phone, _linkedin_profile = linkedin_profile, _website = website, _resume_url = resume_url, _profile_picture = profile_picture, _createdBy = createdBy, _modifiedBy = modifiedBy, _createdAt = createdAt, _modifiedAt = modifiedAt;
   
-  factory User({String? id, String? first_name, String? last_name, String? email, String? phone, String? linkedin_profile, String? website, String? resume_url, String? profile_picture, String? createdBy, String? modifiedBy, TemporalDateTime? createdAt, TemporalDateTime? modifiedAt}) {
+  factory User({required String cognito_id, String? first_name, String? last_name, String? email, String? phone, String? linkedin_profile, String? website, String? resume_url, String? profile_picture, String? createdBy, String? modifiedBy, TemporalDateTime? createdAt, TemporalDateTime? modifiedAt}) {
     return User._internal(
-      id: id == null ? UUID.getUUID() : id,
+      cognito_id: cognito_id,
       first_name: first_name,
       last_name: last_name,
       email: email,
@@ -115,7 +128,7 @@ class User {
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
     return other is User &&
-      id == other.id &&
+      _cognito_id == other._cognito_id &&
       _first_name == other._first_name &&
       _last_name == other._last_name &&
       _email == other._email &&
@@ -138,7 +151,7 @@ class User {
     var buffer = new StringBuffer();
     
     buffer.write("User {");
-    buffer.write("id=" + "$id" + ", ");
+    buffer.write("cognito_id=" + "$_cognito_id" + ", ");
     buffer.write("first_name=" + "$_first_name" + ", ");
     buffer.write("last_name=" + "$_last_name" + ", ");
     buffer.write("email=" + "$_email" + ", ");
@@ -156,9 +169,9 @@ class User {
     return buffer.toString();
   }
   
-  User copyWith({String? id, String? first_name, String? last_name, String? email, String? phone, String? linkedin_profile, String? website, String? resume_url, String? profile_picture, String? createdBy, String? modifiedBy, TemporalDateTime? createdAt, TemporalDateTime? modifiedAt}) {
+  User copyWith({String? cognito_id, String? first_name, String? last_name, String? email, String? phone, String? linkedin_profile, String? website, String? resume_url, String? profile_picture, String? createdBy, String? modifiedBy, TemporalDateTime? createdAt, TemporalDateTime? modifiedAt}) {
     return User._internal(
-      id: id ?? this.id,
+      cognito_id: cognito_id ?? this.cognito_id,
       first_name: first_name ?? this.first_name,
       last_name: last_name ?? this.last_name,
       email: email ?? this.email,
@@ -174,7 +187,7 @@ class User {
   }
   
   User.fromJson(Map<String, dynamic> json)  
-    : id = json['id'],
+    : _cognito_id = json['cognito_id'],
       _first_name = json['first_name'],
       _last_name = json['last_name'],
       _email = json['email'],
@@ -189,7 +202,7 @@ class User {
       _modifiedAt = json['modifiedAt'] != null ? TemporalDateTime.fromString(json['modifiedAt']) : null;
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'first_name': _first_name, 'last_name': _last_name, 'email': _email, 'phone': _phone, 'linkedin_profile': _linkedin_profile, 'website': _website, 'resume_url': _resume_url, 'profile_picture': _profile_picture, 'createdBy': _createdBy, 'modifiedBy': _modifiedBy, 'createdAt': _createdAt?.format(), 'modifiedAt': _modifiedAt?.format()
+    'cognito_id': _cognito_id, 'first_name': _first_name, 'last_name': _last_name, 'email': _email, 'phone': _phone, 'linkedin_profile': _linkedin_profile, 'website': _website, 'resume_url': _resume_url, 'profile_picture': _profile_picture, 'createdBy': _createdBy, 'modifiedBy': _modifiedBy, 'createdAt': _createdAt?.format(), 'modifiedAt': _modifiedAt?.format()
   };
 
   static var schema = Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
@@ -197,7 +210,7 @@ class User {
     modelSchemaDefinition.pluralName = "Users";
     
     modelSchemaDefinition.addField(ModelFieldDefinition.customTypeField(
-      fieldName: 'id',
+      fieldName: 'cognito_id',
       isRequired: true,
       ofType: ModelFieldType(ModelFieldTypeEnum.string)
     ));
