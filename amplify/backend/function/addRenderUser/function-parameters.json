@@ -2,8 +2,8 @@
   "lambdaLayers": [
     {
       "type": "ProjectLayer",
-      "resourceName": "renderutils",
-      "env": "dev",
+      "resourceName": "rendersharedModules",
+      "env": "staging",
       "version": "Always choose latest version",
       "isLatestVersionSelected": true
     }

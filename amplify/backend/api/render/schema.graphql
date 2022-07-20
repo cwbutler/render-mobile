@@ -1,39 +1,15 @@
-# This "input" configures a global authorization rule to enable public access to
-# all models in this schema. Learn more about authorization rules here: https://docs.amplify.aws/cli/graphql/authorization-rules
-input AMPLIFY { globalAuthRule: AuthRule = { allow: public } } # FOR TESTING ONLY!
-
-type User {
-    cognito_id: ID!
-    first_name: String
-    last_name: String
-    email: AWSEmail
-    phone: AWSPhone
-    linkedin_profile: String
-    website: AWSURL
-    resume_url: AWSURL
-    profile_picture: AWSURL
-    createdBy: String
-    modifiedBy: String
-    createdAt: AWSDateTime
-    modifiedAt: AWSDateTime
-}
-
-type Mutation {
-  addUser(input: AddUserInput): User @function(name: "addRenderUser-${env}")
-}
-
-type Query {
-  getUser(id: String!): User @function(name: "getRenderUser-${env}")
-}
-
-input AddUserInput {
-    email: AWSEmail!
-    cognito_id: String!
-    first_name: String
-    last_name: String
-    phone: AWSPhone
-    linkedin_profile: String
-    website: AWSURL
-    resume_url: AWSURL
-    profile_picture: AWSURL
+type User @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  email: AWSEmail!
+  last_name: String
+  first_name: String
+  phone: AWSPhone
+  linkedin_profile: String
+  website: AWSURL
+  resume: AWSURL
+  profile_picture: AWSURL
+  createdBy: String
+  modifiedBy: String
+  createdAt: AWSDateTime
+  modifiedAt: AWSDateTime
 }

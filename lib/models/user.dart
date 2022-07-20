@@ -25,24 +25,34 @@ import 'package:flutter/foundation.dart';
 
 /** This is an auto generated class representing the User type in your schema. */
 @immutable
-class User {
-  final String? _cognito_id;
-  final String? _first_name;
-  final String? _last_name;
+class User extends Model {
+  static const classType = const _UserModelType();
+  final String id;
   final String? _email;
+  final String? _last_name;
+  final String? _first_name;
   final String? _phone;
   final String? _linkedin_profile;
   final String? _website;
-  final String? _resume_url;
+  final String? _resume;
   final String? _profile_picture;
   final String? _createdBy;
   final String? _modifiedBy;
   final TemporalDateTime? _createdAt;
   final TemporalDateTime? _modifiedAt;
+  final TemporalDateTime? _updatedAt;
 
-  String get cognito_id {
+  @override
+  getInstanceType() => classType;
+  
+  @override
+  String getId() {
+    return id;
+  }
+  
+  String get email {
     try {
-      return _cognito_id!;
+      return _email!;
     } catch(e) {
       throw new AmplifyCodeGenModelException(
           AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
@@ -53,16 +63,12 @@ class User {
     }
   }
   
-  String? get first_name {
-    return _first_name;
-  }
-  
   String? get last_name {
     return _last_name;
   }
   
-  String? get email {
-    return _email;
+  String? get first_name {
+    return _first_name;
   }
   
   String? get phone {
@@ -77,8 +83,8 @@ class User {
     return _website;
   }
   
-  String? get resume_url {
-    return _resume_url;
+  String? get resume {
+    return _resume;
   }
   
   String? get profile_picture {
@@ -101,18 +107,22 @@ class User {
     return _modifiedAt;
   }
   
-  const User._internal({required cognito_id, first_name, last_name, email, phone, linkedin_profile, website, resume_url, profile_picture, createdBy, modifiedBy, createdAt, modifiedAt}): _cognito_id = cognito_id, _first_name = first_name, _last_name = last_name, _email = email, _phone = phone, _linkedin_profile = linkedin_profile, _website = website, _resume_url = resume_url, _profile_picture = profile_picture, _createdBy = createdBy, _modifiedBy = modifiedBy, _createdAt = createdAt, _modifiedAt = modifiedAt;
+  TemporalDateTime? get updatedAt {
+    return _updatedAt;
+  }
   
-  factory User({required String cognito_id, String? first_name, String? last_name, String? email, String? phone, String? linkedin_profile, String? website, String? resume_url, String? profile_picture, String? createdBy, String? modifiedBy, TemporalDateTime? createdAt, TemporalDateTime? modifiedAt}) {
+  const User._internal({required this.id, required email, last_name, first_name, phone, linkedin_profile, website, resume, profile_picture, createdBy, modifiedBy, createdAt, modifiedAt, updatedAt}): _email = email, _last_name = last_name, _first_name = first_name, _phone = phone, _linkedin_profile = linkedin_profile, _website = website, _resume = resume, _profile_picture = profile_picture, _createdBy = createdBy, _modifiedBy = modifiedBy, _createdAt = createdAt, _modifiedAt = modifiedAt, _updatedAt = updatedAt;
+  
+  factory User({String? id, required String email, String? last_name, String? first_name, String? phone, String? linkedin_profile, String? website, String? resume, String? profile_picture, String? createdBy, String? modifiedBy, TemporalDateTime? createdAt, TemporalDateTime? modifiedAt}) {
     return User._internal(
-      cognito_id: cognito_id,
-      first_name: first_name,
-      last_name: last_name,
+      id: id == null ? UUID.getUUID() : id,
       email: email,
+      last_name: last_name,
+      first_name: first_name,
       phone: phone,
       linkedin_profile: linkedin_profile,
       website: website,
-      resume_url: resume_url,
+      resume: resume,
       profile_picture: profile_picture,
       createdBy: createdBy,
       modifiedBy: modifiedBy,
@@ -128,14 +138,14 @@ class User {
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
     return other is User &&
-      _cognito_id == other._cognito_id &&
-      _first_name == other._first_name &&
-      _last_name == other._last_name &&
+      id == other.id &&
       _email == other._email &&
+      _last_name == other._last_name &&
+      _first_name == other._first_name &&
       _phone == other._phone &&
       _linkedin_profile == other._linkedin_profile &&
       _website == other._website &&
-      _resume_url == other._resume_url &&
+      _resume == other._resume &&
       _profile_picture == other._profile_picture &&
       _createdBy == other._createdBy &&
       _modifiedBy == other._modifiedBy &&
@@ -151,34 +161,35 @@ class User {
     var buffer = new StringBuffer();
     
     buffer.write("User {");
-    buffer.write("cognito_id=" + "$_cognito_id" + ", ");
-    buffer.write("first_name=" + "$_first_name" + ", ");
-    buffer.write("last_name=" + "$_last_name" + ", ");
+    buffer.write("id=" + "$id" + ", ");
     buffer.write("email=" + "$_email" + ", ");
+    buffer.write("last_name=" + "$_last_name" + ", ");
+    buffer.write("first_name=" + "$_first_name" + ", ");
     buffer.write("phone=" + "$_phone" + ", ");
     buffer.write("linkedin_profile=" + "$_linkedin_profile" + ", ");
     buffer.write("website=" + "$_website" + ", ");
-    buffer.write("resume_url=" + "$_resume_url" + ", ");
+    buffer.write("resume=" + "$_resume" + ", ");
     buffer.write("profile_picture=" + "$_profile_picture" + ", ");
     buffer.write("createdBy=" + "$_createdBy" + ", ");
     buffer.write("modifiedBy=" + "$_modifiedBy" + ", ");
     buffer.write("createdAt=" + (_createdAt != null ? _createdAt!.format() : "null") + ", ");
-    buffer.write("modifiedAt=" + (_modifiedAt != null ? _modifiedAt!.format() : "null"));
+    buffer.write("modifiedAt=" + (_modifiedAt != null ? _modifiedAt!.format() : "null") + ", ");
+    buffer.write("updatedAt=" + (_updatedAt != null ? _updatedAt!.format() : "null"));
     buffer.write("}");
     
     return buffer.toString();
   }
   
-  User copyWith({String? cognito_id, String? first_name, String? last_name, String? email, String? phone, String? linkedin_profile, String? website, String? resume_url, String? profile_picture, String? createdBy, String? modifiedBy, TemporalDateTime? createdAt, TemporalDateTime? modifiedAt}) {
+  User copyWith({String? id, String? email, String? last_name, String? first_name, String? phone, String? linkedin_profile, String? website, String? resume, String? profile_picture, String? createdBy, String? modifiedBy, TemporalDateTime? createdAt, TemporalDateTime? modifiedAt}) {
     return User._internal(
-      cognito_id: cognito_id ?? this.cognito_id,
-      first_name: first_name ?? this.first_name,
-      last_name: last_name ?? this.last_name,
+      id: id ?? this.id,
       email: email ?? this.email,
+      last_name: last_name ?? this.last_name,
+      first_name: first_name ?? this.first_name,
       phone: phone ?? this.phone,
       linkedin_profile: linkedin_profile ?? this.linkedin_profile,
       website: website ?? this.website,
-      resume_url: resume_url ?? this.resume_url,
+      resume: resume ?? this.resume,
       profile_picture: profile_picture ?? this.profile_picture,
       createdBy: createdBy ?? this.createdBy,
       modifiedBy: modifiedBy ?? this.modifiedBy,
@@ -187,104 +198,141 @@ class User {
   }
   
   User.fromJson(Map<String, dynamic> json)  
-    : _cognito_id = json['cognito_id'],
-      _first_name = json['first_name'],
-      _last_name = json['last_name'],
+    : id = json['id'],
       _email = json['email'],
+      _last_name = json['last_name'],
+      _first_name = json['first_name'],
       _phone = json['phone'],
       _linkedin_profile = json['linkedin_profile'],
       _website = json['website'],
-      _resume_url = json['resume_url'],
+      _resume = json['resume'],
       _profile_picture = json['profile_picture'],
       _createdBy = json['createdBy'],
       _modifiedBy = json['modifiedBy'],
       _createdAt = json['createdAt'] != null ? TemporalDateTime.fromString(json['createdAt']) : null,
-      _modifiedAt = json['modifiedAt'] != null ? TemporalDateTime.fromString(json['modifiedAt']) : null;
+      _modifiedAt = json['modifiedAt'] != null ? TemporalDateTime.fromString(json['modifiedAt']) : null,
+      _updatedAt = json['updatedAt'] != null ? TemporalDateTime.fromString(json['updatedAt']) : null;
   
   Map<String, dynamic> toJson() => {
-    'cognito_id': _cognito_id, 'first_name': _first_name, 'last_name': _last_name, 'email': _email, 'phone': _phone, 'linkedin_profile': _linkedin_profile, 'website': _website, 'resume_url': _resume_url, 'profile_picture': _profile_picture, 'createdBy': _createdBy, 'modifiedBy': _modifiedBy, 'createdAt': _createdAt?.format(), 'modifiedAt': _modifiedAt?.format()
+    'id': id, 'email': _email, 'last_name': _last_name, 'first_name': _first_name, 'phone': _phone, 'linkedin_profile': _linkedin_profile, 'website': _website, 'resume': _resume, 'profile_picture': _profile_picture, 'createdBy': _createdBy, 'modifiedBy': _modifiedBy, 'createdAt': _createdAt?.format(), 'modifiedAt': _modifiedAt?.format(), 'updatedAt': _updatedAt?.format()
   };
 
+  static final QueryField ID = QueryField(fieldName: "user.id");
+  static final QueryField EMAIL = QueryField(fieldName: "email");
+  static final QueryField LAST_NAME = QueryField(fieldName: "last_name");
+  static final QueryField FIRST_NAME = QueryField(fieldName: "first_name");
+  static final QueryField PHONE = QueryField(fieldName: "phone");
+  static final QueryField LINKEDIN_PROFILE = QueryField(fieldName: "linkedin_profile");
+  static final QueryField WEBSITE = QueryField(fieldName: "website");
+  static final QueryField RESUME = QueryField(fieldName: "resume");
+  static final QueryField PROFILE_PICTURE = QueryField(fieldName: "profile_picture");
+  static final QueryField CREATEDBY = QueryField(fieldName: "createdBy");
+  static final QueryField MODIFIEDBY = QueryField(fieldName: "modifiedBy");
+  static final QueryField CREATEDAT = QueryField(fieldName: "createdAt");
+  static final QueryField MODIFIEDAT = QueryField(fieldName: "modifiedAt");
   static var schema = Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
     modelSchemaDefinition.name = "User";
     modelSchemaDefinition.pluralName = "Users";
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.customTypeField(
-      fieldName: 'cognito_id',
+    modelSchemaDefinition.authRules = [
+      AuthRule(
+        authStrategy: AuthStrategy.PUBLIC,
+        operations: [
+          ModelOperation.CREATE,
+          ModelOperation.UPDATE,
+          ModelOperation.DELETE,
+          ModelOperation.READ
+        ])
+    ];
+    
+    modelSchemaDefinition.addField(ModelFieldDefinition.id());
+    
+    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+      key: User.EMAIL,
       isRequired: true,
       ofType: ModelFieldType(ModelFieldTypeEnum.string)
     ));
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.customTypeField(
-      fieldName: 'first_name',
+    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+      key: User.LAST_NAME,
       isRequired: false,
       ofType: ModelFieldType(ModelFieldTypeEnum.string)
     ));
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.customTypeField(
-      fieldName: 'last_name',
+    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+      key: User.FIRST_NAME,
       isRequired: false,
       ofType: ModelFieldType(ModelFieldTypeEnum.string)
     ));
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.customTypeField(
-      fieldName: 'email',
+    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+      key: User.PHONE,
       isRequired: false,
       ofType: ModelFieldType(ModelFieldTypeEnum.string)
     ));
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.customTypeField(
-      fieldName: 'phone',
+    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+      key: User.LINKEDIN_PROFILE,
       isRequired: false,
       ofType: ModelFieldType(ModelFieldTypeEnum.string)
     ));
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.customTypeField(
-      fieldName: 'linkedin_profile',
+    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+      key: User.WEBSITE,
       isRequired: false,
       ofType: ModelFieldType(ModelFieldTypeEnum.string)
     ));
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.customTypeField(
-      fieldName: 'website',
+    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+      key: User.RESUME,
       isRequired: false,
       ofType: ModelFieldType(ModelFieldTypeEnum.string)
     ));
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.customTypeField(
-      fieldName: 'resume_url',
+    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+      key: User.PROFILE_PICTURE,
       isRequired: false,
       ofType: ModelFieldType(ModelFieldTypeEnum.string)
     ));
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.customTypeField(
-      fieldName: 'profile_picture',
+    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+      key: User.CREATEDBY,
       isRequired: false,
       ofType: ModelFieldType(ModelFieldTypeEnum.string)
     ));
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.customTypeField(
-      fieldName: 'createdBy',
+    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+      key: User.MODIFIEDBY,
       isRequired: false,
       ofType: ModelFieldType(ModelFieldTypeEnum.string)
     ));
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.customTypeField(
-      fieldName: 'modifiedBy',
-      isRequired: false,
-      ofType: ModelFieldType(ModelFieldTypeEnum.string)
-    ));
-    
-    modelSchemaDefinition.addField(ModelFieldDefinition.customTypeField(
-      fieldName: 'createdAt',
+    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+      key: User.CREATEDAT,
       isRequired: false,
       ofType: ModelFieldType(ModelFieldTypeEnum.dateTime)
     ));
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.customTypeField(
-      fieldName: 'modifiedAt',
+    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+      key: User.MODIFIEDAT,
       isRequired: false,
+      ofType: ModelFieldType(ModelFieldTypeEnum.dateTime)
+    ));
+    
+    modelSchemaDefinition.addField(ModelFieldDefinition.nonQueryField(
+      fieldName: 'updatedAt',
+      isRequired: false,
+      isReadOnly: true,
       ofType: ModelFieldType(ModelFieldTypeEnum.dateTime)
     ));
   });
+}
+
+class _UserModelType extends ModelType<User> {
+  const _UserModelType();
+  
+  @override
+  User fromJson(Map<String, dynamic> jsonData) {
+    return User.fromJson(jsonData);
+  }
 }

@@ -26,12 +26,21 @@ export 'User.dart';
 
 class ModelProvider implements ModelProviderInterface {
   @override
-  String version = "ad2d4dd565cd74b27d8702033037c5c2";
+  String version = "0b8593a5487c89d370a148df91b104b3";
   @override
-  List<ModelSchema> modelSchemas = [];
+  List<ModelSchema> modelSchemas = [User.schema];
   static final ModelProvider _instance = ModelProvider();
   @override
-  List<ModelSchema> customTypeSchemas = [User.schema];
+  List<ModelSchema> customTypeSchemas = [];
 
   static ModelProvider get instance => _instance;
+  
+  ModelType getModelTypeByModelName(String modelName) {
+    switch(modelName) {
+      case "User":
+        return User.classType;
+      default:
+        throw Exception("Failed to find model in model provider for model name: " + modelName);
+    }
+  }
 }

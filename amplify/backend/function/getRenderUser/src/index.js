@@ -18,7 +18,7 @@ exports.handler = async (event, _, callback) => {
         
         return result[0]?.fields;
     } catch (e) {
-        console.log(e.data.error)
+        console.log(e);
         return callback(e);
     }
 };

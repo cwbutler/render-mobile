@@ -16,12 +16,12 @@
     "s3Key": {
       "Type": "String"
     },
-    "functionrenderutilsArn": {
-      "Type": "String",
-      "Default": "functionrenderutilsArn"
-    },
     "airtableApiKey": {
       "Type": "String"
+    },
+    "functionrendersharedModulesArn": {
+      "Type": "String",
+      "Default": "functionrendersharedModulesArn"
     }
   },
   "Conditions": {
@@ -91,7 +91,7 @@
         "Runtime": "nodejs14.x",
         "Layers": [
           {
-            "Ref": "functionrenderutilsArn"
+            "Ref": "functionrendersharedModulesArn"
           }
         ],
         "Timeout": 25
@@ -103,12 +103,12 @@
         "RoleName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "renderLambdaRole1fa3dc5d",
+            "renderLambdaRole5320bdb2",
             {
               "Fn::Join": [
                 "",
                 [
-                  "renderLambdaRole1fa3dc5d",
+                  "renderLambdaRole5320bdb2",
                   "-",
                   {
                     "Ref": "env"

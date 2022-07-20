@@ -1,4 +1,38 @@
 {
+  "staging": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-render-staging-225743-authRole",
+      "UnauthRoleArn": "arn:aws:iam::766361691327:role/amplify-render-staging-225743-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::766361691327:role/amplify-render-staging-225743-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-render-staging-225743-deployment",
+      "UnauthRoleName": "amplify-render-staging-225743-unauthRole",
+      "StackName": "amplify-render-staging-225743",
+      "StackId": "arn:aws:cloudformation:us-east-1:766361691327:stack/amplify-render-staging-225743/32f82940-07b6-11ed-8011-0eeb86d7cbcd",
+      "AmplifyAppId": "d28cjlok2ls5o3"
+    },
+    "categories": {
+      "auth": {
+        "render": {}
+      },
+      "function": {
+        "addRenderUser": {
+          "airtableApiKey": "keygh9rYVmOMPYc35",
+          "deploymentBucketName": "amplify-render-staging-225743-deployment",
+          "s3Key": "amplify-builds/addRenderUser-2b7a50736f5564466c62-build.zip"
+        },
+        "getRenderUser": {
+          "airtableApiKey": "keygh9rYVmOMPYc35",
+          "deploymentBucketName": "amplify-render-staging-225743-deployment",
+          "s3Key": "amplify-builds/getRenderUser-586b465a7a6e5a676542-build.zip"
+        },
+        "rendersharedModules": {
+          "deploymentBucketName": "amplify-render-staging-225743-deployment",
+          "s3Key": "amplify-builds/rendersharedModules-LambdaLayerVersion7e1f8cf6-build.zip"
+        }
+      }
+    }
+  },
   "dev": {
     "awscloudformation": {
       "AuthRoleName": "amplify-render-dev-134928-authRole",

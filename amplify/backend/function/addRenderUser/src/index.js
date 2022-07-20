@@ -14,7 +14,7 @@ exports.handler = async (event, _, callback) => {
         const result = await base('Users').create(event.arguments.input);
         return result?.fields;
     } catch (e) {
-        console.log(e.data.error)
+        console.log(e);
         return callback(e);
     }
 };
