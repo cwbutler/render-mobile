@@ -2,6 +2,7 @@
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_api/amplify_api.dart';
+import 'package:amplify_datastore/amplify_datastore.dart';
 import 'package:render/models/ModelProvider.dart';
 import 'package:flutter/widgets.dart';
 import 'amplifyconfiguration.dart';
@@ -11,7 +12,8 @@ class RenderAmplify {
     try {
       final authPlugin = AmplifyAuthCognito();
       final api = AmplifyAPI(modelProvider: ModelProvider.instance);
-      await Amplify.addPlugins([authPlugin, api]);
+      final datastore = AmplifyDataStore(modelProvider: ModelProvider.instance);
+      await Amplify.addPlugins([authPlugin, api, datastore]);
       await Amplify.configure(amplifyconfig);
     } on AmplifyAlreadyConfiguredException {
       debugPrint(

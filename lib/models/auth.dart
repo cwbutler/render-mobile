@@ -1,28 +1,32 @@
 // ignore_for_file: non_constant_identifier_names
 
-import 'package:amplify_flutter/amplify_flutter.dart';
-import 'package:flutter/widgets.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:render/models/user.dart';
 
-@immutable
-class RenderUser {
-  const RenderUser({this.authUser});
+class UserNotifier extends StateNotifier<User> {
+  UserNotifier(User state) : super(state);
 
-  final AuthUser? authUser;
-}
-
-class UserNotifier extends StateNotifier<RenderUser> {
-  UserNotifier(RenderUser state) : super(state);
-
-  void setCurrentUser(RenderUser user) {
+  void setCurrentUser(User user) {
     state = user;
   }
 
+  void updateUser(User user) {
+    state = state.copyWith(
+        email: (user.email == '') ? state.email : user.email,
+        first_name: user.first_name,
+        last_name: user.last_name,
+        phone: user.phone,
+        linkedin_profile: user.linkedin_profile,
+        website: user.website,
+        resume: user.resume,
+        profile_picture: user.profile_picture);
+  }
+
   void clearUser() {
-    state = const RenderUser();
+    state = User(email: '', id: '');
   }
 }
 
-final userProvider = StateNotifierProvider<UserNotifier, RenderUser>((ref) {
-  return UserNotifier(const RenderUser());
+final userProvider = StateNotifierProvider<UserNotifier, User>((ref) {
+  return UserNotifier(User(email: ''));
 });

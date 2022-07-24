@@ -36,6 +36,7 @@ class User extends Model {
   final String? _website;
   final String? _resume;
   final String? _profile_picture;
+  final String? _location;
   final String? _createdBy;
   final String? _modifiedBy;
   final TemporalDateTime? _createdAt;
@@ -91,6 +92,10 @@ class User extends Model {
     return _profile_picture;
   }
   
+  String? get location {
+    return _location;
+  }
+  
   String? get createdBy {
     return _createdBy;
   }
@@ -111,9 +116,9 @@ class User extends Model {
     return _updatedAt;
   }
   
-  const User._internal({required this.id, required email, last_name, first_name, phone, linkedin_profile, website, resume, profile_picture, createdBy, modifiedBy, createdAt, modifiedAt, updatedAt}): _email = email, _last_name = last_name, _first_name = first_name, _phone = phone, _linkedin_profile = linkedin_profile, _website = website, _resume = resume, _profile_picture = profile_picture, _createdBy = createdBy, _modifiedBy = modifiedBy, _createdAt = createdAt, _modifiedAt = modifiedAt, _updatedAt = updatedAt;
+  const User._internal({required this.id, required email, last_name, first_name, phone, linkedin_profile, website, resume, profile_picture, location, createdBy, modifiedBy, createdAt, modifiedAt, updatedAt}): _email = email, _last_name = last_name, _first_name = first_name, _phone = phone, _linkedin_profile = linkedin_profile, _website = website, _resume = resume, _profile_picture = profile_picture, _location = location, _createdBy = createdBy, _modifiedBy = modifiedBy, _createdAt = createdAt, _modifiedAt = modifiedAt, _updatedAt = updatedAt;
   
-  factory User({String? id, required String email, String? last_name, String? first_name, String? phone, String? linkedin_profile, String? website, String? resume, String? profile_picture, String? createdBy, String? modifiedBy, TemporalDateTime? createdAt, TemporalDateTime? modifiedAt}) {
+  factory User({String? id, required String email, String? last_name, String? first_name, String? phone, String? linkedin_profile, String? website, String? resume, String? profile_picture, String? location, String? createdBy, String? modifiedBy, TemporalDateTime? createdAt, TemporalDateTime? modifiedAt}) {
     return User._internal(
       id: id == null ? UUID.getUUID() : id,
       email: email,
@@ -124,6 +129,7 @@ class User extends Model {
       website: website,
       resume: resume,
       profile_picture: profile_picture,
+      location: location,
       createdBy: createdBy,
       modifiedBy: modifiedBy,
       createdAt: createdAt,
@@ -147,6 +153,7 @@ class User extends Model {
       _website == other._website &&
       _resume == other._resume &&
       _profile_picture == other._profile_picture &&
+      _location == other._location &&
       _createdBy == other._createdBy &&
       _modifiedBy == other._modifiedBy &&
       _createdAt == other._createdAt &&
@@ -170,6 +177,7 @@ class User extends Model {
     buffer.write("website=" + "$_website" + ", ");
     buffer.write("resume=" + "$_resume" + ", ");
     buffer.write("profile_picture=" + "$_profile_picture" + ", ");
+    buffer.write("location=" + "$_location" + ", ");
     buffer.write("createdBy=" + "$_createdBy" + ", ");
     buffer.write("modifiedBy=" + "$_modifiedBy" + ", ");
     buffer.write("createdAt=" + (_createdAt != null ? _createdAt!.format() : "null") + ", ");
@@ -180,7 +188,7 @@ class User extends Model {
     return buffer.toString();
   }
   
-  User copyWith({String? id, String? email, String? last_name, String? first_name, String? phone, String? linkedin_profile, String? website, String? resume, String? profile_picture, String? createdBy, String? modifiedBy, TemporalDateTime? createdAt, TemporalDateTime? modifiedAt}) {
+  User copyWith({String? id, String? email, String? last_name, String? first_name, String? phone, String? linkedin_profile, String? website, String? resume, String? profile_picture, String? location, String? createdBy, String? modifiedBy, TemporalDateTime? createdAt, TemporalDateTime? modifiedAt}) {
     return User._internal(
       id: id ?? this.id,
       email: email ?? this.email,
@@ -191,6 +199,7 @@ class User extends Model {
       website: website ?? this.website,
       resume: resume ?? this.resume,
       profile_picture: profile_picture ?? this.profile_picture,
+      location: location ?? this.location,
       createdBy: createdBy ?? this.createdBy,
       modifiedBy: modifiedBy ?? this.modifiedBy,
       createdAt: createdAt ?? this.createdAt,
@@ -207,6 +216,7 @@ class User extends Model {
       _website = json['website'],
       _resume = json['resume'],
       _profile_picture = json['profile_picture'],
+      _location = json['location'],
       _createdBy = json['createdBy'],
       _modifiedBy = json['modifiedBy'],
       _createdAt = json['createdAt'] != null ? TemporalDateTime.fromString(json['createdAt']) : null,
@@ -214,7 +224,7 @@ class User extends Model {
       _updatedAt = json['updatedAt'] != null ? TemporalDateTime.fromString(json['updatedAt']) : null;
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'email': _email, 'last_name': _last_name, 'first_name': _first_name, 'phone': _phone, 'linkedin_profile': _linkedin_profile, 'website': _website, 'resume': _resume, 'profile_picture': _profile_picture, 'createdBy': _createdBy, 'modifiedBy': _modifiedBy, 'createdAt': _createdAt?.format(), 'modifiedAt': _modifiedAt?.format(), 'updatedAt': _updatedAt?.format()
+    'id': id, 'email': _email, 'last_name': _last_name, 'first_name': _first_name, 'phone': _phone, 'linkedin_profile': _linkedin_profile, 'website': _website, 'resume': _resume, 'profile_picture': _profile_picture, 'location': _location, 'createdBy': _createdBy, 'modifiedBy': _modifiedBy, 'createdAt': _createdAt?.format(), 'modifiedAt': _modifiedAt?.format(), 'updatedAt': _updatedAt?.format()
   };
 
   static final QueryField ID = QueryField(fieldName: "user.id");
@@ -226,6 +236,7 @@ class User extends Model {
   static final QueryField WEBSITE = QueryField(fieldName: "website");
   static final QueryField RESUME = QueryField(fieldName: "resume");
   static final QueryField PROFILE_PICTURE = QueryField(fieldName: "profile_picture");
+  static final QueryField LOCATION = QueryField(fieldName: "location");
   static final QueryField CREATEDBY = QueryField(fieldName: "createdBy");
   static final QueryField MODIFIEDBY = QueryField(fieldName: "modifiedBy");
   static final QueryField CREATEDAT = QueryField(fieldName: "createdAt");
@@ -291,6 +302,12 @@ class User extends Model {
     
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
       key: User.PROFILE_PICTURE,
+      isRequired: false,
+      ofType: ModelFieldType(ModelFieldTypeEnum.string)
+    ));
+    
+    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+      key: User.LOCATION,
       isRequired: false,
       ofType: ModelFieldType(ModelFieldTypeEnum.string)
     ));

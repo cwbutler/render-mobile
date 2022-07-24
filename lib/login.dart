@@ -1,9 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:render/auth_model.dart';
-import 'package:render/models/auth.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -28,16 +26,13 @@ class LoginScreen extends StatelessWidget {
   }
 }
 
-class LoginBody extends HookConsumerWidget {
+class LoginBody extends StatelessWidget {
   const LoginBody({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final setCurrentUser = ref.read(userProvider.notifier).setCurrentUser;
-
+  Widget build(BuildContext context) {
     Future<void> signInWithGoogle() async {
-      final authUser = await AuthModel.signInWithGoogle();
-      setCurrentUser(RenderUser(authUser: authUser));
+      await AuthModel.signInWithGoogle();
     }
 
     return SafeArea(
