@@ -1,27 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:render/create_user/layout.dart';
 import 'package:render/create_user/input.dart';
 import 'package:render/create_user/next_button.dart';
 import 'package:render/models/auth.dart';
+import 'package:render/models/user_profile.dart';
 
 class CreateUserProfessional extends HookConsumerWidget {
   const CreateUserProfessional({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final updateUser = ref.read(userProvider.notifier).updateUser;
-    final linkedin = useState('');
-    final website = useState('');
-    final resume = useState('');
+    final updateUser = ref.read(userProvider.notifier).updateUserProfile;
 
     onNext() {
-      /*updateUser(User(
-          cognito_id: '',
-          linkedin_profile: linkedin.value,
-          website: website.value,
-          resume: resume.value));*/
       Navigator.pushNamed(context, 'create/location');
     }
 
@@ -35,13 +27,13 @@ class CreateUserProfessional extends HookConsumerWidget {
             CreateInput(
               label: 'LinkedIn Profile',
               onChange: (value) {
-                linkedin.value = value;
+                updateUser(UserProfile(linkedin_profile: value));
               },
             ),
             CreateInput(
               label: 'Personal Website/Github',
               onChange: (value) {
-                website.value = value;
+                updateUser(UserProfile(website: value));
               },
             ),
             const Spacer(),

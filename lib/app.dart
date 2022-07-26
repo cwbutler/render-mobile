@@ -30,17 +30,18 @@ class RenderApp extends HookConsumerWidget {
       await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform,
       );
-      //await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
-      FirebaseAuth.instance.idTokenChanges().listen((User? user) {
+      await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
+      FirebaseAuth.instance.idTokenChanges().listen((User? user) async {
         if (user == null) {
-          setCurrentUser(RenderUser());
+          setCurrentUser(const RenderUser());
+          if (isLoading.value) isLoading.value = false;
         } else {
-          setCurrentUser(RenderUser(user: user));
+          final renderUser = await RenderUser(user: user).getUserProfile();
+          setCurrentUser(renderUser);
+          if (isLoading.value) isLoading.value = false;
         }
       });
     }
-
-    debugPrint("${auth.user?.email} ${auth.user?.toString()}");
 
     useEffect(() {
       _init().then((value) {

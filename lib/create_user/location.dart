@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:render/create_user/layout.dart';
 import 'package:render/create_user/input.dart';
 import 'package:render/create_user/next_button.dart';
 import 'package:render/models/auth.dart';
+import 'package:render/models/user_profile.dart';
 
 class CreateUserLocation extends HookConsumerWidget {
   const CreateUserLocation({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final updateUser = ref.read(userProvider.notifier).updateUser;
-    final location = useState('');
+    final updateUser = ref.read(userProvider.notifier).updateUserProfile;
 
     onNext() {
-      //updateUser(User(cognito_id: '', location: location.value));
       Navigator.pushNamed(context, 'create/profile_pic');
     }
 
@@ -29,7 +27,7 @@ class CreateUserLocation extends HookConsumerWidget {
             CreateInput(
               label: 'Zip Code',
               onChange: (value) {
-                location.value = value;
+                updateUser(UserProfile(location: value));
               },
             ),
             const Spacer(),

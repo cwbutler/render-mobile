@@ -4,14 +4,15 @@ import 'package:render/create_user/layout.dart';
 import 'package:render/create_user/input.dart';
 import 'package:render/create_user/next_button.dart';
 import 'package:render/models/auth.dart';
+import 'package:render/models/user_profile.dart';
 
 class CreateUser extends HookConsumerWidget {
   const CreateUser({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final user = ref.watch(userProvider).user;
-    final updateUser = ref.read(userProvider.notifier).updateUser;
+    final user = ref.watch(userProvider).userProfile;
+    final updateUser = ref.read(userProvider.notifier).updateUserProfile;
 
     onNext() {
       Navigator.pushNamed(context, 'create/professional');
@@ -24,31 +25,31 @@ class CreateUser extends HookConsumerWidget {
         child: Column(children: [
           CreateInput(
             label: 'First Name',
-            initalText: user?.displayName?.split(" ")[0],
+            initalText: user.first_name,
             onChange: (value) {
-              //updateUser(User(cognito_id: '', first_name: value));
+              updateUser(UserProfile(first_name: value));
             },
           ),
           CreateInput(
             label: 'Last Name',
-            initalText: user?.displayName?.split(" ")[1],
+            initalText: user.last_name,
             onChange: (value) {
-              //updateUser(User(cognito_id: '', last_name: value));
+              updateUser(UserProfile(last_name: value));
             },
           ),
           CreateInput(
               label: 'Email',
-              initalText: user?.email,
+              initalText: user.email,
               onChange: (value) {
-                //updateUser(User(cognito_id: '', email: value));
+                updateUser(UserProfile(email: value));
               },
               keyboardType: TextInputType.emailAddress),
           CreateInput(
             label: 'Phone',
-            initalText: user?.phoneNumber,
+            initalText: user.phone,
             keyboardType: TextInputType.phone,
             onChange: (value) {
-              //updateUser(User(cognito_id: '', phone_number: value));
+              updateUser(UserProfile(phone: value));
             },
           ),
           const Spacer(),
