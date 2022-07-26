@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:render/auth_model.dart';
 import 'package:render/models/auth.dart';
 
 class RenderDrawer extends HookConsumerWidget {
@@ -10,6 +9,15 @@ class RenderDrawer extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final clearUser = ref.read(userProvider.notifier).clearUser;
+
+    navigateToHome() {
+      Navigator.pushNamed(context, 'login');
+    }
+
+    logout() async {
+      //await AuthModel.logout();
+      navigateToHome();
+    }
 
     return SizedBox(
         width: MediaQuery.of(context).size.width,
@@ -24,8 +32,7 @@ class RenderDrawer extends HookConsumerWidget {
                 // Logout
                 TextButton(
                     onPressed: () {
-                      AuthModel.logout()
-                          .then((value) => {if (value) clearUser()});
+                      logout();
                     },
                     child: const Text("LOGOUT",
                         style: TextStyle(

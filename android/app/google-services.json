@@ -1,0 +1,82 @@
+{
+  "project_info": {
+    "project_number": "815961350855",
+    "project_id": "render-3faf5",
+    "storage_bucket": "render-3faf5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:815961350855:android:20f6642e216c11882cd4e2",
+        "android_client_info": {
+          "package_name": "com.example.render"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "815961350855-mhcnr90c91seo91e6b1fdbd0kgjog8p2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAKNmvMEU_-iefceiz14zpg2DHe5H3LiDQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "815961350855-mhcnr90c91seo91e6b1fdbd0kgjog8p2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "815961350855-h3h2kii7tds0jauirodjdibnmbdpfbvk.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.project9.render"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:815961350855:android:d882091f08868ab42cd4e2",
+        "android_client_info": {
+          "package_name": "com.project9.render"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "815961350855-mhcnr90c91seo91e6b1fdbd0kgjog8p2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAKNmvMEU_-iefceiz14zpg2DHe5H3LiDQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "815961350855-mhcnr90c91seo91e6b1fdbd0kgjog8p2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "815961350855-h3h2kii7tds0jauirodjdibnmbdpfbvk.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.project9.render"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

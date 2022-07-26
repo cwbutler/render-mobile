@@ -1,7 +1,9 @@
 import 'dart:ui';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:render/auth_model.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:render/models/auth.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -26,13 +28,25 @@ class LoginScreen extends StatelessWidget {
   }
 }
 
-class LoginBody extends StatelessWidget {
+class LoginBody extends HookConsumerWidget {
   const LoginBody({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final setCurrentUser = ref.read(userProvider.notifier).setCurrentUser;
+
+    void navigate(user) {
+      debugPrint(user.createdAt.toString());
+      if (user.createdAt == null) {
+        Navigator.pushNamed(context, 'create');
+      } else {
+        Navigator.pushNamed(context, 'home');
+      }
+    }
+
     Future<void> signInWithGoogle() async {
-      await AuthModel.signInWithGoogle();
+      UserCredential user = await RenderUser.signInWithGoogle();
+      debugPrint(user.toString());
     }
 
     return SafeArea(
@@ -102,7 +116,10 @@ class LoginBtn extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               if (icon != null) ...[SvgPicture.asset(icon.toString())],
-              Text(text)
+              Text(
+                text,
+                style: const TextStyle(color: Colors.black),
+              )
             ],
           ),
         ));

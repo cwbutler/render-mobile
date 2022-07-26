@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:amplify_flutter/amplify_flutter.dart';
-import 'package:render/amplify.dart';
-import 'package:render/auth_model.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'firebase_options.dart';
 import 'package:render/models/auth.dart';
 // Pages (Screens)
 import 'package:render/home.dart';
@@ -22,40 +22,25 @@ class RenderApp extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     // Default status bar to 'light'
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
-    final user = ref.watch(userProvider);
+    final auth = ref.watch(userProvider);
     final setCurrentUser = ref.read(userProvider.notifier).setCurrentUser;
     final isLoading = useState(true);
 
-    Future<Null Function()> _init() async {
-      await RenderAmplify.configure();
-      final user = await AuthModel.getCurrentUser();
-
-      if (user.id.isNotEmpty) {
-        setCurrentUser(user);
-      }
-
-      StreamSubscription<HubEvent> hubSubscription =
-          Amplify.Hub.listen([HubChannel.Auth], (hubEvent) async {
-        switch (hubEvent.eventName) {
-          case 'SIGNED_IN':
-            setCurrentUser(await AuthModel.getCurrentUser());
-            break;
-          case 'SIGNED_OUT':
-            await Amplify.DataStore.clear();
-            break;
-          case 'SESSION_EXPIRED':
-            debugPrint('SESSION HAS EXPIRED');
-            break;
-          case 'USER_DELETED':
-            debugPrint('USER HAS BEEN DELETED');
-            break;
+    Future<void> _init() async {
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
+      //await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
+      FirebaseAuth.instance.idTokenChanges().listen((User? user) {
+        if (user == null) {
+          setCurrentUser(RenderUser());
+        } else {
+          setCurrentUser(RenderUser(user: user));
         }
       });
-
-      return () {
-        hubSubscription.cancel();
-      };
     }
+
+    debugPrint("${auth.user?.email} ${auth.user?.toString()}");
 
     useEffect(() {
       _init().then((value) {
@@ -85,13 +70,19 @@ class RenderApp extends HookConsumerWidget {
       debugShowCheckedModeBanner: false,
       home: (isLoading.value)
           ? const Center(child: CircularProgressIndicator())
-          : (user.email.isEmpty)
+          : (auth.user == null)
               ? const LoginScreen()
-              : (user.createdAt == null)
+              : (auth.hasProfile == false)
                   ? const CreateUser()
                   : const HomeScreen(),
       onGenerateRoute: (settings) {
         switch (settings.name) {
+          case 'home':
+            return MaterialPageRoute(builder: (context) => const HomeScreen());
+          case 'login':
+            return MaterialPageRoute(builder: (context) => const LoginScreen());
+          case 'create':
+            return MaterialPageRoute(builder: (context) => const CreateUser());
           case 'create/professional':
             return MaterialPageRoute(
                 builder: (context) => const CreateUserProfessional());

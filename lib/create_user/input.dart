@@ -5,7 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 class CreateInput extends HookConsumerWidget {
   final String label;
   final String? initalText;
-  final Function? onChange;
+  final void Function(String)? onChange;
   final TextInputType? keyboardType;
   const CreateInput(
       {Key? key,
@@ -19,14 +19,10 @@ class CreateInput extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final controller = useTextEditingController(text: initalText);
 
-    useEffect(() {
-      if (onChange != null) onChange!(controller.text);
-      return null;
-    }, [controller.text]);
-
     return Container(
         margin: const EdgeInsets.only(bottom: 30),
         child: TextFormField(
+            onChanged: onChange,
             style: const TextStyle(fontFamily: 'Inter', fontSize: 20),
             controller: controller,
             keyboardType: keyboardType,

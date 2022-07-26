@@ -1,29 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:render/create_user/layout.dart';
 import 'package:render/create_user/input.dart';
 import 'package:render/create_user/next_button.dart';
 import 'package:render/models/auth.dart';
-import 'package:render/models/user.dart';
 
 class CreateUser extends HookConsumerWidget {
   const CreateUser({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(userProvider).user;
     final updateUser = ref.read(userProvider.notifier).updateUser;
-    final firstName = useState('');
-    final lastName = useState('');
-    final email = useState('');
-    final phone = useState('');
 
     onNext() {
-      updateUser(User(
-          email: email.value,
-          first_name: firstName.value,
-          last_name: lastName.value,
-          phone: phone.value));
       Navigator.pushNamed(context, 'create/professional');
     }
 
@@ -34,27 +24,31 @@ class CreateUser extends HookConsumerWidget {
         child: Column(children: [
           CreateInput(
             label: 'First Name',
+            initalText: user?.displayName?.split(" ")[0],
             onChange: (value) {
-              firstName.value = value;
+              //updateUser(User(cognito_id: '', first_name: value));
             },
           ),
           CreateInput(
             label: 'Last Name',
+            initalText: user?.displayName?.split(" ")[1],
             onChange: (value) {
-              lastName.value = value;
+              //updateUser(User(cognito_id: '', last_name: value));
             },
           ),
           CreateInput(
               label: 'Email',
+              initalText: user?.email,
               onChange: (value) {
-                email.value = value;
+                //updateUser(User(cognito_id: '', email: value));
               },
               keyboardType: TextInputType.emailAddress),
           CreateInput(
             label: 'Phone',
+            initalText: user?.phoneNumber,
             keyboardType: TextInputType.phone,
             onChange: (value) {
-              phone.value = value;
+              //updateUser(User(cognito_id: '', phone_number: value));
             },
           ),
           const Spacer(),

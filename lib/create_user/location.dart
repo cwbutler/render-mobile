@@ -5,7 +5,6 @@ import 'package:render/create_user/layout.dart';
 import 'package:render/create_user/input.dart';
 import 'package:render/create_user/next_button.dart';
 import 'package:render/models/auth.dart';
-import 'package:render/models/user.dart';
 
 class CreateUserLocation extends HookConsumerWidget {
   const CreateUserLocation({Key? key}) : super(key: key);
@@ -16,7 +15,7 @@ class CreateUserLocation extends HookConsumerWidget {
     final location = useState('');
 
     onNext() {
-      updateUser(User(email: '', location: location.value));
+      //updateUser(User(cognito_id: '', location: location.value));
       Navigator.pushNamed(context, 'create/profile_pic');
     }
 

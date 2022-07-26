@@ -5,7 +5,6 @@ import 'package:render/create_user/layout.dart';
 import 'package:render/create_user/input.dart';
 import 'package:render/create_user/next_button.dart';
 import 'package:render/models/auth.dart';
-import 'package:render/models/user.dart';
 
 class CreateUserProfessional extends HookConsumerWidget {
   const CreateUserProfessional({Key? key}) : super(key: key);
@@ -18,11 +17,11 @@ class CreateUserProfessional extends HookConsumerWidget {
     final resume = useState('');
 
     onNext() {
-      updateUser(User(
-          email: '',
+      /*updateUser(User(
+          cognito_id: '',
           linkedin_profile: linkedin.value,
           website: website.value,
-          resume: resume.value));
+          resume: resume.value));*/
       Navigator.pushNamed(context, 'create/location');
     }
 
