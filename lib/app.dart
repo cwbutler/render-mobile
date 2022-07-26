@@ -8,12 +8,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'firebase_options.dart';
 import 'package:render/models/auth.dart';
 // Pages (Screens)
-import 'package:render/home.dart';
-import 'package:render/login.dart';
-import 'package:render/create_user/create_user.dart';
-import 'package:render/create_user/professional.dart';
-import 'package:render/create_user/location.dart';
-import 'package:render/create_user/profile_pic.dart';
+import 'package:render/screens/home/home.dart';
+import 'package:render/screens/login/login.dart';
+import 'package:render/screens/create_user/create_user.dart';
+import 'package:render/screens/create_user/professional.dart';
+import 'package:render/screens/create_user/location.dart';
+import 'package:render/screens/create_user/profile_pic.dart';
 
 class RenderApp extends HookConsumerWidget {
   const RenderApp({Key? key}) : super(key: key);

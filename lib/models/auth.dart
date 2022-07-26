@@ -21,23 +21,33 @@ class RenderUser {
   });
 
   static Future<UserCredential> signInWithGoogle() async {
-    // Trigger the authentication flow
-    final GoogleSignInAccount? googleUser = await GoogleSignIn(
-            clientId: DefaultFirebaseOptions.currentPlatform.iosClientId)
-        .signIn();
+    try {
+      // Trigger the authentication flow
+      final GoogleSignInAccount? googleUser = await GoogleSignIn(
+              clientId: DefaultFirebaseOptions.currentPlatform.iosClientId)
+          .signIn();
 
-    // Obtain the auth details from the request
-    final GoogleSignInAuthentication? googleAuth =
-        await googleUser?.authentication;
+      // Obtain the auth details from the request
+      final GoogleSignInAuthentication? googleAuth =
+          await googleUser?.authentication;
 
-    // Create a new credential
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth?.accessToken,
-      idToken: googleAuth?.idToken,
-    );
+      // Create a new credential
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
+      );
 
-    // Once signed in, return the UserCredential
-    return await FirebaseAuth.instance.signInWithCredential(credential);
+      // Once signed in, return the UserCredential
+      return await FirebaseAuth.instance.signInWithCredential(credential);
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+
+    throw "Could not sign in";
+  }
+
+  static Future<void> logout() async {
+    await FirebaseAuth.instance.signOut();
   }
 
   RenderUser copyWith(RenderUser user) {

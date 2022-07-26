@@ -1,34 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:render/components/drawer.dart';
+import 'package:render/models/auth.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends HookConsumerWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(userProvider).userProfile;
+
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
         backgroundColor: Colors.black,
-        leading: Builder(
-          builder: (context) => IconButton(
-            icon: SvgPicture.asset('assets/svgs/logo.svg'),
-            onPressed: () => Scaffold.of(context).openDrawer(),
-          ),
+        leading: IconButton(
+          icon: SvgPicture.asset('assets/svgs/logo.svg'),
+          onPressed: () => {},
         ),
         actions: [
           IconButton(
             icon: SvgPicture.asset('assets/svgs/notifications.svg'),
             onPressed: () => {},
           ),
-          IconButton(
-            icon: CircleAvatar(
-              backgroundColor: Colors.brown.shade800,
-              child: const Text('AH'),
-            ),
-            onPressed: () => {},
-          )
+          Builder(
+              builder: (context) => IconButton(
+                    icon: CircleAvatar(
+                      backgroundColor: Colors.brown.shade800,
+                      backgroundImage:
+                          NetworkImage(user.profile_photo_url ?? ''),
+                    ),
+                    onPressed: () => Scaffold.of(context).openDrawer(),
+                  )),
         ],
       ),
       drawer: Builder(builder: (context) => const RenderDrawer()),

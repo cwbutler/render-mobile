@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:render/create_user/progress.dart';
-import 'package:render/create_user/header.dart';
+import 'package:render/screens/create_user/progress.dart';
+import 'package:render/screens/create_user/header.dart';
 
 class CreateUserLayout extends StatelessWidget {
   final Widget child;

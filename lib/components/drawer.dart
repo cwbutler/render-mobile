@@ -8,14 +8,12 @@ class RenderDrawer extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final clearUser = ref.read(userProvider.notifier).clearUser;
-
     navigateToHome() {
       Navigator.pushNamed(context, 'login');
     }
 
     logout() async {
-      //await AuthModel.logout();
+      await RenderUser.logout();
       navigateToHome();
     }
 
