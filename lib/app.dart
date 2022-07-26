@@ -25,12 +25,18 @@ class RenderApp extends HookConsumerWidget {
     final auth = ref.watch(userProvider);
     final setCurrentUser = ref.read(userProvider.notifier).setCurrentUser;
     final isLoading = useState(true);
+    final homeScreen = (isLoading.value)
+        ? const Center(child: CircularProgressIndicator())
+        : (auth.user == null)
+            ? const LoginScreen()
+            : (auth.hasProfile == false)
+                ? const CreateUser()
+                : const HomeScreen();
 
     Future<void> _init() async {
       await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform,
       );
-      await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
       FirebaseAuth.instance.idTokenChanges().listen((User? user) async {
         if (user == null) {
           setCurrentUser(const RenderUser());
@@ -69,13 +75,7 @@ class RenderApp extends HookConsumerWidget {
               focusedBorder: UnderlineInputBorder(
                   borderSide: BorderSide(color: Color(0xffff88df))))),
       debugShowCheckedModeBanner: false,
-      home: (isLoading.value)
-          ? const Center(child: CircularProgressIndicator())
-          : (auth.user == null)
-              ? const LoginScreen()
-              : (auth.hasProfile == false)
-                  ? const CreateUser()
-                  : const HomeScreen(),
+      home: homeScreen,
       onGenerateRoute: (settings) {
         switch (settings.name) {
           case 'home':

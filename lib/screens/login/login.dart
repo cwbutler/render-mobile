@@ -1,8 +1,6 @@
 import 'dart:ui';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:render/models/auth.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -28,25 +26,13 @@ class LoginScreen extends StatelessWidget {
   }
 }
 
-class LoginBody extends HookConsumerWidget {
+class LoginBody extends StatelessWidget {
   const LoginBody({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final setCurrentUser = ref.read(userProvider.notifier).setCurrentUser;
-
-    void navigate(user) {
-      debugPrint(user.createdAt.toString());
-      if (user.createdAt == null) {
-        Navigator.pushNamed(context, 'create');
-      } else {
-        Navigator.pushNamed(context, 'home');
-      }
-    }
-
+  Widget build(BuildContext context) {
     Future<void> signInWithGoogle() async {
-      UserCredential user = await RenderUser.signInWithGoogle();
-      debugPrint(user.toString());
+      await RenderUser.signInWithGoogle();
     }
 
     return SafeArea(

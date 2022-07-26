@@ -38,7 +38,9 @@ class RenderUser {
       );
 
       // Once signed in, return the UserCredential
-      return await FirebaseAuth.instance.signInWithCredential(credential);
+      final UserCredential creds =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+      return creds;
     } catch (e) {
       debugPrint(e.toString());
     }

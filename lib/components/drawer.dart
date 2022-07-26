@@ -1,20 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:render/models/auth.dart';
 
-class RenderDrawer extends HookConsumerWidget {
+class RenderDrawer extends StatelessWidget {
   const RenderDrawer({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    navigateToHome() {
-      Navigator.pushNamed(context, 'login');
-    }
-
+  Widget build(BuildContext context) {
     logout() async {
       await RenderUser.logout();
-      navigateToHome();
     }
 
     return SizedBox(
