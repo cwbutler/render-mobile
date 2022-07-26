@@ -109,7 +109,8 @@ class UserNotifier extends StateNotifier<RenderUser> {
   }
 
   RenderUser updateUserProfile(UserProfile profile) {
-    return state.copyWith(RenderUser(userProfile: profile));
+    state = state.copyWith(RenderUser(userProfile: profile));
+    return state;
   }
 
   void clearUser() {
