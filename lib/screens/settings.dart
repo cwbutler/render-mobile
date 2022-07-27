@@ -10,6 +10,7 @@ class RenderMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     logout() async {
+      Navigator.pop(context);
       await RenderUser.logout();
     }
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:render/components/coming_soon.dart';
 
 class RenderBottomNav extends StatelessWidget {
   const RenderBottomNav({Key? key}) : super(key: key);
@@ -12,57 +13,60 @@ class RenderBottomNav extends StatelessWidget {
           borderRadius: const BorderRadius.all(Radius.circular(100)),
           child: Container(
             padding: const EdgeInsets.symmetric(vertical: 10),
-            child: const TabBar(
-              unselectedLabelColor: Colors.white,
-              labelColor: Color(0xffFF88DF),
-              indicator: BoxDecoration(),
-              tabs: [
-                Tab(
-                  icon: RenderTabIcon(
-                    icon: Icon(Icons.home),
-                    label: "Home",
+            child: BottomNavigationBar(
+              backgroundColor: Colors.transparent,
+              unselectedItemColor: Colors.white,
+              selectedItemColor: const Color(0xffFF88DF),
+              onTap: (int index) {
+                const shape = RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(30.0),
+                    topRight: Radius.circular(30.0),
                   ),
+                );
+                switch (index) {
+                  case 1:
+                    showModalBottomSheet(
+                      backgroundColor: Colors.white,
+                      isDismissible: true,
+                      context: context,
+                      shape: shape,
+                      builder: (BuildContext context) {
+                        return const RenderComingSoon();
+                      },
+                    );
+                    break;
+                  case 2:
+                    showModalBottomSheet(
+                      backgroundColor: Colors.white,
+                      isDismissible: true,
+                      context: context,
+                      shape: shape,
+                      builder: (BuildContext context) {
+                        return const RenderComingSoon();
+                      },
+                    );
+                    break;
+                  default:
+                    break;
+                }
+              },
+              items: const [
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.home),
+                  label: "Home",
                 ),
-                Tab(
-                  icon: RenderTabIcon(
-                    icon: Icon(Icons.person_add),
-                    label: "Connections",
-                  ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.person_add),
+                  label: "Connections",
                 ),
-                Tab(
-                  icon: RenderTabIcon(
-                    icon: Icon(Icons.file_open),
-                    label: "Job Boards",
-                  ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.file_open),
+                  label: "Job Boards",
                 ),
               ],
             ),
           )),
-    );
-  }
-}
-
-class RenderTabIcon extends StatelessWidget {
-  final Widget? icon;
-  final String? label;
-  const RenderTabIcon({Key? key, this.icon, this.label}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        if (icon != null) icon!,
-        if (label != null)
-          Container(
-            margin: const EdgeInsets.symmetric(vertical: 3),
-            child: Text(
-              label!,
-              style: const TextStyle(fontFamily: 'Inter', fontSize: 10),
-            ),
-          )
-      ],
     );
   }
 }
