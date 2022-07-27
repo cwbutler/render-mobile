@@ -5,20 +5,18 @@ class HomeTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
-          Text(
-            'Upcoming Events',
-            style: TextStyle(
-                color: Colors.white,
-                fontFamily: 'Gothic A1',
-                fontWeight: FontWeight.w700,
-                fontSize: 16),
-          )
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: const [
+        Text(
+          'Upcoming Events',
+          style: TextStyle(
+              color: Colors.white,
+              fontFamily: 'Gothic A1',
+              fontWeight: FontWeight.w700,
+              fontSize: 16),
+        )
+      ],
     );
   }
 }
