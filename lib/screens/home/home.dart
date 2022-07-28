@@ -18,6 +18,7 @@ class HomeScreen extends StatelessWidget {
           body: Container(
             padding: const EdgeInsets.only(top: 40, left: 20, right: 20),
             child: const TabBarView(
+              physics: NeverScrollableScrollPhysics(),
               children: [
                 HomeTab(),
                 Icon(Icons.directions_transit),
