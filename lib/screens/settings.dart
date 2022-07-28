@@ -21,24 +21,44 @@ class RenderMenu extends StatelessWidget {
         const RenderMenuHeader(title: "Main Menu"),
         // Body
         Expanded(
-          child: Column(
-            children: [
-              Container(
-                margin: const EdgeInsets.only(bottom: 65),
-                child: const SizedBox(
-                  width: 100,
-                  height: 100,
-                  child: CircleAvatar(
-                    backgroundColor: Color(0xffFF88DF),
-                    child: RenderAvatar(
-                      width: 95,
-                      height: 95,
-                      fontSize: 26,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(bottom: 50),
+                  child: const SizedBox(
+                    width: 100,
+                    height: 100,
+                    child: CircleAvatar(
+                      backgroundColor: Color(0xffFF88DF),
+                      child: RenderAvatar(
+                        width: 95,
+                        height: 95,
+                        fontSize: 26,
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+                const RenderMenuSettingsLink(
+                  label: "VIEW PROFILE",
+                ),
+                const RenderMenuSettingsLink(
+                  label: "SETTINGS",
+                ),
+                const RenderMenuSettingsLink(
+                  label: "PODCAST",
+                ),
+                const RenderMenuSettingsLink(
+                  label: "DISCORD",
+                ),
+                const RenderMenuSettingsLink(
+                  label: "MERCH SHOP",
+                ),
+                const RenderMenuSettingsLink(
+                  label: "BUY TICKETS",
+                ),
+              ],
+            ),
           ),
         ),
         // Logout
@@ -54,6 +74,36 @@ class RenderMenu extends StatelessWidget {
           ),
         )
       ]),
+    );
+  }
+}
+
+class RenderMenuSettingsLink extends StatelessWidget {
+  final void Function()? onPressed;
+  final String? label;
+
+  const RenderMenuSettingsLink({
+    Key? key,
+    this.onPressed,
+    this.label,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 15),
+      child: TextButton(
+        onPressed: onPressed ?? () {},
+        child: Text(
+          label ?? "",
+          style: const TextStyle(
+            fontFamily: "Mortend",
+            fontWeight: FontWeight.w700,
+            fontSize: 20,
+            color: Colors.white,
+          ),
+        ),
+      ),
     );
   }
 }

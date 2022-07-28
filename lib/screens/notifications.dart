@@ -8,9 +8,21 @@ class RenderNotifications extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RenderFullBottomSheetLayout(
-      child: Column(children: const <Widget>[
+      child: Column(children: <Widget>[
         // Header
-        RenderMenuHeader(title: "Notifications"),
+        const RenderMenuHeader(title: "Notifications"),
+        Expanded(
+          child: Container(
+            margin: EdgeInsets.only(
+                bottom:
+                    MediaQueryData.fromWindow(WidgetsBinding.instance.window)
+                        .padding
+                        .top),
+            child: const Center(
+              child: Text("No Notifications"),
+            ),
+          ),
+        )
       ]),
     );
   }

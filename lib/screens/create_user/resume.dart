@@ -74,6 +74,9 @@ class RenderResumeInput extends HookConsumerWidget {
                   ? [
                       Text(
                         user.userProfile.resume_name!,
+                        maxLines: 1,
+                        softWrap: false,
+                        overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 16,
