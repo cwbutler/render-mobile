@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:render/models/auth.dart';
@@ -13,6 +14,7 @@ class RenderResumeInput extends HookConsumerWidget {
     final user = ref.watch(userProvider);
     final updateUser = ref.read(userProvider.notifier).updateUserProfile;
     final isActive = user.userProfile.resume_url?.isNotEmpty ?? false;
+    final isLoading = useState(false);
 
     onPressed() async {
       FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -22,11 +24,13 @@ class RenderResumeInput extends HookConsumerWidget {
       if (result != null && result.files.first.path != null) {
         PlatformFile file = result.files.first;
         File fileData = File(file.path!);
+        isLoading.value = true;
         final url = await user.saveUserResume(
           fileName: file.name,
           file: fileData,
         );
         updateUser(UserProfile(resume_name: file.name, resume_url: url));
+        isLoading.value = false;
       } else {
         // User canceled the picker
         debugPrint(result?.files.first.size.toString());
@@ -52,6 +56,7 @@ class RenderResumeInput extends HookConsumerWidget {
           ElevatedButton(
             onPressed: onPressed,
             style: ElevatedButton.styleFrom(
+              minimumSize: const Size.fromHeight(65),
               primary: (isActive)
                   ? const Color.fromRGBO(255, 136, 223, 0.6)
                   : Colors.black,
@@ -70,44 +75,50 @@ class RenderResumeInput extends HookConsumerWidget {
               mainAxisAlignment: (isActive)
                   ? MainAxisAlignment.start
                   : MainAxisAlignment.center,
-              children: (isActive)
+              children: (isLoading.value)
                   ? [
-                      Text(
-                        user.userProfile.resume_name!,
-                        maxLines: 1,
-                        softWrap: false,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                        ),
-                      ),
-                      const Spacer(),
-                      IconButton(
-                        splashRadius: 10,
-                        onPressed: () {
-                          updateUser(const UserProfile(
-                            resume_name: "",
-                            resume_url: "",
-                          ));
-                        },
-                        icon: const Icon(Icons.cancel),
+                      const Center(
+                        child: CircularProgressIndicator(),
                       )
                     ]
-                  : [
-                      const Icon(
-                        Icons.attach_file,
-                        color: Color(0xffDADADA),
-                      ),
-                      Text(
-                        "Attach a file",
-                        style: TextStyle(
-                          color: (isActive)
-                              ? Colors.black
-                              : const Color(0xffDADADA),
-                        ),
-                      )
-                    ],
+                  : (isActive)
+                      ? [
+                          Text(
+                            user.userProfile.resume_name!,
+                            maxLines: 1,
+                            softWrap: false,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                            ),
+                          ),
+                          const Spacer(),
+                          IconButton(
+                            splashRadius: 10,
+                            onPressed: () {
+                              updateUser(const UserProfile(
+                                resume_name: "",
+                                resume_url: "",
+                              ));
+                            },
+                            icon: const Icon(Icons.cancel),
+                          )
+                        ]
+                      : [
+                          const Icon(
+                            Icons.attach_file,
+                            color: Color(0xffDADADA),
+                          ),
+                          Text(
+                            "Attach a file",
+                            style: TextStyle(
+                              color: (isActive)
+                                  ? Colors.black
+                                  : const Color(0xffDADADA),
+                            ),
+                          )
+                        ],
             ),
           ),
         ],

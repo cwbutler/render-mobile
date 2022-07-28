@@ -22,7 +22,7 @@ class RenderUser {
     this.hasProfile = false,
   });
 
-  static Future<UserCredential> signInWithGoogle() async {
+  Future<UserCredential> signInWithGoogle() async {
     try {
       // Trigger the authentication flow
       final GoogleSignInAccount? googleUser = await GoogleSignIn(
@@ -121,6 +121,7 @@ class RenderUser {
     try {
       final key = 'resumes/${userProfile.id}_$fileName';
       final storageRef = FirebaseStorage.instance.ref(key);
+      await storageRef.putFile(file);
       final url = await storageRef.getDownloadURL();
       return url;
     } catch (e) {
@@ -157,6 +158,13 @@ class UserNotifier extends StateNotifier<RenderUser> {
 
   void clearUser() {
     state = const RenderUser();
+  }
+
+  Future<RenderUser> signInWithGoogle() async {
+    final creds = await state.signInWithGoogle();
+    final user = RenderUser(user: creds.user);
+    state = await user.getUserProfile();
+    return state;
   }
 }
 

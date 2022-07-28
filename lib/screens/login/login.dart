@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:render/models/auth.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -26,13 +27,16 @@ class LoginScreen extends StatelessWidget {
   }
 }
 
-class LoginBody extends StatelessWidget {
+class LoginBody extends HookConsumerWidget {
   const LoginBody({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    Future<void> signInWithGoogle() async {
-      await RenderUser.signInWithGoogle();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final signInWithGoogle = ref.read(userProvider.notifier).signInWithGoogle;
+
+    navigateAway(RenderUser user) {
+      final nextRoute = (user.hasProfile ?? false) ? 'home' : 'create';
+      Navigator.pushReplacementNamed(context, nextRoute);
     }
 
     return SafeArea(
@@ -61,8 +65,9 @@ class LoginBody extends StatelessWidget {
                   LoginBtn(
                     text: "CONTINUE WITH GOOGLE",
                     icon: 'assets/svgs/google_logo.svg',
-                    onPressed: () {
-                      signInWithGoogle();
+                    onPressed: () async {
+                      final user = await signInWithGoogle();
+                      navigateAway(user);
                     },
                   ),
                 ]

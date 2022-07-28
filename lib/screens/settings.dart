@@ -9,9 +9,13 @@ class RenderMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    goToLogin() {
+      Navigator.pushReplacementNamed(context, 'login');
+    }
+
     logout() async {
-      Navigator.pop(context);
       await RenderUser.logout();
+      goToLogin();
     }
 
     return RenderFullBottomSheetLayout(

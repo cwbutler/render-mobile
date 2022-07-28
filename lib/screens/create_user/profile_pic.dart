@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:render/models/user_profile.dart';
 import 'package:render/screens/create_user/layout.dart';
@@ -66,9 +67,13 @@ class CreateUserProfilePic extends HookConsumerWidget {
                   ? const Center(child: CircularProgressIndicator())
                   : CircleAvatar(
                       radius: 50,
-                      backgroundColor: const Color(0xffFF88DF),
-                      backgroundImage:
-                          NetworkImage(user.profile_photo_url ?? ''),
+                      backgroundColor: const Color.fromRGBO(255, 136, 223, 1),
+                      foregroundImage: (user.profile_photo_url != null)
+                          ? NetworkImage(user.profile_photo_url!)
+                          : null,
+                      child: (user.profile_photo_url == null)
+                          ? SvgPicture.asset("assets/svgs/camera.svg")
+                          : null,
                     ),
             ),
           ),
