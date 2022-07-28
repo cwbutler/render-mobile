@@ -57,7 +57,7 @@ class RenderBottomNav extends StatelessWidget {
                   label: "Home",
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.person_add),
+                  icon: Icon(Icons.person_add_alt_1),
                   label: "Connections",
                 ),
                 BottomNavigationBarItem(

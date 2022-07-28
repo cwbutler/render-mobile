@@ -5,12 +5,14 @@ import 'package:render/screens/create_user/input.dart';
 import 'package:render/screens/create_user/next_button.dart';
 import 'package:render/models/auth.dart';
 import 'package:render/models/user_profile.dart';
+import 'package:render/screens/create_user/resume.dart';
 
 class CreateUserProfessional extends HookConsumerWidget {
   const CreateUserProfessional({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final profile = ref.watch(userProvider).userProfile;
     final updateUser = ref.read(userProvider.notifier).updateUserProfile;
 
     onNext() {
@@ -26,20 +28,24 @@ class CreateUserProfessional extends HookConsumerWidget {
           children: [
             CreateInput(
               label: 'LinkedIn Profile',
+              initalText: profile.linkedin_profile,
               onChange: (value) {
                 updateUser(UserProfile(linkedin_profile: value));
               },
             ),
             CreateInput(
               label: 'Personal Website/Github',
+              initalText: profile.website,
               onChange: (value) {
                 updateUser(UserProfile(website: value));
               },
             ),
+            const RenderResumeInput(),
             const Spacer(),
             Container(
-                margin: const EdgeInsets.only(top: 50),
-                child: NextButton(onPressed: onNext))
+              margin: const EdgeInsets.only(top: 50),
+              child: NextButton(onPressed: onNext),
+            )
           ],
         )));
   }

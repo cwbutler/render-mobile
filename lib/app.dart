@@ -59,21 +59,27 @@ class RenderApp extends HookConsumerWidget {
     return MaterialApp(
       title: 'Render Conference App',
       theme: ThemeData(
-          brightness: Brightness.dark,
-          primaryColor: const Color(0xffff88df),
-          backgroundColor: Colors.black,
-          fontFamily: 'Gothic A1',
-          disabledColor: Colors.black,
-          inputDecorationTheme: const InputDecorationTheme(
-              contentPadding: EdgeInsets.only(bottom: 6),
-              floatingLabelStyle: TextStyle(
-                  color: Color(0xffff88df),
-                  fontSize: 20,
-                  fontWeight: FontWeight.w500),
-              floatingLabelBehavior: FloatingLabelBehavior.always,
-              labelStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
-              focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Color(0xffff88df))))),
+        brightness: Brightness.dark,
+        primaryColor: const Color(0xffff88df),
+        backgroundColor: Colors.black,
+        fontFamily: 'Gothic A1',
+        disabledColor: Colors.black,
+        inputDecorationTheme: const InputDecorationTheme(
+          contentPadding: EdgeInsets.only(bottom: 6),
+          floatingLabelStyle: TextStyle(
+            color: Color(0xffff88df),
+            fontSize: 20,
+            fontWeight: FontWeight.w500,
+          ),
+          floatingLabelBehavior: FloatingLabelBehavior.always,
+          labelStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(
+              color: Color(0xffff88df),
+            ),
+          ),
+        ),
+      ),
       debugShowCheckedModeBanner: false,
       home: homeScreen,
       onGenerateRoute: (settings) {

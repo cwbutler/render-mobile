@@ -11,6 +11,7 @@ class CreateUserLocation extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final profile = ref.watch(userProvider).userProfile;
     final updateUser = ref.read(userProvider.notifier).updateUserProfile;
 
     onNext() {
@@ -18,23 +19,24 @@ class CreateUserLocation extends HookConsumerWidget {
     }
 
     return CreateUserLayout(
-        active: 3,
-        title: 'LOCATION',
-        subtitle: "Where are you located?",
-        child: Form(
-            child: Column(
-          children: [
-            CreateInput(
-              label: 'Zip Code',
-              onChange: (value) {
-                updateUser(UserProfile(location: value));
-              },
-            ),
-            const Spacer(),
-            Container(
-                margin: const EdgeInsets.only(top: 50),
-                child: NextButton(onPressed: onNext))
-          ],
-        )));
+      active: 3,
+      title: 'LOCATION',
+      subtitle: "Where are you located?",
+      child: Column(
+        children: [
+          CreateInput(
+            label: 'Zip Code',
+            initalText: profile.location,
+            onChange: (value) {
+              updateUser(UserProfile(location: value));
+            },
+          ),
+          const Spacer(),
+          Container(
+              margin: const EdgeInsets.only(top: 50),
+              child: NextButton(onPressed: onNext))
+        ],
+      ),
+    );
   }
 }

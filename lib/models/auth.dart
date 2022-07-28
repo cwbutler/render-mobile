@@ -1,5 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
+import 'dart:io';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -110,6 +112,34 @@ class RenderUser {
     } catch (e) {
       debugPrint(e.toString());
     }
+  }
+
+  Future<String> saveUserResume({
+    required String fileName,
+    required File file,
+  }) async {
+    try {
+      final key = 'resumes/${userProfile.id}_$fileName';
+      final storageRef = FirebaseStorage.instance.ref(key);
+      final url = await storageRef.getDownloadURL();
+      return url;
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return "";
+  }
+
+  Future<String> saveUserImage({required File file}) async {
+    try {
+      final key = 'images/${userProfile.id}';
+      final storageRef = FirebaseStorage.instance.ref(key);
+      await storageRef.putFile(file);
+      final url = await storageRef.getDownloadURL();
+      return url;
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return "";
   }
 }
 

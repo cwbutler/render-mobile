@@ -23,7 +23,7 @@ class CreateInput extends HookConsumerWidget {
         margin: const EdgeInsets.only(bottom: 30),
         child: TextFormField(
             onChanged: onChange,
-            style: const TextStyle(fontFamily: 'Inter', fontSize: 20),
+            style: const TextStyle(fontFamily: 'Gothic A1', fontSize: 20),
             controller: controller,
             keyboardType: keyboardType,
             decoration: InputDecoration(labelText: label)));
