@@ -133,6 +133,7 @@ class RenderUser {
           profile_photo_url: data["profile_photo_url"],
           resume_name: data["resume_name"],
           resume_url: data["resume_url"],
+          isNotificationsEnabled: data["isNotificationsEnabled"],
         );
 
         return copyWith(RenderUser(userProfile: profile, hasProfile: true));

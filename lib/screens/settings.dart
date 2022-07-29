@@ -1,0 +1,53 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:render/components/menu_appbar.dart';
+import 'package:render/models/auth.dart';
+import 'package:render/models/user_profile.dart';
+
+class RenderSettings extends HookConsumerWidget {
+  const RenderSettings({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(userProvider).userProfile;
+    final appUser = ref.watch(userProvider);
+    final updateUser = ref.read(userProvider.notifier).updateUserProfile;
+
+    return Scaffold(
+      appBar: const RenderMenuAppBar(title: "Settings"),
+      backgroundColor: Colors.black,
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(20),
+        child: SizedBox(
+          width: double.infinity,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                margin: const EdgeInsets.only(bottom: 5),
+                child: Row(children: [
+                  const Text(
+                    "Notifications",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  const Spacer(),
+                  CupertinoSwitch(
+                    value: user.isNotificationsEnabled ?? false,
+                    onChanged: (value) async {
+                      updateUser(UserProfile(isNotificationsEnabled: value));
+                      appUser.saveUserProfile();
+                    },
+                  ),
+                ]),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

@@ -8,6 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:render/models/events.dart';
 import 'package:render/screens/profile/edit.dart';
 import 'package:render/screens/profile/profile.dart';
+import 'package:render/screens/settings.dart';
 import 'firebase_options.dart';
 import 'package:render/models/auth.dart';
 // Pages (Screens)
@@ -110,6 +111,9 @@ class RenderApp extends HookConsumerWidget {
           case 'profile/edit':
             return MaterialPageRoute(
                 builder: (context) => const RenderProfileEdit());
+          case 'settings':
+            return MaterialPageRoute(
+                builder: (context) => const RenderSettings());
           default:
             return MaterialPageRoute(
                 builder: (context) => const UnknownScreen());

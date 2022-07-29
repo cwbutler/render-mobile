@@ -15,6 +15,7 @@ class UserProfile {
   final String? profile_photo_url;
   final String? resume_url;
   final String? resume_name;
+  final bool? isNotificationsEnabled;
 
   const UserProfile({
     this.id,
@@ -28,6 +29,7 @@ class UserProfile {
     this.profile_photo_url,
     this.resume_url,
     this.resume_name,
+    this.isNotificationsEnabled,
   });
 
   UserProfile copyWith(UserProfile profile) {
@@ -43,6 +45,8 @@ class UserProfile {
       profile_photo_url: profile.profile_photo_url ?? profile_photo_url,
       resume_url: profile.resume_url ?? resume_url,
       resume_name: profile.resume_name ?? resume_name,
+      isNotificationsEnabled:
+          profile.isNotificationsEnabled ?? isNotificationsEnabled,
     );
   }
 
@@ -59,13 +63,13 @@ class UserProfile {
       "profile_photo_url": profile_photo_url,
       "resume_url": resume_url,
       "resume_name": resume_name,
+      "isNotificationsEnabled": isNotificationsEnabled,
     };
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-
     return other is UserProfile && other.id == id && other.email == email;
   }
 

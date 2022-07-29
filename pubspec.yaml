@@ -47,6 +47,7 @@ dependencies:
   crypto: ^3.0.1
   http: ^0.13.4
   cloud_functions: ^3.3.3
+  notification_permissions: ^0.6.1
 
 dev_dependencies:
   flutter_test:

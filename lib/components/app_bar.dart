@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:render/components/avatar.dart';
 import 'package:render/screens/notifications.dart';
-import 'package:render/screens/settings.dart';
+import 'package:render/screens/menu.dart';
 
 class RenderAppBar extends StatelessWidget implements PreferredSizeWidget {
   const RenderAppBar({Key? key}) : super(key: key);

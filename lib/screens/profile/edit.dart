@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:render/components/avatar.dart';
+import 'package:render/components/menu_appbar.dart';
 import 'package:render/models/app.dart';
 import 'package:render/models/auth.dart';
 import 'package:render/models/user_profile.dart';
@@ -21,17 +22,7 @@ class RenderProfileEdit extends HookConsumerWidget {
     final isUserLoading = useState(false);
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        title: const Text(
-          "Edit Profile",
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-          ),
-        ),
-      ),
+      appBar: const RenderMenuAppBar(title: "Edit Profile"),
       backgroundColor: Colors.black,
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
@@ -109,7 +100,7 @@ class RenderProfileEdit extends HookConsumerWidget {
               ),
               const RenderResumeInput(),
               Container(
-                margin: const EdgeInsets.only(top: 50),
+                margin: const EdgeInsets.only(top: 40, bottom: 30),
                 child: NextButton(
                   title: "Save",
                   isLoading: isUserLoading.value,
