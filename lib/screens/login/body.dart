@@ -13,7 +13,7 @@ class LoginBody extends HookConsumerWidget {
 
     navigateAway(RenderUser user) {
       final nextRoute = (user.hasProfile ?? false) ? 'home' : 'create';
-      Navigator.pushReplacementNamed(context, nextRoute);
+      Navigator.popAndPushNamed(context, nextRoute);
     }
 
     return SafeArea(
@@ -25,15 +25,16 @@ class LoginBody extends HookConsumerWidget {
                 const Image(image: AssetImage('assets/images/logo.png')),
                 const Spacer(),
                 Container(
-                    margin: const EdgeInsets.only(bottom: 6),
-                    child: const Text(
-                      "WELCOME TO RENDER",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: 'Mortend',
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold),
-                    )),
+                  margin: const EdgeInsets.only(bottom: 6),
+                  child: const Text(
+                    "WELCOME TO RENDER",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontFamily: 'Mortend',
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
                 if (true) ...[
                   LoginBtn(
                     text: "CONTINUE WITH APPLE",

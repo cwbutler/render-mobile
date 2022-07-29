@@ -5,7 +5,7 @@ import 'package:render/screens/create_user/input.dart';
 import 'package:render/screens/create_user/next_button.dart';
 import 'package:render/models/auth.dart';
 import 'package:render/models/user_profile.dart';
-import 'package:render/screens/create_user/resume.dart';
+import 'package:render/components/resume.dart';
 
 class CreateUserProfessional extends HookConsumerWidget {
   const CreateUserProfessional({Key? key}) : super(key: key);

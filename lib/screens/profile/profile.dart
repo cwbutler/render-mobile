@@ -33,7 +33,9 @@ class RenderProfile extends HookConsumerWidget {
               Container(
                 margin: const EdgeInsets.only(bottom: 38),
                 child: TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushNamed(context, 'profile/edit');
+                  },
                   child: Text(
                     "Edit Profile",
                     style: TextStyle(

@@ -10,7 +10,7 @@ class RenderMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     goToLogin() {
-      Navigator.pushReplacementNamed(context, 'login');
+      Navigator.pushNamedAndRemoveUntil(context, 'login', (_) => false);
     }
 
     logout() async {

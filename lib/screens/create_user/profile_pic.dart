@@ -24,7 +24,7 @@ class CreateUserProfilePic extends HookConsumerWidget {
     final isLoading = useState(false);
 
     navigateHome() {
-      Navigator.pushNamed(context, 'home');
+      Navigator.pushNamedAndRemoveUntil(context, 'home', (route) => false);
     }
 
     onNext() async {
@@ -79,19 +79,23 @@ class CreateUserProfilePic extends HookConsumerWidget {
           ),
           const Spacer(),
           Container(
-              margin: const EdgeInsets.only(top: 50),
-              child: NextButton(onPressed: onNext, title: 'FINISH')),
+            margin: const EdgeInsets.only(top: 50),
+            child: NextButton(onPressed: onNext, title: 'FINISH'),
+          ),
           Container(
-              margin: const EdgeInsets.only(top: 15),
-              child: TextButton(
-                onPressed: onSkip,
-                child: const Text('Add later',
-                    style: TextStyle(
-                        color: Color(0xffFF88DF),
-                        fontFamily: 'Gothic A1',
-                        fontWeight: FontWeight.w700,
-                        fontSize: 20)),
-              ))
+            margin: const EdgeInsets.only(top: 15),
+            child: TextButton(
+              onPressed: onSkip,
+              child: const Text(
+                'Add later',
+                style: TextStyle(
+                    color: Color(0xffFF88DF),
+                    fontFamily: 'Gothic A1',
+                    fontWeight: FontWeight.w700,
+                    fontSize: 20),
+              ),
+            ),
+          )
         ],
       ),
     );

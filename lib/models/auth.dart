@@ -131,6 +131,8 @@ class RenderUser {
           website: data["website"],
           location: data["location"],
           profile_photo_url: data["profile_photo_url"],
+          resume_name: data["resume_name"],
+          resume_url: data["resume_url"],
         );
 
         return copyWith(RenderUser(userProfile: profile, hasProfile: true));

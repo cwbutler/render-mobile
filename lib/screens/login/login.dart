@@ -13,11 +13,12 @@ class LoginScreen extends StatelessWidget {
         alignment: Alignment.topCenter,
         children: [
           Align(
-              alignment: const Alignment(0, 0),
-              child: ImageFiltered(
-                imageFilter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
-                child: Image.asset('assets/images/login_bg.png'),
-              )),
+            alignment: const Alignment(0, 0),
+            child: ImageFiltered(
+              imageFilter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+              child: Image.asset('assets/images/login_bg.png'),
+            ),
+          ),
           const Positioned.fill(child: LoginBody())
         ],
       ),
