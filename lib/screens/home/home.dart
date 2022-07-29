@@ -13,9 +13,10 @@ class HomeScreen extends HookConsumerWidget {
       child: DefaultTabController(
         length: 3,
         child: Scaffold(
-          backgroundColor: Colors.black,
+          backgroundColor: Colors.transparent,
           appBar: const RenderAppBar(),
           bottomNavigationBar: const RenderBottomNav(),
+          extendBody: true,
           body: Container(
             padding: const EdgeInsets.only(left: 20, right: 20),
             child: const TabBarView(
