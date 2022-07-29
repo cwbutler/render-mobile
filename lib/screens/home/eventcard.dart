@@ -10,6 +10,8 @@ class RenderEventCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final date = DateTime.parse(event.dateTime ?? "");
+    final image =
+        "${event.images?[0].baseUrl}${event.images?[0].id}/${MediaQuery.of(context).size.width.toInt()}x140.jpg";
     const textStyle = TextStyle(
       fontFamily: 'Inter',
       color: Colors.white,
@@ -25,8 +27,7 @@ class RenderEventCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.black,
         image: DecorationImage(
-          image: NetworkImage(
-              "${event.images?[0].baseUrl}${event.images?[0].id}/676x380.jpg"),
+          image: NetworkImage(image),
           fit: BoxFit.cover,
           colorFilter: ColorFilter.mode(
             Colors.black.withOpacity(0.73),
@@ -108,7 +109,7 @@ String getMonth(int month) {
     case DateTime.september:
       return "Sept";
     case DateTime.october:
-      return "Octr";
+      return "Oct";
     case DateTime.november:
       return "Nov";
     case DateTime.december:
