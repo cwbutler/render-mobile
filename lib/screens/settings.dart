@@ -43,8 +43,9 @@ class RenderMenu extends StatelessWidget {
                     ),
                   ),
                 ),
-                const RenderMenuSettingsLink(
+                RenderMenuSettingsLink(
                   label: "VIEW PROFILE",
+                  onPressed: () => Navigator.pushNamed(context, 'profile'),
                 ),
                 const RenderMenuSettingsLink(
                   label: "SETTINGS",

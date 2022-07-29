@@ -6,6 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:render/models/events.dart';
+import 'package:render/screens/profile/profile.dart';
 import 'firebase_options.dart';
 import 'package:render/models/auth.dart';
 // Pages (Screens)
@@ -102,6 +103,9 @@ class RenderApp extends HookConsumerWidget {
           case 'create/profile_pic':
             return MaterialPageRoute(
                 builder: (context) => const CreateUserProfilePic());
+          case 'profile':
+            return MaterialPageRoute(
+                builder: (context) => const RenderProfile());
           default:
             return MaterialPageRoute(
                 builder: (context) => const UnknownScreen());
