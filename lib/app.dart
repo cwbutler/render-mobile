@@ -5,6 +5,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:render/models/events.dart';
 import 'firebase_options.dart';
 import 'package:render/models/auth.dart';
 // Pages (Screens)
@@ -37,6 +38,8 @@ class RenderApp extends HookConsumerWidget {
       await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform,
       );
+      await EventsApi.init();
+
       FirebaseAuth.instance.idTokenChanges().listen((User? user) async {
         if (user == null) {
           setCurrentUser(const RenderUser());

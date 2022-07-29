@@ -25,7 +25,8 @@ class RenderEventCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.black,
         image: DecorationImage(
-          image: AssetImage(event.images?[0].baseUrl ?? ""),
+          image: NetworkImage(
+              "${event.images?[0].baseUrl}${event.images?[0].id}/676x380.jpg"),
           fit: BoxFit.cover,
           colorFilter: ColorFilter.mode(
             Colors.black.withOpacity(0.73),

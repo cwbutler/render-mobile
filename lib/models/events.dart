@@ -1,54 +1,76 @@
 // ignore_for_file: non_constant_identifier_names
 
-import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
+import 'dart:convert';
+
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:http/http.dart' as http;
+
+@immutable
+class EventsToken {
+  final String refresh_token;
+  final String access_token;
+  final int expires_in;
+
+  const EventsToken({
+    required this.access_token,
+    required this.refresh_token,
+    required this.expires_in,
+  });
+}
 
 class EventsApi {
-  static JWT? jwt;
+  static EventsToken? token;
   static bool? isLoaded = false;
+  static String host = "https://api.meetup.com/gql";
 
   EventsApi();
 
-  static void init() async {
-    jwt = JWT(
-      {},
-      subject: "",
-    );
-    isLoaded = true;
+  static Future<void> init() async {
+    try {
+      final result = await FirebaseFunctions.instance
+          .httpsCallable('getMeetupAccess')
+          .call();
+      if (result.data["access_token"] != null) {
+        token = EventsToken(
+          access_token: result.data["access_token"],
+          refresh_token: result.data["refresh_token"],
+          expires_in: result.data['expires_in'],
+        );
+      }
+      isLoaded = true;
+    } catch (e) {
+      debugPrint("Error on events init ${e.toString()}");
+    }
   }
 
-  static List<RenderEvent> fetchEvents() {
-    return [
-      RenderEvent(
-        title: "Black Tech Haus",
-        dateTime: DateTime.utc(2022, DateTime.may, 20).toIso8601String(),
-        images: const [
-          RenderEventImage(
-            id: '',
-            baseUrl: 'assets/images/defaultEventImage1.png',
-          ),
-        ],
-        venue: const RenderEventVenue(
-          city: "Miami",
-          state: "Fl",
-        ),
-      ),
-      RenderEvent(
-        title: "Black Tech Haus",
-        dateTime: DateTime.utc(2022, DateTime.september, 8).toIso8601String(),
-        images: const [
-          RenderEventImage(
-            id: '',
-            baseUrl: 'assets/images/defaultEventImage2.png',
-          ),
-        ],
-        venue: const RenderEventVenue(
-          city: "Brooklyn",
-          state: "Ny",
-        ),
-      ),
-    ];
+  static Future<Map<String, dynamic>> queryMeetup(String query) async {
+    final url = Uri.parse(host);
+    final response = await http.post(
+      url,
+      body: jsonEncode({"query": query}),
+      headers: {
+        'Authorization': 'Bearer ${token?.access_token}',
+        'Content-Type': 'application/json',
+      },
+    );
+    return json.decode(response.body);
+  }
+
+  static Future<List<RenderEvent>> fetchEvents() async {
+    try {
+      const query =
+          'query { groupByUrlname(urlname: "renderatl") { id logo { baseUrl } upcomingEvents(input: {}) { edges { cursor node { id } } } pastEvents(input: {}) { edges { cursor node { id title eventUrl description shortDescription dateTime venue { id name address city state postalCode } images { id baseUrl } }} } } }';
+      final result = await queryMeetup(query);
+      final data =
+          List.from(result["data"]["groupByUrlname"]["pastEvents"]["edges"])
+              .map((e) => RenderEvent.fromMap(e["node"]));
+      return List.from(data);
+    } catch (e) {
+      debugPrint("Error fetching event list: $e");
+    }
+    return [];
   }
 }
 
@@ -75,6 +97,20 @@ class RenderEventVenue {
     this.lat,
     this.lng,
   });
+
+  static RenderEventVenue fromMap(Map<String, dynamic> data) {
+    return RenderEventVenue(
+      id: data["id"],
+      name: data["name"],
+      address: data["address"],
+      city: data["city"],
+      state: data["state"],
+      postalCode: data["postalCode"],
+      country: data["country"],
+      lat: data["lat"],
+      lng: data["lng"],
+    );
+  }
 }
 
 @immutable
@@ -86,6 +122,13 @@ class RenderEventImage {
     this.id,
     this.baseUrl,
   });
+
+  static RenderEventImage fromMap(Map<String, dynamic> data) {
+    return RenderEventImage(
+      id: data["id"],
+      baseUrl: data["baseUrl"],
+    );
+  }
 }
 
 @immutable
@@ -113,6 +156,23 @@ class RenderEvent {
     this.duration,
     this.images,
   });
+
+  static RenderEvent fromMap(Map<String, dynamic> data) {
+    return RenderEvent(
+      id: data["id"],
+      title: data["title"],
+      eventUrl: data["eventUrl"],
+      description: data["description"],
+      shortDescription: data["shortDescription"],
+      dateTime: data["dateTime"],
+      status: data["status"],
+      duration: data["duration"],
+      venue: RenderEventVenue.fromMap(data["venue"]),
+      images: List.from(
+        List.from(data["images"]).map((e) => RenderEventImage.fromMap(e)),
+      ),
+    );
+  }
 }
 
 @immutable

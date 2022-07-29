@@ -9,6 +9,10 @@ PODS:
     - Firebase/Firestore (= 9.3.0)
     - firebase_core
     - Flutter
+  - cloud_functions (3.3.3):
+    - Firebase/Functions (= 9.3.0)
+    - firebase_core
+    - Flutter
   - DKImagePickerController/Core (4.3.4):
     - DKImagePickerController/ImageDataManager
     - DKImagePickerController/Resource
@@ -51,6 +55,9 @@ PODS:
   - Firebase/Firestore (9.3.0):
     - Firebase/CoreOnly
     - FirebaseFirestore (~> 9.3.0)
+  - Firebase/Functions (9.3.0):
+    - Firebase/CoreOnly
+    - FirebaseFunctions (~> 9.3.0)
   - Firebase/Storage (9.3.0):
     - Firebase/CoreOnly
     - FirebaseStorage (~> 9.3.0)
@@ -94,6 +101,16 @@ PODS:
   - FirebaseFirestore/Base (9.3.0)
   - FirebaseFirestore/WithLeveldb (9.3.0):
     - FirebaseFirestore/Base
+  - FirebaseFunctions (9.3.0):
+    - FirebaseAppCheckInterop (~> 9.0)
+    - FirebaseAuthInterop (~> 9.0)
+    - FirebaseCore (~> 9.0)
+    - FirebaseCoreExtension (~> 9.0)
+    - FirebaseMessagingInterop (~> 9.0)
+    - FirebaseSharedSwift (~> 9.0)
+    - GTMSessionFetcher/Core (< 3.0, >= 1.7)
+  - FirebaseMessagingInterop (9.3.0)
+  - FirebaseSharedSwift (9.3.0)
   - FirebaseStorage (9.3.0):
     - FirebaseAppCheckInterop (~> 9.0)
     - FirebaseAuthInterop (~> 9.0)
@@ -149,6 +166,7 @@ PODS:
 
 DEPENDENCIES:
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
+  - cloud_functions (from `.symlinks/plugins/cloud_functions/ios`)
   - file_picker (from `.symlinks/plugins/file_picker/ios`)
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
@@ -171,6 +189,9 @@ SPEC REPOS:
     - FirebaseCoreDiagnostics
     - FirebaseCoreExtension
     - FirebaseCoreInternal
+    - FirebaseFunctions
+    - FirebaseMessagingInterop
+    - FirebaseSharedSwift
     - FirebaseStorage
     - FirebaseStorageInternal
     - GoogleDataTransport
@@ -186,6 +207,8 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   cloud_firestore:
     :path: ".symlinks/plugins/cloud_firestore/ios"
+  cloud_functions:
+    :path: ".symlinks/plugins/cloud_functions/ios"
   file_picker:
     :path: ".symlinks/plugins/file_picker/ios"
   firebase_auth:
@@ -212,6 +235,7 @@ CHECKOUT OPTIONS:
 SPEC CHECKSUMS:
   AppAuth: 80317d99ac7ff2801a2f18ff86b48cd315ed465d
   cloud_firestore: bc004ee2498babe8c3df4abfd68754939b398135
+  cloud_functions: 646a1d8ecc5868b97e6c41cb2bc10b7509ba611c
   DKImagePickerController: b512c28220a2b8ac7419f21c491fc8534b7601ac
   DKPhotoGallery: fdfad5125a9fdda9cc57df834d49df790dbb4179
   file_picker: 817ab1d8cd2da9d2da412a417162deee3500fc95
@@ -227,6 +251,9 @@ SPEC CHECKSUMS:
   FirebaseCoreExtension: 900b065a4970c31ce8de4e966cee910188e3a07b
   FirebaseCoreInternal: 635d1c9a612a6502b6377a0c92af83758076ffff
   FirebaseFirestore: 46c6a5f8f633267208ff16e6b72d7aedc7e77c8d
+  FirebaseFunctions: 817616e838ef76f985314d0e1e8caa0bb5c19daf
+  FirebaseMessagingInterop: af98663efee05115924de2f4123321183c3a2be6
+  FirebaseSharedSwift: 8becafc1096ca5703ac03065ed80496023880ac0
   FirebaseStorage: 1414d27e15fa04f6350ef6602accef0e951c8bca
   FirebaseStorageInternal: f1a6d64cace780580d2b8ffa0a0c8cf3c376f3f8
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a

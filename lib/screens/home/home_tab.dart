@@ -9,7 +9,17 @@ class HomeTab extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final events = EventsApi.fetchEvents();
+    final events = useState([]);
+
+    void init() async {
+      final data = await EventsApi.fetchEvents();
+      events.value = data;
+    }
+
+    useEffect(() {
+      init();
+      return;
+    }, []);
 
     return SingleChildScrollView(
       physics: const ScrollPhysics(),
@@ -17,7 +27,7 @@ class HomeTab extends HookConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            margin: const EdgeInsets.only(bottom: 20),
+            margin: const EdgeInsets.only(top: 40, bottom: 20),
             child: const Text(
               'Upcoming Events',
               style: TextStyle(
@@ -31,9 +41,9 @@ class HomeTab extends HookConsumerWidget {
           ListView.builder(
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
-            itemCount: events.length,
+            itemCount: events.value.length,
             itemBuilder: (BuildContext context, int index) {
-              final event = events.elementAt(index);
+              final event = events.value.elementAt(index);
               return RenderEventCard(event: event);
             },
           )
