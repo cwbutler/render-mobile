@@ -11,7 +11,6 @@ class RenderSettings extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(userProvider).userProfile;
-    final appUser = ref.watch(userProvider);
     final updateUser = ref.read(userProvider.notifier).updateUserProfile;
 
     return Scaffold(
@@ -38,8 +37,9 @@ class RenderSettings extends HookConsumerWidget {
                   CupertinoSwitch(
                     value: user.isNotificationsEnabled ?? false,
                     onChanged: (value) async {
-                      updateUser(UserProfile(isNotificationsEnabled: value));
-                      appUser.saveUserProfile();
+                      await updateUser(
+                        UserProfile(isNotificationsEnabled: value),
+                      ).saveUserProfile();
                     },
                   ),
                 ]),

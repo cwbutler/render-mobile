@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:notification_permissions/notification_permissions.dart';
 import 'package:render/models/user_profile.dart';
 import 'package:render/screens/create_user/layout.dart';
 import 'package:render/screens/create_user/next_button.dart';
@@ -29,6 +30,11 @@ class CreateUserProfilePic extends HookConsumerWidget {
 
     onNext() async {
       await appUser.saveUserProfile();
+      final permission =
+          await NotificationPermissions.requestNotificationPermissions();
+      await updateUser(
+        UserProfile(isNotificationsEnabled: permission.name == "granted"),
+      ).saveUserProfile();
       navigateHome();
     }
 
@@ -89,10 +95,11 @@ class CreateUserProfilePic extends HookConsumerWidget {
               child: const Text(
                 'Add later',
                 style: TextStyle(
-                    color: Color(0xffFF88DF),
-                    fontFamily: 'Gothic A1',
-                    fontWeight: FontWeight.w700,
-                    fontSize: 20),
+                  color: Color(0xffFF88DF),
+                  fontFamily: 'Gothic A1',
+                  fontWeight: FontWeight.w700,
+                  fontSize: 20,
+                ),
               ),
             ),
           )

@@ -81,22 +81,30 @@ class RenderProfileEdit extends HookConsumerWidget {
               CreateInput(
                 label: "Email",
                 initalText: user.email,
-                onChange: null,
+                onChange: (value) {
+                  updateUser(UserProfile(email: value));
+                },
               ),
               CreateInput(
                 label: "Phone",
                 initalText: user.phone,
-                onChange: null,
+                onChange: (value) {
+                  updateUser(UserProfile(phone: value));
+                },
               ),
               CreateInput(
                 label: "Website",
                 initalText: user.website,
-                onChange: null,
+                onChange: (value) {
+                  updateUser(UserProfile(website: value));
+                },
               ),
               CreateInput(
                 label: "Location",
                 initalText: user.location,
-                onChange: null,
+                onChange: (value) {
+                  updateUser(UserProfile(location: value));
+                },
               ),
               const RenderResumeInput(),
               Container(

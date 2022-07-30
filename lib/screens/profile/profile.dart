@@ -71,6 +71,10 @@ class RenderProfile extends HookConsumerWidget {
                 label: "Phone",
                 value: user.phone,
               ),
+              RenderProfileField(
+                label: "Location",
+                value: user.location,
+              ),
             ],
           ),
         ),

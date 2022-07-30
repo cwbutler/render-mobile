@@ -33,7 +33,7 @@ class RenderApp extends HookConsumerWidget {
         ? const Center(child: CircularProgressIndicator())
         : (auth.user == null)
             ? const LoginScreen()
-            : (auth.hasProfile == false)
+            : (auth.userProfile.id == null)
                 ? const CreateUser()
                 : const HomeScreen();
 
