@@ -63,7 +63,6 @@ class CreateUserProfilePic extends HookConsumerWidget {
                 isLoading.value = false;
               } else {
                 // User canceled the picker
-                debugPrint(result?.files.first.size.toString());
               }
             },
             child: CircleAvatar(

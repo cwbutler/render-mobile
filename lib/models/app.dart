@@ -13,7 +13,6 @@ class RenderAppModel {
       return File(file.path!);
     } else {
       // User canceled the picker
-      debugPrint(result?.files.first.size.toString());
     }
 
     return null;

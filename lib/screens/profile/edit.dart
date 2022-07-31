@@ -100,6 +100,13 @@ class RenderProfileEdit extends HookConsumerWidget {
                 },
               ),
               CreateInput(
+                label: "LinkedIn",
+                initalText: user.linkedin_profile,
+                onChange: (value) {
+                  updateUser(UserProfile(linkedin_profile: value));
+                },
+              ),
+              CreateInput(
                 label: "Location",
                 initalText: user.location,
                 onChange: (value) {
