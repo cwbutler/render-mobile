@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/material.dart';
 
 class RenderAppModel {
   static Future<File?> getImageFromDevice() async {

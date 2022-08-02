@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:render/components/avatar.dart';
 import 'package:render/components/full_bottomsheet.dart';
 import 'package:render/components/menu_header.dart';
 import 'package:render/models/auth.dart';
