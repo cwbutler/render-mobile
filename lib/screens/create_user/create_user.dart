@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:render/screens/create_user/layout.dart';
-import 'package:render/screens/create_user/input.dart';
+import 'package:render/components/input.dart';
 import 'package:render/screens/create_user/next_button.dart';
 import 'package:render/models/auth.dart';
 import 'package:render/models/user_profile.dart';
@@ -30,6 +30,8 @@ class CreateUser extends HookConsumerWidget {
           CreateInput(
             label: 'First Name',
             initalText: user.first_name,
+            keyboardType: TextInputType.name,
+            textCapitalization: TextCapitalization.words,
             onChange: (value) {
               updateUser(UserProfile(first_name: value));
             },
@@ -37,17 +39,20 @@ class CreateUser extends HookConsumerWidget {
           CreateInput(
             label: 'Last Name',
             initalText: user.last_name,
+            keyboardType: TextInputType.name,
+            textCapitalization: TextCapitalization.words,
             onChange: (value) {
               updateUser(UserProfile(last_name: value));
             },
           ),
           CreateInput(
-              label: 'Email',
-              initalText: user.email,
-              onChange: (value) {
-                updateUser(UserProfile(email: value));
-              },
-              keyboardType: TextInputType.emailAddress),
+            label: 'Email',
+            initalText: user.email,
+            onChange: (value) {
+              updateUser(UserProfile(email: value));
+            },
+            keyboardType: TextInputType.emailAddress,
+          ),
           CreateInput(
             label: 'Phone',
             initalText: user.phone,

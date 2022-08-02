@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:render/landing.dart';
 import 'package:render/screens/profile/edit.dart';
@@ -19,6 +20,7 @@ class RenderApp extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
     return MaterialApp(
       title: 'Render Conference App',
       theme: ThemeData(
@@ -27,6 +29,8 @@ class RenderApp extends HookConsumerWidget {
         backgroundColor: Colors.black,
         fontFamily: 'Gothic A1',
         disabledColor: Colors.black,
+        splashColor: Colors.transparent,
+        highlightColor: Colors.transparent,
         inputDecorationTheme: const InputDecorationTheme(
           contentPadding: EdgeInsets.only(bottom: 6),
           floatingLabelStyle: TextStyle(

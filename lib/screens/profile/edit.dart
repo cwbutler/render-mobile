@@ -3,10 +3,11 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:render/components/avatar.dart';
 import 'package:render/components/menu_appbar.dart';
+import 'package:render/components/phone_input.dart';
 import 'package:render/models/app.dart';
 import 'package:render/models/auth.dart';
 import 'package:render/models/user_profile.dart';
-import 'package:render/screens/create_user/input.dart';
+import 'package:render/components/input.dart';
 import 'package:render/screens/create_user/next_button.dart';
 import 'package:render/components/resume.dart';
 
@@ -21,112 +22,121 @@ class RenderProfileEdit extends HookConsumerWidget {
     final isImgLoading = useState(false);
     final isUserLoading = useState(false);
 
-    return Scaffold(
-      appBar: const RenderMenuAppBar(title: "Edit Profile"),
-      backgroundColor: Colors.black,
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: SizedBox(
-          width: double.infinity,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              // Avatar
-              Container(
-                margin: const EdgeInsets.only(bottom: 12),
-                child: RenderAvatar(
-                  width: 72,
-                  height: 72,
-                  showEdit: true,
-                  isLoading: isImgLoading.value,
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        appBar: const RenderMenuAppBar(title: "Edit Profile"),
+        backgroundColor: Colors.black,
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.all(20),
+          child: SizedBox(
+            width: double.infinity,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // Avatar
+                Container(
+                  margin: const EdgeInsets.only(bottom: 12),
+                  child: RenderAvatar(
+                    width: 72,
+                    height: 72,
+                    showEdit: true,
+                    isLoading: isImgLoading.value,
+                  ),
                 ),
-              ),
-              // Edit Profile
-              Container(
-                margin: const EdgeInsets.only(bottom: 38),
-                child: TextButton(
-                  onPressed: () async {
-                    final file = await RenderAppModel.getImageFromDevice();
-                    if (file != null) {
-                      isImgLoading.value = true;
-                      final url = await appUser.saveUserImage(file: file);
-                      updateUser(UserProfile(profile_photo_url: url));
-                      isImgLoading.value = false;
-                    }
-                  },
-                  child: Text(
-                    "Change Profile Picture",
-                    style: TextStyle(
-                      color: Theme.of(context).primaryColor,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 12,
+                // Edit Profile
+                Container(
+                  margin: const EdgeInsets.only(bottom: 38),
+                  child: TextButton(
+                    onPressed: () async {
+                      final file = await RenderAppModel.getImageFromDevice();
+                      if (file != null) {
+                        isImgLoading.value = true;
+                        final url = await appUser.saveUserImage(file: file);
+                        updateUser(UserProfile(profile_photo_url: url));
+                        isImgLoading.value = false;
+                      }
+                    },
+                    child: Text(
+                      "Change Profile Picture",
+                      style: TextStyle(
+                        color: Theme.of(context).primaryColor,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              CreateInput(
-                label: "Name",
-                initalText: "${user.first_name} ${user.last_name}",
-                onChange: (value) {
-                  final values = value.split(" ");
-                  final firstName = values[0];
-                  values.removeAt(0);
-                  final lastName = values.join(" ");
+                CreateInput(
+                  label: "Name",
+                  initalText: "${user.first_name} ${user.last_name}",
+                  keyboardType: TextInputType.name,
+                  textCapitalization: TextCapitalization.words,
+                  onChange: (value) {
+                    final values = value.split(" ");
+                    final firstName = values[0];
+                    values.removeAt(0);
+                    final lastName = values.join(" ");
 
-                  updateUser(
-                    UserProfile(first_name: firstName, last_name: lastName),
-                  );
-                },
-              ),
-              CreateInput(
-                label: "Email",
-                initalText: user.email,
-                onChange: (value) {
-                  updateUser(UserProfile(email: value));
-                },
-              ),
-              CreateInput(
-                label: "Phone",
-                initalText: user.phone,
-                onChange: (value) {
-                  updateUser(UserProfile(phone: value));
-                },
-              ),
-              CreateInput(
-                label: "Website",
-                initalText: user.website,
-                onChange: (value) {
-                  updateUser(UserProfile(website: value));
-                },
-              ),
-              CreateInput(
-                label: "LinkedIn",
-                initalText: user.linkedin_profile,
-                onChange: (value) {
-                  updateUser(UserProfile(linkedin_profile: value));
-                },
-              ),
-              CreateInput(
-                label: "Location",
-                initalText: user.location,
-                onChange: (value) {
-                  updateUser(UserProfile(location: value));
-                },
-              ),
-              const RenderResumeInput(),
-              Container(
-                margin: const EdgeInsets.only(top: 40, bottom: 30),
-                child: NextButton(
-                  title: "Save",
-                  isLoading: isUserLoading.value,
-                  onPressed: () async {
-                    isUserLoading.value = true;
-                    await appUser.saveUserProfile();
-                    isUserLoading.value = false;
+                    updateUser(
+                      UserProfile(first_name: firstName, last_name: lastName),
+                    );
                   },
                 ),
-              )
-            ],
+                CreateInput(
+                  label: "Email",
+                  initalText: user.email,
+                  keyboardType: TextInputType.emailAddress,
+                  onChange: (value) {
+                    updateUser(UserProfile(email: value));
+                  },
+                ),
+                RenderPhoneInput(
+                  label: "Phone",
+                  initialText: user.phone,
+                  onChange: (value) {
+                    updateUser(UserProfile(phone: value));
+                  },
+                ),
+                CreateInput(
+                  label: "Website",
+                  initalText: user.website,
+                  keyboardType: TextInputType.url,
+                  onChange: (value) {
+                    updateUser(UserProfile(website: value));
+                  },
+                ),
+                CreateInput(
+                  label: "LinkedIn",
+                  initalText: user.linkedin_profile,
+                  keyboardType: TextInputType.url,
+                  onChange: (value) {
+                    updateUser(UserProfile(linkedin_profile: value));
+                  },
+                ),
+                CreateInput(
+                  label: "Location",
+                  initalText: user.location,
+                  keyboardType: TextInputType.number,
+                  onChange: (value) {
+                    updateUser(UserProfile(location: value));
+                  },
+                ),
+                const RenderResumeInput(),
+                Container(
+                  margin: const EdgeInsets.only(top: 40, bottom: 30),
+                  child: NextButton(
+                    title: "Save",
+                    isLoading: isUserLoading.value,
+                    onPressed: () async {
+                      isUserLoading.value = true;
+                      await appUser.saveUserProfile();
+                      isUserLoading.value = false;
+                    },
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),

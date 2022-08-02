@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:heroicons/heroicons.dart';
 import 'package:render/components/coming_soon.dart';
 
 class RenderBottomNav extends StatelessWidget {
@@ -60,7 +61,10 @@ class RenderBottomNav extends StatelessWidget {
                   label: "Connections",
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.file_open),
+                  icon: HeroIcon(
+                    HeroIcons.collection,
+                    solid: true,
+                  ),
                   label: "Job Boards",
                 ),
               ],

@@ -158,6 +158,10 @@ PODS:
   - nanopb/encode (2.30909.0)
   - notification_permissions (0.4.4):
     - Flutter
+  - phone_number (0.12.0):
+    - Flutter
+    - PhoneNumberKit/PhoneNumberKitCore (= 3.3.4)
+  - PhoneNumberKit/PhoneNumberKitCore (3.3.4)
   - PromisesObjC (2.1.1)
   - SDWebImage (5.13.2):
     - SDWebImage/Core (= 5.13.2)
@@ -177,6 +181,7 @@ DEPENDENCIES:
   - Flutter (from `Flutter`)
   - google_sign_in_ios (from `.symlinks/plugins/google_sign_in_ios/ios`)
   - notification_permissions (from `.symlinks/plugins/notification_permissions/ios`)
+  - phone_number (from `.symlinks/plugins/phone_number/ios`)
   - sign_in_with_apple (from `.symlinks/plugins/sign_in_with_apple/ios`)
 
 SPEC REPOS:
@@ -203,6 +208,7 @@ SPEC REPOS:
     - GTMAppAuth
     - GTMSessionFetcher
     - nanopb
+    - PhoneNumberKit
     - PromisesObjC
     - SDWebImage
     - SwiftyGif
@@ -229,6 +235,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/google_sign_in_ios/ios"
   notification_permissions:
     :path: ".symlinks/plugins/notification_permissions/ios"
+  phone_number:
+    :path: ".symlinks/plugins/phone_number/ios"
   sign_in_with_apple:
     :path: ".symlinks/plugins/sign_in_with_apple/ios"
 
@@ -270,6 +278,8 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: 5595ec75acf5be50814f81e9189490412bad82ba
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
   notification_permissions: 825ea1bf2a52ab585c53fd7b5e8e96876d735d4b
+  phone_number: 7e56d6e4e43fbe37507512a3aab3f11cf082af69
+  PhoneNumberKit: 441e8b26ec88d598e3591de9061eff18f5dd12e8
   PromisesObjC: ab77feca74fa2823e7af4249b8326368e61014cb
   SDWebImage: 72f86271a6f3139cc7e4a89220946489d4b9a866
   sign_in_with_apple: f3bf75217ea4c2c8b91823f225d70230119b8440

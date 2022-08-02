@@ -282,6 +282,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.10.2"
+  heroicons:
+    dependency: "direct main"
+    description:
+      name: heroicons
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.5.0"
   hooks_riverpod:
     dependency: "direct main"
     description:
@@ -380,6 +387,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "5.0.0"
+  phone_number:
+    dependency: "direct main"
+    description:
+      name: phone_number
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.12.0+2"
   plugin_platform_interface:
     dependency: transitive
     description:

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class RenderBuyTickets extends StatelessWidget {
   const RenderBuyTickets({Key? key}) : super(key: key);
@@ -7,16 +6,24 @@ class RenderBuyTickets extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(),
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          IconButton(
-            icon: SvgPicture.asset('assets/svgs/tickets.svg'),
-            onPressed: () => {},
-            tooltip: "",
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: TextButton(
+        style: TextButton.styleFrom(
+          backgroundColor: const Color.fromRGBO(255, 136, 223, 0.2),
+          splashFactory: NoSplash.splashFactory,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(100)),
           ),
-        ],
+        ),
+        child: Text(
+          "buy conference tickets".toUpperCase(),
+          style: TextStyle(
+            fontFamily: 'Mortend',
+            fontSize: 8,
+            color: Theme.of(context).primaryColor,
+          ),
+        ),
+        onPressed: () {},
       ),
     );
   }

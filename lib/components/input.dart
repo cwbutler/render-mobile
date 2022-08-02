@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class CreateInput extends HookConsumerWidget {
@@ -8,6 +7,8 @@ class CreateInput extends HookConsumerWidget {
   final bool? autocorrect;
   final void Function(String)? onChange;
   final TextInputType? keyboardType;
+  final TextCapitalization textCapitalization;
+  final TextEditingController? controller;
 
   const CreateInput({
     Key? key,
@@ -16,21 +17,23 @@ class CreateInput extends HookConsumerWidget {
     this.initalText,
     this.onChange,
     this.autocorrect,
+    this.textCapitalization = TextCapitalization.none,
+    this.controller,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final controller = useTextEditingController(text: initalText);
-
     return Container(
       margin: const EdgeInsets.only(bottom: 30),
       child: TextFormField(
+        controller: controller,
         onChanged: onChange,
         style: const TextStyle(fontFamily: 'Gothic A1', fontSize: 20),
-        controller: controller,
         keyboardType: keyboardType,
         autocorrect: autocorrect ?? false,
         decoration: InputDecoration(labelText: label),
+        textCapitalization: textCapitalization,
+        initialValue: initalText,
       ),
     );
   }

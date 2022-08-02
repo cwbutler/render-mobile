@@ -14,6 +14,7 @@ class RenderAppBar extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: Colors.black,
       leading: Builder(
         builder: (context) => IconButton(
+          splashRadius: 1,
           icon: const RenderAvatar(),
           onPressed: () => {
             showModalBottomSheet(

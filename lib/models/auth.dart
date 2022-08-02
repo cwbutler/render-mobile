@@ -204,7 +204,7 @@ class RenderUser {
     required File file,
   }) async {
     try {
-      final key = 'resumes/${userProfile.id}_$fileName';
+      final key = 'resumes/${userProfile.id}';
       final storageRef = FirebaseStorage.instance.ref(key);
       await storageRef.putFile(file);
       final url = await storageRef.getDownloadURL();

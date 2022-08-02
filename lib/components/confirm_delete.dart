@@ -32,7 +32,7 @@ class RenderConfirm extends StatelessWidget {
         children: [
           Container(
             margin: const EdgeInsets.symmetric(vertical: 24),
-            width: 207,
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Text(
               title ?? "",
               textAlign: TextAlign.center,
@@ -46,7 +46,7 @@ class RenderConfirm extends StatelessWidget {
           ),
           Container(
             margin: const EdgeInsets.only(bottom: 24),
-            width: 289,
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Text(
               subtitle ?? "",
               textAlign: TextAlign.center,

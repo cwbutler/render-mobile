@@ -17,12 +17,6 @@ class LoginScreen extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
             ),
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 2.0, sigmaY: 2.0),
-              child: Container(
-                decoration: BoxDecoration(color: Colors.black.withOpacity(0.1)),
-              ),
-            ),
           ),
           const Positioned.fill(child: LoginBody())
         ],
