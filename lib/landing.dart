@@ -21,17 +21,15 @@ class RenderAppLanding extends HookConsumerWidget {
       await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform,
       );
+
       final auth = await fetchCurrentUser();
+      String nextRoute = (auth.hasProfile) ? 'home' : 'create';
 
       if (auth.user == null || auth.user!.uid.isEmpty) {
         return navigate('login');
       }
 
-      if (auth.hasProfile) {
-        navigate('home');
-      } else {
-        navigate('create');
-      }
+      navigate(nextRoute);
     }
 
     useEffect(() {

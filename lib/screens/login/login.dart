@@ -8,15 +8,20 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
       body: Stack(
-        alignment: Alignment.topCenter,
         children: [
-          Align(
-            alignment: const Alignment(0, 0),
-            child: ImageFiltered(
-              imageFilter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
-              child: Image.asset('assets/images/login_bg.png'),
+          Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/images/login.gif'),
+                fit: BoxFit.cover,
+              ),
+            ),
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 2.0, sigmaY: 2.0),
+              child: Container(
+                decoration: BoxDecoration(color: Colors.black.withOpacity(0.1)),
+              ),
             ),
           ),
           const Positioned.fill(child: LoginBody())

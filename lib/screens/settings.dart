@@ -34,7 +34,7 @@ class RenderSettings extends HookConsumerWidget {
           children: [
             Container(
               margin: const EdgeInsets.only(bottom: 5),
-              padding: const EdgeInsets.symmetric(horizontal: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Row(
                 children: [
                   const Text(

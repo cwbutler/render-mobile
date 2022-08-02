@@ -25,18 +25,6 @@ class LoginBody extends HookConsumerWidget {
           children: [
             const Image(image: AssetImage('assets/images/logo.png')),
             const Spacer(),
-            Container(
-              margin: const EdgeInsets.only(bottom: 6),
-              child: const Text(
-                "WELCOME TO RENDER",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontFamily: 'Mortend',
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
             LoginBtn(
               text: "CONTINUE WITH APPLE",
               icon: 'assets/svgs/apple_logo.svg',
@@ -49,8 +37,12 @@ class LoginBody extends HookConsumerWidget {
               text: "CONTINUE WITH GOOGLE",
               icon: 'assets/svgs/google_logo.svg',
               onPressed: () async {
-                final user = await signInWithGoogle();
-                navigateAway(user);
+                try {
+                  final user = await signInWithGoogle();
+                  navigateAway(user);
+                } catch (e) {
+                  debugPrint(e.toString());
+                }
               },
             ),
           ],
