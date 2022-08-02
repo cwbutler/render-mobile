@@ -29,17 +29,11 @@ class CreateUserProfilePic extends HookConsumerWidget {
     }
 
     onNext() async {
-      await appUser.saveUserProfile();
       final permission =
           await NotificationPermissions.requestNotificationPermissions();
       await updateUser(
-        UserProfile(isNotificationsEnabled: permission.name == "granted"),
+        UserProfile(isNotificationsEnabled: permission.name != "denied"),
       ).saveUserProfile();
-      navigateHome();
-    }
-
-    onSkip() async {
-      await appUser.saveUserProfile();
       navigateHome();
     }
 
@@ -90,7 +84,7 @@ class CreateUserProfilePic extends HookConsumerWidget {
           Container(
             margin: const EdgeInsets.only(top: 15),
             child: TextButton(
-              onPressed: onSkip,
+              onPressed: onNext,
               child: const Text(
                 'Add later',
                 style: TextStyle(

@@ -3,6 +3,7 @@ import 'package:render/components/avatar.dart';
 import 'package:render/components/full_bottomsheet.dart';
 import 'package:render/components/menu_header.dart';
 import 'package:render/models/auth.dart';
+import 'package:render/components/confirm_delete.dart';
 
 class RenderMenu extends StatelessWidget {
   const RenderMenu({Key? key}) : super(key: key);
@@ -14,8 +15,29 @@ class RenderMenu extends StatelessWidget {
     }
 
     logout() async {
-      await RenderUser.logout();
-      goToLogin();
+      showModalBottomSheet(
+        isDismissible: true,
+        context: context,
+        backgroundColor: Colors.white,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(40.0),
+            topRight: Radius.circular(40.0),
+          ),
+        ),
+        builder: (BuildContext context) {
+          return RenderConfirm(
+            title: "Log Out your account?",
+            subtitle: "Are you sure want to log out of your Render account?",
+            confirm: "LOG OUT",
+            confirmColor: const Color(0xffFBBC05),
+            onConfirm: () async {
+              await RenderUser.logout();
+              goToLogin();
+            },
+          );
+        },
+      );
     }
 
     return RenderFullBottomSheetLayout(
@@ -25,45 +47,35 @@ class RenderMenu extends StatelessWidget {
         const RenderMenuHeader(title: "Main Menu"),
         // Body
         Expanded(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(bottom: 50),
-                  child: const SizedBox(
-                    width: 100,
-                    height: 100,
-                    child: CircleAvatar(
-                      backgroundColor: Color(0xffFF88DF),
-                      child: RenderAvatar(
-                        width: 95,
-                        height: 95,
-                        fontSize: 26,
-                      ),
+          child: Center(
+            child: Container(
+              margin: const EdgeInsets.only(bottom: kToolbarHeight),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    RenderMenuSettingsLink(
+                      label: "VIEW PROFILE",
+                      onPressed: () => Navigator.pushNamed(context, 'profile'),
                     ),
-                  ),
+                    RenderMenuSettingsLink(
+                      label: "SETTINGS",
+                      onPressed: () => Navigator.pushNamed(context, 'settings'),
+                    ),
+                    const RenderMenuSettingsLink(
+                      label: "PODCAST",
+                    ),
+                    const RenderMenuSettingsLink(
+                      label: "DISCORD",
+                    ),
+                    const RenderMenuSettingsLink(
+                      label: "MERCH SHOP",
+                    ),
+                    const RenderMenuSettingsLink(
+                      label: "BUY TICKETS",
+                    ),
+                  ],
                 ),
-                RenderMenuSettingsLink(
-                  label: "VIEW PROFILE",
-                  onPressed: () => Navigator.pushNamed(context, 'profile'),
-                ),
-                RenderMenuSettingsLink(
-                  label: "SETTINGS",
-                  onPressed: () => Navigator.pushNamed(context, 'settings'),
-                ),
-                const RenderMenuSettingsLink(
-                  label: "PODCAST",
-                ),
-                const RenderMenuSettingsLink(
-                  label: "DISCORD",
-                ),
-                const RenderMenuSettingsLink(
-                  label: "MERCH SHOP",
-                ),
-                const RenderMenuSettingsLink(
-                  label: "BUY TICKETS",
-                ),
-              ],
+              ),
             ),
           ),
         ),
@@ -71,7 +83,7 @@ class RenderMenu extends StatelessWidget {
         TextButton(
           onPressed: logout,
           child: const Text(
-            "LOGOUT",
+            "LOG OUT",
             style: TextStyle(
               color: Colors.amber,
               fontFamily: 'Mortend',

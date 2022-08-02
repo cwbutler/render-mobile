@@ -7,10 +7,9 @@ class RenderBottomNav extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 12),
       child: Material(
           color: const Color.fromRGBO(0, 0, 0, 0.85),
-          borderRadius: const BorderRadius.all(Radius.circular(100)),
           child: Container(
             padding: const EdgeInsets.symmetric(vertical: 10),
             child: BottomNavigationBar(

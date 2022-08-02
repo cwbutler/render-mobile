@@ -27,15 +27,20 @@ class RenderProfileField extends StatelessWidget {
             ),
           ),
           const Spacer(),
-          Text(
-            value ?? "",
-            style: TextStyle(
-              color: (isActive ?? false)
-                  ? Theme.of(context).primaryColor
-                  : Colors.white,
-              fontFamily: 'Inter',
-              fontWeight: FontWeight.w500,
-              fontSize: 16,
+          SizedBox(
+            width: 240,
+            child: Text(
+              value ?? "",
+              textAlign: TextAlign.right,
+              style: TextStyle(
+                color: (isActive ?? false)
+                    ? Theme.of(context).primaryColor
+                    : Colors.white,
+                fontFamily: 'Inter',
+                fontWeight: FontWeight.w500,
+                fontSize: 16,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
           ),
         ],

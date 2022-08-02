@@ -18,7 +18,7 @@ import 'package:render/models/user_profile.dart';
 class RenderUser {
   final User? user;
   final UserProfile userProfile;
-  final bool? hasProfile;
+  final bool hasProfile;
 
   const RenderUser({
     this.user,
@@ -28,7 +28,7 @@ class RenderUser {
 
   /// Generates a cryptographically secure random nonce, to be included in a
   /// credential request.
-  String generateNonce([int length = 32]) {
+  String _generateNonce([int length = 32]) {
     const charset =
         '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
     final random = Random.secure();
@@ -37,7 +37,7 @@ class RenderUser {
   }
 
   /// Returns the sha256 hash of [input] in hex notation.
-  String sha256ofString(String input) {
+  String _sha256ofString(String input) {
     final bytes = utf8.encode(input);
     final digest = sha256.convert(bytes);
     return digest.toString();
@@ -49,8 +49,8 @@ class RenderUser {
       // include a nonce in the credential request. When signing in with
       // Firebase, the nonce in the id token returned by Apple, is expected to
       // match the sha256 hash of `rawNonce`.
-      final rawNonce = generateNonce();
-      final nonce = sha256ofString(rawNonce);
+      final rawNonce = _generateNonce();
+      final nonce = _sha256ofString(rawNonce);
 
       // Request credential for the currently signed in Apple account.
       final appleCredential = await SignInWithApple.getAppleIDCredential(
@@ -78,8 +78,8 @@ class RenderUser {
     try {
       // Trigger the authentication flow
       final GoogleSignInAccount? googleUser = await GoogleSignIn(
-              clientId: DefaultFirebaseOptions.currentPlatform.iosClientId)
-          .signIn();
+        clientId: DefaultFirebaseOptions.currentPlatform.iosClientId,
+      ).signIn();
 
       // Obtain the auth details from the request
       final GoogleSignInAuthentication? googleAuth =
@@ -102,6 +102,29 @@ class RenderUser {
     throw "Could not sign in";
   }
 
+  Future<void> deleteUser() async {
+    try {
+      final db = FirebaseFirestore.instance;
+      await db.collection("users").doc(userProfile.id).delete();
+
+      if (userProfile.resume_url != null &&
+          userProfile.resume_url!.isNotEmpty) {
+        final key = 'resumes/${userProfile.id}_${userProfile.resume_name}';
+        await FirebaseStorage.instance.ref(key).delete();
+      }
+
+      if (userProfile.profile_photo_url != null &&
+          userProfile.profile_photo_url!.isNotEmpty) {
+        final key = 'images/${userProfile.id}';
+        await FirebaseStorage.instance.ref(key).delete();
+      }
+
+      await logout();
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
   static Future<void> logout() async {
     await FirebaseAuth.instance.signOut();
   }
@@ -110,7 +133,7 @@ class RenderUser {
     return RenderUser(
       user: user.user ?? this.user,
       userProfile: userProfile.copyWith(user.userProfile),
-      hasProfile: user.hasProfile ?? hasProfile,
+      hasProfile: user.hasProfile,
     );
   }
 
@@ -136,24 +159,16 @@ class RenderUser {
           isNotificationsEnabled: data["isNotificationsEnabled"],
         );
 
-        return copyWith(RenderUser(userProfile: profile, hasProfile: true));
+        return copyWith(RenderUser(
+          userProfile: profile,
+          hasProfile: true,
+        ));
       }
     } catch (e) {
       debugPrint(e.toString());
     }
 
-    return copyWith(
-      RenderUser(
-        userProfile: UserProfile(
-          id: user?.uid,
-          email: user?.email,
-          first_name: user?.displayName?.split(" ")[0],
-          last_name: user?.displayName?.split(" ")[1],
-          phone: user?.phoneNumber,
-          profile_photo_url: user?.photoURL,
-        ),
-      ),
-    );
+    return RenderUser(user: user, userProfile: userProfile, hasProfile: false);
   }
 
   Future<void> saveUserProfile() async {
@@ -161,7 +176,7 @@ class RenderUser {
       final db = FirebaseFirestore.instance;
       await db
           .collection("users")
-          .doc(user?.uid)
+          .doc(userProfile.id)
           .set(userProfile.toMap(), SetOptions(merge: true))
           .onError((error, stackTrace) => debugPrint(error.toString()));
     } catch (e) {
@@ -216,17 +231,72 @@ class UserNotifier extends StateNotifier<RenderUser> {
   }
 
   Future<RenderUser> signInWithGoogle() async {
-    final creds = await state.signInWithGoogle();
-    final user = RenderUser(user: creds.user);
-    state = await user.getUserProfile();
+    try {
+      final creds = await state.signInWithGoogle();
+      final appUser = await RenderUser(user: creds.user).getUserProfile();
+
+      if (appUser.hasProfile) {
+        state = appUser;
+      } else {
+        final name = appUser.user?.displayName?.split(" ");
+        final profile = UserProfile(
+          id: appUser.user?.uid,
+          first_name: name?[0],
+          last_name: name?[1],
+          email: appUser.user?.email,
+          phone: appUser.user?.phoneNumber,
+          profile_photo_url: appUser.user?.photoURL,
+        );
+        state = state.copyWith(RenderUser(userProfile: profile));
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
     return state;
   }
 
   Future<RenderUser> signInWithApple() async {
-    final creds = await state.signInWithApple();
-    final user = RenderUser(user: creds.user);
-    state = await user.getUserProfile();
+    try {
+      final creds = await state.signInWithApple();
+      final appUser = await RenderUser(user: creds.user).getUserProfile();
+
+      if (appUser.hasProfile) {
+        state = appUser;
+      } else {
+        final name = appUser.user?.displayName?.split(" ");
+        final profile = UserProfile(
+          id: appUser.user?.uid,
+          first_name: name?[0],
+          last_name: name?[1],
+          email: appUser.user?.email,
+        );
+        state = appUser.copyWith(RenderUser(userProfile: profile));
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
     return state;
+  }
+
+  Future<RenderUser> fetchCurrentUser() async {
+    try {
+      if (FirebaseAuth.instance.currentUser != null) {
+        final user = RenderUser(user: FirebaseAuth.instance.currentUser);
+        state = await user.getUserProfile();
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return state;
+  }
+
+  Future<void> deleteUser() async {
+    try {
+      await state.deleteUser();
+      state = const RenderUser();
+    } catch (e) {
+      debugPrint(e.toString());
+    }
   }
 }
 

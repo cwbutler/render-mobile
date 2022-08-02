@@ -13,6 +13,10 @@ class CreateUser extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(userProvider).userProfile;
     final updateUser = ref.read(userProvider.notifier).updateUserProfile;
+    final canSave = user.first_name != null &&
+        user.last_name != null &&
+        user.email != null &&
+        user.phone != null;
 
     onNext() {
       Navigator.pushNamed(context, 'create/professional');
@@ -53,7 +57,7 @@ class CreateUser extends HookConsumerWidget {
             },
           ),
           const Spacer(),
-          NextButton(onPressed: onNext)
+          NextButton(onPressed: (canSave) ? onNext : null),
         ]));
   }
 }

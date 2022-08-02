@@ -45,7 +45,6 @@ dependencies:
   dart_jsonwebtoken: ^2.4.2
   sign_in_with_apple: ^3.0.0
   crypto: ^3.0.1
-  http: ^0.13.4
   cloud_functions: ^3.3.3
   notification_permissions: ^0.6.1
 
