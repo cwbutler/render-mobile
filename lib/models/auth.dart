@@ -163,12 +163,27 @@ class RenderUser {
           userProfile: profile,
           hasProfile: true,
         ));
+      } else if (user != null && user!.uid.isNotEmpty) {
+        final name = user?.displayName?.split(" ");
+        return copyWith(
+          RenderUser(
+            hasProfile: false,
+            userProfile: UserProfile(
+              id: user?.uid,
+              email: user?.email,
+              first_name: name?[0],
+              last_name: name?[1],
+              phone: user?.phoneNumber,
+              profile_photo_url: user?.photoURL,
+            ),
+          ),
+        );
       }
     } catch (e) {
       debugPrint(e.toString());
     }
 
-    return RenderUser(user: user, userProfile: userProfile, hasProfile: false);
+    return copyWith(const RenderUser(hasProfile: false));
   }
 
   Future<void> saveUserProfile() async {
@@ -234,21 +249,7 @@ class UserNotifier extends StateNotifier<RenderUser> {
     try {
       final creds = await state.signInWithGoogle();
       final appUser = await RenderUser(user: creds.user).getUserProfile();
-
-      if (appUser.hasProfile) {
-        state = appUser;
-      } else {
-        final name = appUser.user?.displayName?.split(" ");
-        final profile = UserProfile(
-          id: appUser.user?.uid,
-          first_name: name?[0],
-          last_name: name?[1],
-          email: appUser.user?.email,
-          phone: appUser.user?.phoneNumber,
-          profile_photo_url: appUser.user?.photoURL,
-        );
-        state = state.copyWith(RenderUser(userProfile: profile));
-      }
+      state = appUser;
     } catch (e) {
       debugPrint(e.toString());
     }
@@ -259,19 +260,7 @@ class UserNotifier extends StateNotifier<RenderUser> {
     try {
       final creds = await state.signInWithApple();
       final appUser = await RenderUser(user: creds.user).getUserProfile();
-
-      if (appUser.hasProfile) {
-        state = appUser;
-      } else {
-        final name = appUser.user?.displayName?.split(" ");
-        final profile = UserProfile(
-          id: appUser.user?.uid,
-          first_name: name?[0],
-          last_name: name?[1],
-          email: appUser.user?.email,
-        );
-        state = appUser.copyWith(RenderUser(userProfile: profile));
-      }
+      state = appUser;
     } catch (e) {
       debugPrint(e.toString());
     }
@@ -293,6 +282,7 @@ class UserNotifier extends StateNotifier<RenderUser> {
   Future<void> deleteUser() async {
     try {
       await state.deleteUser();
+      await RenderUser.logout();
       state = const RenderUser();
     } catch (e) {
       debugPrint(e.toString());

@@ -33,8 +33,14 @@ class CreateUserLocation extends HookConsumerWidget {
           ),
           const Spacer(),
           Container(
-              margin: const EdgeInsets.only(top: 50),
-              child: NextButton(onPressed: onNext))
+            margin: const EdgeInsets.only(top: 50),
+            child: NextButton(
+              onPressed:
+                  (profile.location != null && profile.location!.isNotEmpty)
+                      ? onNext
+                      : null,
+            ),
+          )
         ],
       ),
     );
