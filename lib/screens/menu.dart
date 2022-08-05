@@ -60,17 +60,22 @@ class RenderMenu extends StatelessWidget {
                       label: "SETTINGS",
                       onPressed: () => Navigator.pushNamed(context, 'settings'),
                     ),
-                    const RenderMenuSettingsLink(
+                    RenderMenuSettingsLink(
                       label: "PODCAST",
+                      onPressed: () => Navigator.pushNamed(context, 'podcast'),
                     ),
-                    const RenderMenuSettingsLink(
+                    RenderMenuSettingsLink(
                       label: "DISCORD",
+                      onPressed: () => Navigator.pushNamed(context, 'discord'),
                     ),
-                    const RenderMenuSettingsLink(
+                    RenderMenuSettingsLink(
                       label: "MERCH SHOP",
+                      onPressed: () => Navigator.pushNamed(context, 'merch'),
                     ),
-                    const RenderMenuSettingsLink(
+                    RenderMenuSettingsLink(
                       label: "BUY TICKETS",
+                      onPressed: () =>
+                          Navigator.pushNamed(context, 'buyTickets'),
                     ),
                   ],
                 ),

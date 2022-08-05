@@ -14,6 +14,7 @@ import 'package:render/screens/create_user/professional.dart';
 import 'package:render/screens/create_user/location.dart';
 import 'package:render/screens/create_user/profile_pic.dart';
 import 'package:render/screens/unknown.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class RenderApp extends HookConsumerWidget {
   const RenderApp({Key? key}) : super(key: key);
@@ -86,6 +87,30 @@ class RenderApp extends HookConsumerWidget {
           case 'settings':
             return MaterialPageRoute(
               builder: (context) => const RenderSettings(),
+            );
+          case 'podcast':
+            return MaterialPageRoute(
+              builder: (context) => const WebView(
+                initialUrl: "https://anchor.fm/renderatl",
+              ),
+            );
+          case 'discord':
+            return MaterialPageRoute(
+              builder: (context) => const WebView(
+                initialUrl: "https://discord.gg/k38Y66Tx",
+              ),
+            );
+          case 'merch':
+            return MaterialPageRoute(
+              builder: (context) => const WebView(
+                initialUrl: "https://renderhardwear.com",
+              ),
+            );
+          case 'buyTickets':
+            return MaterialPageRoute(
+              builder: (context) => const WebView(
+                initialUrl: "https://www.enterrender.com/renderatl#tickets",
+              ),
             );
           default:
             return MaterialPageRoute(

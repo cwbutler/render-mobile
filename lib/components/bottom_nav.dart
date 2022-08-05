@@ -29,6 +29,7 @@ class RenderBottomNav extends StatelessWidget {
                     showModalBottomSheet(
                       backgroundColor: Colors.white,
                       isDismissible: true,
+                      isScrollControlled: true,
                       context: context,
                       shape: shape,
                       builder: (BuildContext context) {
@@ -41,6 +42,7 @@ class RenderBottomNav extends StatelessWidget {
                       backgroundColor: Colors.white,
                       isDismissible: true,
                       context: context,
+                      isScrollControlled: true,
                       shape: shape,
                       builder: (BuildContext context) {
                         return const RenderComingSoon();

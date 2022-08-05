@@ -6,7 +6,7 @@ class RenderBuyTickets extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.symmetric(vertical: 12),
       child: TextButton(
         style: TextButton.styleFrom(
           backgroundColor: const Color.fromRGBO(255, 136, 223, 0.2),
@@ -23,7 +23,9 @@ class RenderBuyTickets extends StatelessWidget {
             color: Theme.of(context).primaryColor,
           ),
         ),
-        onPressed: () {},
+        onPressed: () {
+          Navigator.pushNamed(context, 'buyTickets');
+        },
       ),
     );
   }

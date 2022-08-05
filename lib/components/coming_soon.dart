@@ -7,6 +7,7 @@ class RenderComingSoon extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(left: 24, right: 24, top: 50, bottom: 44),
+      height: 500,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
