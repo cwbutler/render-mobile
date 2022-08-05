@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:render/components/webview.dart';
 import 'package:render/landing.dart';
 import 'package:render/screens/profile/edit.dart';
 import 'package:render/screens/profile/profile.dart';
@@ -90,26 +91,27 @@ class RenderApp extends HookConsumerWidget {
             );
           case 'podcast':
             return MaterialPageRoute(
-              builder: (context) => const WebView(
-                initialUrl: "https://anchor.fm/renderatl",
+              builder: (context) => const RenderWebView(
+                url: "https://anchor.fm/renderatl",
               ),
             );
           case 'discord':
             return MaterialPageRoute(
-              builder: (context) => const WebView(
-                initialUrl: "https://discord.gg/k38Y66Tx",
+              builder: (context) => const RenderWebView(
+                url: "https://discord.gg/k38Y66Tx",
+                javascriptMode: JavascriptMode.unrestricted,
               ),
             );
           case 'merch':
             return MaterialPageRoute(
-              builder: (context) => const WebView(
-                initialUrl: "https://renderhardwear.com",
+              builder: (context) => const RenderWebView(
+                url: "https://renderhardwear.com",
               ),
             );
           case 'buyTickets':
             return MaterialPageRoute(
-              builder: (context) => const WebView(
-                initialUrl: "https://www.enterrender.com/renderatl#tickets",
+              builder: (context) => const RenderWebView(
+                url: "https://www.enterrender.com/renderatl#tickets",
               ),
             );
           default:

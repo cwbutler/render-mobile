@@ -9,17 +9,19 @@ class CreateInput extends HookConsumerWidget {
   final TextInputType? keyboardType;
   final TextCapitalization textCapitalization;
   final TextEditingController? controller;
+  final int? maxLength;
 
-  const CreateInput({
-    Key? key,
-    this.label = '',
-    this.keyboardType = TextInputType.text,
-    this.initalText,
-    this.onChange,
-    this.autocorrect,
-    this.textCapitalization = TextCapitalization.none,
-    this.controller,
-  }) : super(key: key);
+  const CreateInput(
+      {Key? key,
+      this.label = '',
+      this.keyboardType = TextInputType.text,
+      this.initalText,
+      this.onChange,
+      this.autocorrect,
+      this.textCapitalization = TextCapitalization.none,
+      this.controller,
+      this.maxLength})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -33,7 +35,8 @@ class CreateInput extends HookConsumerWidget {
         autocorrect: autocorrect ?? false,
         decoration: InputDecoration(labelText: label),
         textCapitalization: textCapitalization,
-        initialValue: initalText,
+        initialValue: (controller == null) ? initalText : null,
+        maxLength: maxLength,
       ),
     );
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:phone_number/phone_number.dart';
 import 'package:render/screens/create_user/layout.dart';
 import 'package:render/components/input.dart';
 import 'package:render/screens/create_user/next_button.dart';
@@ -17,8 +18,15 @@ class CreateUser extends HookConsumerWidget {
         user.last_name != null &&
         user.email != null &&
         user.phone != null;
+    final phoneController = PhoneNumberEditingController(
+      PhoneNumberUtil(),
+      regionCode: "US",
+      behavior: PhoneInputBehavior.strict,
+      text: user.phone,
+    );
 
     onNext() {
+      updateUser(UserProfile(phone: phoneController.text));
       Navigator.pushNamed(context, 'create/professional');
     }
 
@@ -55,11 +63,9 @@ class CreateUser extends HookConsumerWidget {
           ),
           CreateInput(
             label: 'Phone',
-            initalText: user.phone,
             keyboardType: TextInputType.phone,
-            onChange: (value) {
-              updateUser(UserProfile(phone: value));
-            },
+            controller: phoneController,
+            maxLength: 14,
           ),
           const Spacer(),
           NextButton(onPressed: (canSave) ? onNext : null),
