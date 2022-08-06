@@ -114,6 +114,19 @@ class RenderApp extends HookConsumerWidget {
                 url: "https://www.enterrender.com/renderatl#tickets",
               ),
             );
+          case 'privacy':
+            return MaterialPageRoute(
+              builder: (context) => const RenderWebView(
+                url: "https://renderatl.com/privacy",
+                javascriptMode: JavascriptMode.unrestricted,
+              ),
+            );
+          case 'terms':
+            return MaterialPageRoute(
+              builder: (context) => const RenderWebView(
+                url: "https://renderatl.com/terms",
+              ),
+            );
           default:
             return MaterialPageRoute(
               builder: (context) => const UnknownScreen(),

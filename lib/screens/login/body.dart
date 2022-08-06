@@ -10,6 +10,11 @@ class LoginBody extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final signInWithGoogle = ref.read(userProvider.notifier).signInWithGoogle;
     final signInWithApple = ref.read(userProvider.notifier).signInWithApple;
+    final textStyle = TextStyle(fontSize: 12);
+    final highlightTextStyle = TextStyle(
+      fontSize: 12,
+      color: Theme.of(context).primaryColor,
+    );
 
     navigateAway(RenderUser user) {
       if (user.user == null) return;
@@ -19,7 +24,7 @@ class LoginBody extends HookConsumerWidget {
 
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(0, 150, 0, 130),
+        padding: const EdgeInsets.fromLTRB(0, 150, 0, 0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -45,6 +50,26 @@ class LoginBody extends HookConsumerWidget {
                 }
               },
             ),
+            Container(
+              margin: const EdgeInsets.only(top: 30, bottom: 30),
+              width: 200,
+              child: Wrap(
+                alignment: WrapAlignment.center,
+                children: [
+                  Text("By continuing, you agree to our ", style: textStyle),
+                  GestureDetector(
+                    onTap: () => Navigator.pushNamed(context, 'terms'),
+                    child: Text("Terms ", style: highlightTextStyle),
+                  ),
+                  Text("and our ", style: textStyle),
+                  GestureDetector(
+                    onTap: () => Navigator.pushNamed(context, 'privacy'),
+                    child: Text("Privacy Policy.", style: highlightTextStyle),
+                  ),
+                ],
+              ),
+            ),
+            const Spacer()
           ],
         ),
       ),
