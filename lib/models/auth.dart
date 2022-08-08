@@ -14,6 +14,23 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:render/firebase_options.dart';
 import 'package:render/models/user_profile.dart';
 
+/// Generates a cryptographically secure random nonce, to be included in a
+/// credential request.
+String _generateNonce([int length = 32]) {
+  const charset =
+      '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
+  final random = Random.secure();
+  return List.generate(length, (_) => charset[random.nextInt(charset.length)])
+      .join();
+}
+
+/// Returns the sha256 hash of [input] in hex notation.
+String _sha256ofString(String input) {
+  final bytes = utf8.encode(input);
+  final digest = sha256.convert(bytes);
+  return digest.toString();
+}
+
 @immutable
 class RenderUser {
   final User? user;
@@ -26,24 +43,58 @@ class RenderUser {
     this.hasProfile = false,
   });
 
-  /// Generates a cryptographically secure random nonce, to be included in a
-  /// credential request.
-  String _generateNonce([int length = 32]) {
-    const charset =
-        '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
-    final random = Random.secure();
-    return List.generate(length, (_) => charset[random.nextInt(charset.length)])
-        .join();
+  RenderUser copyWith(RenderUser user) {
+    return RenderUser(
+      user: user.user ?? this.user,
+      userProfile: userProfile.copyWith(user.userProfile),
+      hasProfile: user.hasProfile,
+    );
   }
 
-  /// Returns the sha256 hash of [input] in hex notation.
-  String _sha256ofString(String input) {
-    final bytes = utf8.encode(input);
-    final digest = sha256.convert(bytes);
-    return digest.toString();
+  Future<void> saveUserProfile() async {
+    try {
+      final db = FirebaseFirestore.instance;
+      await db
+          .collection("users")
+          .doc(userProfile.id)
+          .set(userProfile.toMap(), SetOptions(merge: true))
+          .onError((error, stackTrace) => debugPrint(error.toString()));
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+}
+
+class UserNotifier extends StateNotifier<RenderUser> {
+  UserNotifier(RenderUser state) : super(state);
+
+  void setCurrentUser(RenderUser user) {
+    state = user;
   }
 
-  Future<UserCredential> signInWithApple() async {
+  RenderUser updateUserProfile(UserProfile profile) {
+    state = state.copyWith(RenderUser(userProfile: profile));
+    return state;
+  }
+
+  void clearUser() {
+    state = const RenderUser();
+  }
+
+  Future<RenderUser> fetchCurrentUser() async {
+    try {
+      if (FirebaseAuth.instance.currentUser != null) {
+        final user = RenderUser(user: FirebaseAuth.instance.currentUser);
+        state = state.copyWith(user);
+        await getUserProfile();
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return state;
+  }
+
+  Future<RenderUser> signInWithApple() async {
     try {
       // To prevent replay attacks with the credential returned from Apple, we
       // include a nonce in the credential request. When signing in with
@@ -66,15 +117,17 @@ class RenderUser {
 
       // Sign in the user with Firebase. If the nonce we generated earlier does
       // not match the nonce in `appleCredential.identityToken`, sign in will fail.
-      return await FirebaseAuth.instance.signInWithCredential(oauthCredential);
+      await FirebaseAuth.instance.signInWithCredential(oauthCredential);
+      await fetchCurrentUser();
+      return state;
     } catch (e) {
       debugPrint(e.toString());
     }
 
-    throw "Could not sign in";
+    return state;
   }
 
-  Future<UserCredential> signInWithGoogle() async {
+  Future<RenderUser> signInWithGoogle() async {
     try {
       // Trigger the authentication flow
       final GoogleSignInAccount? googleUser = await GoogleSignIn(
@@ -92,32 +145,35 @@ class RenderUser {
       );
 
       // Once signed in, return the UserCredential
-      final UserCredential creds =
-          await FirebaseAuth.instance.signInWithCredential(credential);
-      return creds;
+      await FirebaseAuth.instance.signInWithCredential(credential);
+      await fetchCurrentUser();
+      return state;
     } catch (e) {
       debugPrint(e.toString());
     }
 
-    throw "Could not sign in";
+    return state;
   }
 
   Future<void> deleteUser() async {
     try {
       final db = FirebaseFirestore.instance;
-      await db.collection("users").doc(userProfile.id).delete();
+      await db.collection("users").doc(state.userProfile.id).delete();
 
-      if (userProfile.resume_url != null &&
-          userProfile.resume_url!.isNotEmpty) {
-        final key = 'resumes/${userProfile.id}_${userProfile.resume_name}';
+      if (state.userProfile.resume_url != null &&
+          state.userProfile.resume_url!.isNotEmpty) {
+        final key =
+            'resumes/${state.userProfile.id}_${state.userProfile.resume_name}';
         await FirebaseStorage.instance.ref(key).delete();
       }
 
-      if (userProfile.profile_photo_url != null &&
-          userProfile.profile_photo_url!.isNotEmpty) {
-        final key = 'images/${userProfile.id}';
+      if (state.userProfile.profile_photo_url != null &&
+          state.userProfile.profile_photo_url!.isNotEmpty) {
+        final key = 'images/${state.userProfile.id}';
         await FirebaseStorage.instance.ref(key).delete();
       }
+
+      await FirebaseFirestore.instance.clearPersistence();
 
       await logout();
     } catch (e) {
@@ -125,22 +181,15 @@ class RenderUser {
     }
   }
 
-  static Future<void> logout() async {
+  Future<void> logout() async {
     await FirebaseAuth.instance.signOut();
-  }
-
-  RenderUser copyWith(RenderUser user) {
-    return RenderUser(
-      user: user.user ?? this.user,
-      userProfile: userProfile.copyWith(user.userProfile),
-      hasProfile: user.hasProfile,
-    );
+    clearUser();
   }
 
   Future<RenderUser> getUserProfile() async {
     try {
       final db = FirebaseFirestore.instance;
-      final result = await db.collection("users").doc(user?.uid).get();
+      final result = await db.collection("users").doc(state.user?.uid).get();
 
       if (result.exists) {
         final data = result.data() as Map<String, dynamic>;
@@ -159,134 +208,69 @@ class RenderUser {
           isNotificationsEnabled: data["isNotificationsEnabled"],
         );
 
-        return copyWith(RenderUser(
-          userProfile: profile,
-          hasProfile: true,
-        ));
-      } else if (user != null && user!.uid.isNotEmpty) {
-        final name = user?.displayName?.split(" ");
-        return copyWith(
-          RenderUser(
-            hasProfile: false,
-            userProfile: UserProfile(
-              id: user?.uid,
-              email: user?.email,
-              first_name: name?[0],
-              last_name: name?[1],
-              phone: user?.phoneNumber,
-              profile_photo_url: user?.photoURL,
-            ),
+        final user = RenderUser(userProfile: profile, hasProfile: true);
+        state = state.copyWith(user);
+        return user;
+      } else if (state.user != null && state.user!.uid.isNotEmpty) {
+        final name = state.user?.displayName?.split(" ");
+        final user = RenderUser(
+          hasProfile: false,
+          userProfile: UserProfile(
+            id: state.user?.uid,
+            email: state.user?.email,
+            first_name: name?[0],
+            last_name: name?[1],
+            phone: state.user?.phoneNumber,
+            profile_photo_url: state.user?.photoURL,
           ),
         );
+        state = state.copyWith(user);
+        return user;
       }
     } catch (e) {
       debugPrint(e.toString());
     }
 
-    return copyWith(const RenderUser(hasProfile: false));
+    state = state.copyWith(const RenderUser(hasProfile: false));
+    return state;
   }
 
-  Future<void> saveUserProfile() async {
-    try {
-      final db = FirebaseFirestore.instance;
-      await db
-          .collection("users")
-          .doc(userProfile.id)
-          .set(userProfile.toMap(), SetOptions(merge: true))
-          .onError((error, stackTrace) => debugPrint(error.toString()));
-    } catch (e) {
-      debugPrint(e.toString());
-    }
-  }
-
-  Future<String> saveUserResume({
+  Future<RenderUser> saveUserResume({
     required String fileName,
     required File file,
   }) async {
     try {
-      final key = 'resumes/${userProfile.id}';
+      final key = 'resumes/${state.userProfile.id}';
       final storageRef = FirebaseStorage.instance.ref(key);
       await storageRef.putFile(file);
       final url = await storageRef.getDownloadURL();
-      return url;
+      state = state.copyWith(RenderUser(
+        userProfile: UserProfile(
+          resume_url: url,
+          resume_name: fileName,
+        ),
+      ));
+      return state;
     } catch (e) {
       debugPrint(e.toString());
     }
-    return "";
+    return state;
   }
 
-  Future<String> saveUserImage({required File file}) async {
+  Future<RenderUser> saveUserImage({required File file}) async {
     try {
-      final key = 'images/${userProfile.id}';
+      final key = 'images/${state.userProfile.id}';
       final storageRef = FirebaseStorage.instance.ref(key);
       await storageRef.putFile(file);
       final url = await storageRef.getDownloadURL();
-      return url;
-    } catch (e) {
-      debugPrint(e.toString());
-    }
-    return "";
-  }
-}
-
-class UserNotifier extends StateNotifier<RenderUser> {
-  UserNotifier(RenderUser state) : super(state);
-
-  void setCurrentUser(RenderUser user) {
-    state = user;
-  }
-
-  RenderUser updateUserProfile(UserProfile profile) {
-    state = state.copyWith(RenderUser(userProfile: profile));
-    return state;
-  }
-
-  void clearUser() {
-    state = const RenderUser();
-  }
-
-  Future<RenderUser> signInWithGoogle() async {
-    try {
-      final creds = await state.signInWithGoogle();
-      final appUser = await RenderUser(user: creds.user).getUserProfile();
-      state = appUser;
+      state = state.copyWith(
+        RenderUser(userProfile: UserProfile(profile_photo_url: url)),
+      );
+      return state;
     } catch (e) {
       debugPrint(e.toString());
     }
     return state;
-  }
-
-  Future<RenderUser> signInWithApple() async {
-    try {
-      final creds = await state.signInWithApple();
-      final appUser = await RenderUser(user: creds.user).getUserProfile();
-      state = appUser;
-    } catch (e) {
-      debugPrint(e.toString());
-    }
-    return state;
-  }
-
-  Future<RenderUser> fetchCurrentUser() async {
-    try {
-      if (FirebaseAuth.instance.currentUser != null) {
-        final user = RenderUser(user: FirebaseAuth.instance.currentUser);
-        state = await user.getUserProfile();
-      }
-    } catch (e) {
-      debugPrint(e.toString());
-    }
-    return state;
-  }
-
-  Future<void> deleteUser() async {
-    try {
-      await state.deleteUser();
-      await RenderUser.logout();
-      state = const RenderUser();
-    } catch (e) {
-      debugPrint(e.toString());
-    }
   }
 }
 

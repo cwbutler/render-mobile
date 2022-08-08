@@ -16,21 +16,26 @@ class RenderWebView extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final isLoading = useState(true);
 
-    return Stack(
-      children: [
-        WebView(
-          initialUrl: url,
-          backgroundColor: Colors.black,
-          javascriptMode: javascriptMode,
-          onPageFinished: ((url) => isLoading.value = false),
-        ),
-        Visibility(
-          visible: isLoading.value,
-          child: const Center(
-            child: CircularProgressIndicator(),
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+      ),
+      body: Stack(
+        children: [
+          WebView(
+            initialUrl: url,
+            backgroundColor: Colors.black,
+            javascriptMode: javascriptMode,
+            onPageFinished: ((url) => isLoading.value = false),
           ),
-        )
-      ],
+          Visibility(
+            visible: isLoading.value,
+            child: const Center(
+              child: CircularProgressIndicator(),
+            ),
+          )
+        ],
+      ),
     );
   }
 }

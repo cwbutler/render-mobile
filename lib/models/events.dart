@@ -60,13 +60,12 @@ class EventsApi {
 
   static Future<List<RenderEvent>> fetchEvents() async {
     try {
-      const query =
-          'query { groupByUrlname(urlname: "renderatl") { id logo { baseUrl } upcomingEvents(input: {}) { edges { cursor node { id } } } pastEvents(input: {}) { edges { cursor node { id title eventUrl description shortDescription dateTime venue { id name address city state postalCode } images { id baseUrl } }} } } }';
-      final result = await queryMeetup(query);
-      final data =
-          List.from(result["data"]["groupByUrlname"]["pastEvents"]["edges"])
-              .map((e) => RenderEvent.fromMap(e["node"]));
-      return List.from(data);
+      final result = await FirebaseFunctions.instance
+          .httpsCallable('fetchMeetupEvents')
+          .call();
+      final data = json.decode(json.encode(result.data));
+      return List.from(
+          List.from(data).map((item) => RenderEvent.fromMap(item["node"])));
     } catch (e) {
       debugPrint("Error fetching event list: $e");
     }

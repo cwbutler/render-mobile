@@ -19,6 +19,7 @@ class RenderProfileEdit extends HookConsumerWidget {
     final appUser = ref.watch(userProvider);
     final user = ref.watch(userProvider).userProfile;
     final updateUser = ref.read(userProvider.notifier).updateUserProfile;
+    final saveImage = ref.read(userProvider.notifier).saveUserImage;
     final isImgLoading = useState(false);
     final isUserLoading = useState(false);
 
@@ -52,8 +53,7 @@ class RenderProfileEdit extends HookConsumerWidget {
                       final file = await RenderAppModel.getImageFromDevice();
                       if (file != null) {
                         isImgLoading.value = true;
-                        final url = await appUser.saveUserImage(file: file);
-                        updateUser(UserProfile(profile_photo_url: url));
+                        await saveImage(file: file);
                         isImgLoading.value = false;
                       }
                     },

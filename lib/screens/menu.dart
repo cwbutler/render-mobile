@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:render/components/full_bottomsheet.dart';
 import 'package:render/components/menu_header.dart';
 import 'package:render/models/auth.dart';
 import 'package:render/components/confirm_delete.dart';
 
-class RenderMenu extends StatelessWidget {
+class RenderMenu extends HookConsumerWidget {
   const RenderMenu({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final logoutUser = ref.read(userProvider.notifier).logout;
+
     goToLogin() {
       Navigator.pushNamedAndRemoveUntil(context, 'login', (_) => false);
     }
@@ -31,7 +34,7 @@ class RenderMenu extends StatelessWidget {
             confirm: "LOG OUT",
             confirmColor: const Color(0xffFBBC05),
             onConfirm: () async {
-              await RenderUser.logout();
+              await logoutUser();
               goToLogin();
             },
           );

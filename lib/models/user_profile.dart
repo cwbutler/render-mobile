@@ -15,6 +15,7 @@ class UserProfile {
   final String? profile_photo_url;
   final String? resume_url;
   final String? resume_name;
+  final String? fcmToken;
   final bool? isNotificationsEnabled;
 
   const UserProfile({
@@ -29,6 +30,7 @@ class UserProfile {
     this.profile_photo_url,
     this.resume_url,
     this.resume_name,
+    this.fcmToken,
     this.isNotificationsEnabled,
   });
 
@@ -45,6 +47,7 @@ class UserProfile {
       profile_photo_url: profile.profile_photo_url ?? profile_photo_url,
       resume_url: profile.resume_url ?? resume_url,
       resume_name: profile.resume_name ?? resume_name,
+      fcmToken: profile.fcmToken ?? fcmToken,
       isNotificationsEnabled:
           profile.isNotificationsEnabled ?? isNotificationsEnabled,
     );
@@ -63,6 +66,7 @@ class UserProfile {
       "profile_photo_url": profile_photo_url,
       "resume_url": resume_url,
       "resume_name": resume_name,
+      "fcmToken": fcmToken,
       "isNotificationsEnabled": isNotificationsEnabled,
     };
   }

@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/svg.dart';
@@ -19,6 +20,7 @@ class CreateUserProfilePic extends HookConsumerWidget {
     final appUser = ref.watch(userProvider);
     final user = appUser.userProfile;
     final updateUser = ref.read(userProvider.notifier).updateUserProfile;
+    final saveImage = ref.read(userProvider.notifier).saveUserImage;
     final photoUrl = user.profile_photo_url ?? '';
     final borderColor =
         (photoUrl.isEmpty) ? Colors.white : const Color(0xffFF88DF);
@@ -29,10 +31,23 @@ class CreateUserProfilePic extends HookConsumerWidget {
     }
 
     onNext() async {
-      final permission =
-          await NotificationPermissions.requestNotificationPermissions();
+      NotificationSettings settings =
+          await FirebaseMessaging.instance.requestPermission(
+        alert: true,
+        announcement: false,
+        badge: true,
+        carPlay: false,
+        criticalAlert: false,
+        provisional: false,
+        sound: true,
+      );
+      final fcmToken = await FirebaseMessaging.instance.getToken();
       await updateUser(
-        UserProfile(isNotificationsEnabled: permission.name != "denied"),
+        UserProfile(
+          isNotificationsEnabled:
+              settings.authorizationStatus == AuthorizationStatus.authorized,
+          fcmToken: fcmToken,
+        ),
       ).saveUserProfile();
       navigateHome();
     }
@@ -52,8 +67,7 @@ class CreateUserProfilePic extends HookConsumerWidget {
                 PlatformFile file = result.files.first;
                 File fileData = File(file.path!);
                 isLoading.value = true;
-                final url = await appUser.saveUserImage(file: fileData);
-                updateUser(UserProfile(profile_photo_url: url));
+                final url = await saveImage(file: fileData);
                 isLoading.value = false;
               } else {
                 // User canceled the picker

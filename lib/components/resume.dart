@@ -13,6 +13,7 @@ class RenderResumeInput extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(userProvider);
     final updateUser = ref.read(userProvider.notifier).updateUserProfile;
+    final saveUserResume = ref.read(userProvider.notifier).saveUserResume;
     final isActive = user.userProfile.resume_url?.isNotEmpty ?? false;
     final isLoading = useState(false);
 
@@ -25,11 +26,10 @@ class RenderResumeInput extends HookConsumerWidget {
         PlatformFile file = result.files.first;
         File fileData = File(file.path!);
         isLoading.value = true;
-        final url = await user.saveUserResume(
+        await saveUserResume(
           fileName: file.name,
           file: fileData,
         );
-        updateUser(UserProfile(resume_name: file.name, resume_url: url));
         isLoading.value = false;
       } else {
         // User canceled the picker

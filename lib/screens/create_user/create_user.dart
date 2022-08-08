@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:phone_number/phone_number.dart';
+import 'package:render/components/phone_input.dart';
 import 'package:render/screens/create_user/layout.dart';
 import 'package:render/components/input.dart';
 import 'package:render/screens/create_user/next_button.dart';
@@ -15,18 +15,15 @@ class CreateUser extends HookConsumerWidget {
     final user = ref.watch(userProvider).userProfile;
     final updateUser = ref.read(userProvider.notifier).updateUserProfile;
     final canSave = user.first_name != null &&
+        user.first_name!.isNotEmpty &&
         user.last_name != null &&
+        user.last_name!.isNotEmpty &&
         user.email != null &&
-        user.phone != null;
-    final phoneController = PhoneNumberEditingController(
-      PhoneNumberUtil(),
-      regionCode: "US",
-      behavior: PhoneInputBehavior.strict,
-      text: user.phone,
-    );
+        user.email!.isNotEmpty &&
+        user.phone != null &&
+        user.phone!.isNotEmpty;
 
     onNext() {
-      updateUser(UserProfile(phone: phoneController.text));
       Navigator.pushNamed(context, 'create/professional');
     }
 
@@ -61,11 +58,12 @@ class CreateUser extends HookConsumerWidget {
             },
             keyboardType: TextInputType.emailAddress,
           ),
-          CreateInput(
-            label: 'Phone',
-            keyboardType: TextInputType.phone,
-            controller: phoneController,
-            maxLength: 14,
+          RenderPhoneInput(
+            label: "Phone",
+            initialText: user.phone,
+            onChange: (value) {
+              updateUser(UserProfile(phone: value));
+            },
           ),
           const Spacer(),
           NextButton(onPressed: (canSave) ? onNext : null),

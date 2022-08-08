@@ -14,6 +14,11 @@ class RenderSettings extends HookConsumerWidget {
     final user = ref.watch(userProvider).userProfile;
     final updateUser = ref.read(userProvider.notifier).updateUserProfile;
     final deleteUser = ref.read(userProvider.notifier).deleteUser;
+    const labelStyle = TextStyle(
+      color: Colors.white,
+      fontSize: 18,
+      fontWeight: FontWeight.bold,
+    );
 
     void navigateHome() {
       Navigator.pushNamedAndRemoveUntil(context, "login", (route) => false);
@@ -27,24 +32,19 @@ class RenderSettings extends HookConsumerWidget {
     return Scaffold(
       appBar: const RenderMenuAppBar(title: "Settings"),
       backgroundColor: Colors.black,
-      body: SizedBox(
+      body: Container(
         width: double.infinity,
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              margin: const EdgeInsets.only(bottom: 5),
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              margin: const EdgeInsets.only(bottom: 30, top: 20),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const Text(
-                    "Notifications",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  const Text("Notifications", style: labelStyle),
                   const Spacer(),
                   CupertinoSwitch(
                     value: user.isNotificationsEnabled ?? false,
@@ -55,6 +55,20 @@ class RenderSettings extends HookConsumerWidget {
                     },
                   ),
                 ],
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.only(bottom: 30),
+              child: GestureDetector(
+                onTap: () {},
+                child: const Text("Terms and Conditions", style: labelStyle),
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.only(bottom: 30),
+              child: GestureDetector(
+                onTap: () {},
+                child: const Text("Privacy Policy", style: labelStyle),
               ),
             ),
             const Spacer(),
@@ -83,11 +97,15 @@ class RenderSettings extends HookConsumerWidget {
                     },
                   );
                 },
-                child: const Text(
-                  "DELETE ACCOUNT",
-                  style: TextStyle(
-                    color: Color(0xffEA4335),
-                    fontFamily: 'Mortend',
+                child: const SizedBox(
+                  width: double.infinity,
+                  child: Text(
+                    "DELETE ACCOUNT",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Color(0xffEA4335),
+                      fontFamily: 'Mortend',
+                    ),
                   ),
                 ),
               ),
