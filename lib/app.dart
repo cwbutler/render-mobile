@@ -98,7 +98,7 @@ class RenderApp extends HookConsumerWidget {
           case 'discord':
             return MaterialPageRoute(
               builder: (context) => const RenderWebView(
-                url: "https://discord.gg/k38Y66Tx",
+                url: "https://renderatl.com/discord",
                 javascriptMode: JavascriptMode.unrestricted,
               ),
             );
@@ -112,6 +112,7 @@ class RenderApp extends HookConsumerWidget {
             return MaterialPageRoute(
               builder: (context) => const RenderWebView(
                 url: "https://www.enterrender.com/renderatl#tickets",
+                javascriptMode: JavascriptMode.unrestricted,
               ),
             );
           case 'privacy':

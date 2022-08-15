@@ -82,9 +82,10 @@ export async function addToMailchimp({ email, firstName, experience } : { email:
 }
 
 export async function createDiscontCode({ email } : { email: string }) {
-    const db = admin.firestore().collection('discountCodes');
+    const db = admin.firestore().collection('discountCodes').doc(email);
     try {
         const headers = { 'Content-Type': 'application/json', key: process.env.RENDER_SERVICE_KEY || "" };
+        const validateStatus = (status: number) => status >= 200 && status < 500;
         const params = {
             "eventSlug": "2023",
             "discountCode": email,
@@ -93,14 +94,16 @@ export async function createDiscontCode({ email } : { email: string }) {
             "discountQuantity": "1",
             "ticketId": [1378784, 1378785, 1378775]
         };
-        const result = await axios.post("https://adoring-newton-de5d6b.netlify.app/api/discount", params, { headers });
-        if (result?.data) {
-            db.add({ id: email, ...result.data.message });
-            functions.logger.log(`Added discount code to ${email} ${result.data}}`);
+        const result = await axios.post("https://adoring-newton-de5d6b.netlify.app/api/discount", params, { headers, validateStatus });
+        if (result?.data && result.data?.message) {
+            delete result.data.message.statusCode;
+            await db.create(result.data.message);
+            functions.logger.log(`Added discount code to ${email} ${result.data.message.code}`);
             return result.data;
         } else {
             functions.logger.log(`Could not create discount for ${email}, ${result.data}`);
         }
     } catch (e) {
+        functions.logger.log(`Could not create discount ${e}`);
     }
 }

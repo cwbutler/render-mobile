@@ -48,17 +48,30 @@ export const createUser = functions.firestore
         // Get an object representing the document
         const newUser = snap.data();
         await api.addToMailchimp({ email: newUser.email, firstName: newUser.first_name });
-        const { message: { code, link } } = await api.createDiscontCode({ email: newUser.email });
+        const result = await api.createDiscontCode({ email: newUser.email });
         const message = {
           notification: {
             title: "Welcome to Render",
-            body: `Here is your discont code for Render Conference tickets! ${code}
-            Here is link to your code: ${link}`
+            body: `Here is your discont code for Render Conference tickets! ${result.message.code}
+            Here is link to your code: ${result.message.link}`
           },
           token: newUser.fcmToken
         };
-        admin.messaging().send(message);
-        admin.firestore().collection('notifications').doc(newUser.id).collection(newUser.email).add({ id: newUser.id, message });
+        await admin.messaging().send(message);
+        await admin.firestore().collection('notifications').doc(newUser.email).collection("messages").add(message);
+      } catch (e) {
+        console.log(e);
+      }
+    });
+
+export const deleteUser = functions.firestore
+    .document('users/{userId}')
+    .onDelete(async (snap: { data: () => any; }) => {
+      try {
+        // Get an object representing the document
+        const newUser = snap.data();
+        await admin.firestore().collection('discountCodes').doc(newUser.email).delete();
+        await admin.firestore().collection('notifications').doc(newUser.email).delete();
       } catch (e) {
         console.log(e);
       }

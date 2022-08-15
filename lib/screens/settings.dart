@@ -60,14 +60,18 @@ class RenderSettings extends HookConsumerWidget {
             Container(
               margin: const EdgeInsets.only(bottom: 30),
               child: GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  Navigator.pushNamed(context, 'terms');
+                },
                 child: const Text("Terms and Conditions", style: labelStyle),
               ),
             ),
             Container(
               margin: const EdgeInsets.only(bottom: 30),
               child: GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  Navigator.pushNamed(context, 'privacy');
+                },
                 child: const Text("Privacy Policy", style: labelStyle),
               ),
             ),

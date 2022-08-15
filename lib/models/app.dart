@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class RenderAppModel {
   static Future<File?> getImageFromDevice() async {
@@ -15,5 +16,11 @@ class RenderAppModel {
     }
 
     return null;
+  }
+
+  static Future<void> launchWebView(Uri url) async {
+    if (!await launchUrl(url, mode: LaunchMode.platformDefault)) {
+      throw 'Could not launch $url';
+    }
   }
 }
