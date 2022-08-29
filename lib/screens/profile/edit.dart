@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:render/components/avatar.dart';
+import 'package:render/components/job_picker.dart';
 import 'package:render/components/menu_appbar.dart';
 import 'package:render/components/phone_input.dart';
 import 'package:render/models/app.dart';
@@ -123,6 +124,11 @@ class RenderProfileEdit extends HookConsumerWidget {
                   },
                 ),
                 const RenderResumeInput(),
+                Container(
+                  margin: const EdgeInsets.only(top: 25),
+                  width: double.infinity,
+                  child: const RenderPicker(),
+                ),
                 Container(
                   margin: const EdgeInsets.only(top: 40, bottom: 30),
                   child: NextButton(

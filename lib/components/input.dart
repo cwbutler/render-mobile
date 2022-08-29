@@ -11,17 +11,17 @@ class CreateInput extends HookConsumerWidget {
   final TextEditingController? controller;
   final int? maxLength;
 
-  const CreateInput(
-      {Key? key,
-      this.label = '',
-      this.keyboardType = TextInputType.text,
-      this.initalText,
-      this.onChange,
-      this.autocorrect,
-      this.textCapitalization = TextCapitalization.none,
-      this.controller,
-      this.maxLength})
-      : super(key: key);
+  const CreateInput({
+    Key? key,
+    this.label = '',
+    this.keyboardType = TextInputType.text,
+    this.initalText,
+    this.onChange,
+    this.autocorrect,
+    this.textCapitalization = TextCapitalization.none,
+    this.controller,
+    this.maxLength,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

@@ -58,7 +58,7 @@ export const createUser = functions.firestore
           token: newUser.fcmToken
         };
         await admin.messaging().send(message);
-        await admin.firestore().collection('notifications').doc(newUser.email).collection("messages").add(message);
+        await admin.firestore().doc(newUser.id).collection("messages").add(message);
       } catch (e) {
         console.log(e);
       }
@@ -71,7 +71,7 @@ export const deleteUser = functions.firestore
         // Get an object representing the document
         const newUser = snap.data();
         await admin.firestore().collection('discountCodes').doc(newUser.email).delete();
-        await admin.firestore().collection('notifications').doc(newUser.email).delete();
+        await admin.firestore().doc(newUser.id).delete();
       } catch (e) {
         console.log(e);
       }

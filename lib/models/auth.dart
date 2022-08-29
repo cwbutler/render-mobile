@@ -1,10 +1,10 @@
 // ignore_for_file: non_constant_identifier_names
 
-import 'dart:io';
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crypto/crypto.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -106,6 +106,12 @@ class UserNotifier extends StateNotifier<RenderUser> {
       // Request credential for the currently signed in Apple account.
       final appleCredential = await SignInWithApple.getAppleIDCredential(
         scopes: AppleIDAuthorizationScopes.values,
+        webAuthenticationOptions: WebAuthenticationOptions(
+          clientId: "com.projec9.renderservice",
+          redirectUri: Uri.parse(
+            'https://render-app-3c6cd.firebaseapp.com/__/auth/handler',
+          ),
+        ),
         nonce: nonce,
       );
 

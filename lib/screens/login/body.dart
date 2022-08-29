@@ -10,7 +10,7 @@ class LoginBody extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final signInWithGoogle = ref.read(userProvider.notifier).signInWithGoogle;
     final signInWithApple = ref.read(userProvider.notifier).signInWithApple;
-    final textStyle = TextStyle(fontSize: 12);
+    const textStyle = TextStyle(fontSize: 12);
     final highlightTextStyle = TextStyle(
       fontSize: 12,
       color: Theme.of(context).primaryColor,
@@ -56,12 +56,15 @@ class LoginBody extends HookConsumerWidget {
               child: Wrap(
                 alignment: WrapAlignment.center,
                 children: [
-                  Text("By continuing, you agree to our ", style: textStyle),
+                  const Text(
+                    "By continuing, you agree to our ",
+                    style: textStyle,
+                  ),
                   GestureDetector(
                     onTap: () => Navigator.pushNamed(context, 'terms'),
                     child: Text("Terms ", style: highlightTextStyle),
                   ),
-                  Text("and our ", style: textStyle),
+                  const Text("and our ", style: textStyle),
                   GestureDetector(
                     onTap: () => Navigator.pushNamed(context, 'privacy'),
                     child: Text("Privacy Policy.", style: highlightTextStyle),

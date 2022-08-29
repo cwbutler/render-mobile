@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:render/components/webview.dart';
 import 'package:render/landing.dart';
+import 'package:render/models/auth.dart';
 import 'package:render/screens/profile/edit.dart';
 import 'package:render/screens/profile/profile.dart';
 import 'package:render/screens/settings.dart';
@@ -22,6 +23,7 @@ class RenderApp extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(userProvider).userProfile;
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
     return MaterialApp(
       title: 'Render Conference App',
@@ -110,8 +112,8 @@ class RenderApp extends HookConsumerWidget {
             );
           case 'buyTickets':
             return MaterialPageRoute(
-              builder: (context) => const RenderWebView(
-                url: "https://www.enterrender.com/renderatl#tickets",
+              builder: (context) => RenderWebView(
+                url: "https://ti.to/render-atlanta/2023/discount/${user.email}",
                 javascriptMode: JavascriptMode.unrestricted,
               ),
             );

@@ -36,7 +36,7 @@ class RenderAppLanding extends HookConsumerWidget {
 
         if (message.notification != null) {
           debugPrint(
-            'Message also contained a notification: ${message.notification}',
+            'Message also contained a notification: ${message.notification!.title}',
           );
         }
       });

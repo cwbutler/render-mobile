@@ -26,7 +26,6 @@ class RenderWebView extends HookConsumerWidget {
           WebView(
             initialUrl: url,
             backgroundColor: Colors.black,
-            debuggingEnabled: false,
             javascriptMode: javascriptMode,
             onPageFinished: ((url) => isLoading.value = false),
           ),
