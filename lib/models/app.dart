@@ -23,4 +23,16 @@ class RenderAppModel {
       throw 'Could not launch $url';
     }
   }
+
+  static String daysBetween(DateTime from, DateTime to) {
+    from = DateTime(from.year, from.month, from.day);
+    to = DateTime(to.year, to.month, to.day);
+    final numOfDays = (to.difference(from).inHours / 24).round();
+
+    if (numOfDays == 0) return "Today";
+    if (numOfDays == 1) return "Yesterday";
+    if (numOfDays >= 7) return "${(numOfDays / 7).floor()}w";
+
+    return "${numOfDays}d";
+  }
 }

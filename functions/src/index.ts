@@ -41,6 +41,18 @@ export const fetchMeetupEvents = functions.https.onRequest(async (_, res) => {
   }
 });
 
+/**
+ * Function to fetch render jobs from airtable
+ */
+ export const fetchJobs = functions.https.onRequest(async (_, res) => {
+  try {
+    const data = await api.fetchJobs();
+    res.send({ data });
+  } catch (e) {
+    res.status(500).send(`Could not fetch jobs ${e}`);
+  }
+});
+
 export const createUser = functions.firestore
     .document('users/{userId}')
     .onCreate(async (snap: { data: () => any; }) => {

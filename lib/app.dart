@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:render/components/webview.dart';
 import 'package:render/landing.dart';
 import 'package:render/models/auth.dart';
+import 'package:render/screens/jobs/jobs.dart';
 import 'package:render/screens/profile/edit.dart';
 import 'package:render/screens/profile/profile.dart';
 import 'package:render/screens/settings.dart';

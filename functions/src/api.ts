@@ -2,7 +2,9 @@ import axios from "axios";
 import * as functions from "firebase-functions";
 import * as admin from 'firebase-admin';
 import * as jwt from "jsonwebtoken";
+import Airtable from "airtable";
 
+// Initialize firebase
 admin.initializeApp();
 
 export async function fetchJWT() {
@@ -106,4 +108,37 @@ export async function createDiscontCode({ email } : { email: string }) {
     } catch (e) {
         functions.logger.log(`Could not create discount ${e}`);
     }
+}
+
+export async function fetchJobs() {
+    // Initialize airtable
+    Airtable.configure({
+        endpointUrl: 'https://api.airtable.com',
+        apiKey: process.env.RENDER_AIRTABLE_KEY,
+    });
+    const base = Airtable.base('app0Zd3TKjPbrlPZA');
+    const jobs: any[] = [];
+
+    return new Promise((resolve, reject) => {
+        base('2023').select({
+            view: "Grid view"
+        }).eachPage(function page(records, fetchNextPage: () => void) {
+            // This function (`page`) will get called for each page of records.
+            records.forEach(function(record) {
+                jobs.push(record);
+            });
+        
+            // To fetch the next page of records, call `fetchNextPage`.
+            // If there are more records, `page` will get called again.
+            // If there are no more records, `done` will get called.
+            fetchNextPage();
+        }, function done(err: any) {
+            if (err) { 
+                console.error(err); 
+                reject(err);
+                return; 
+            }
+            resolve(jobs);
+        });
+    });
 }

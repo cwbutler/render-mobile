@@ -9,15 +9,12 @@ class HomeTab extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final events = useState([]);
-
-    void init() async {
-      final data = await EventsApi.fetchEvents();
-      events.value = data;
-    }
+    final state = ref.watch(eventsProvider);
+    final fetchEvents = ref.read(eventsProvider.notifier).fetchEvents;
+    final events = state.listEvents();
 
     useEffect(() {
-      init();
+      fetchEvents();
       return;
     }, []);
 
@@ -41,10 +38,10 @@ class HomeTab extends HookConsumerWidget {
           ListView.builder(
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
-            itemCount: events.value.length,
+            itemCount: events.length,
             itemBuilder: (BuildContext context, int index) {
-              final event = events.value.elementAt(index);
-              return RenderEventCard(event: event);
+              final event = events.elementAt(index);
+              return RenderEventCard(event: event!);
             },
           )
         ],

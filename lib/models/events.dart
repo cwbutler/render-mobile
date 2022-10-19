@@ -57,20 +57,6 @@ class EventsApi {
     );
     return json.decode(response.body);
   }
-
-  static Future<List<RenderEvent>> fetchEvents() async {
-    try {
-      final result = await FirebaseFunctions.instance
-          .httpsCallable('fetchMeetupEvents')
-          .call();
-      final data = json.decode(json.encode(result.data));
-      return List.from(
-          List.from(data).map((item) => RenderEvent.fromMap(item["node"])));
-    } catch (e) {
-      debugPrint("Error fetching event list: $e");
-    }
-    return [];
-  }
 }
 
 @immutable
@@ -191,10 +177,37 @@ class RenderEvents {
   RenderEvent? getEvent(String id) {
     return entities[id];
   }
+
+  RenderEvents copyWith(RenderEvents state) {
+    return RenderEvents(
+      ids: [...ids, ...state.ids],
+      entities: {...entities, ...state.entities},
+    );
+  }
 }
 
 class RenderEventNotifier extends StateNotifier<RenderEvents> {
   RenderEventNotifier(RenderEvents state) : super(state);
+
+  Future<RenderEvents> fetchEvents() async {
+    try {
+      final result = await FirebaseFunctions.instance
+          .httpsCallable('fetchMeetupEvents')
+          .call();
+      final data = json.decode(json.encode(result.data));
+      final List<RenderEvent> list = List.from(
+        List.from(data).map((item) => RenderEvent.fromMap(item["node"])),
+      );
+      state = state.copyWith(RenderEvents(
+        ids: List<String>.from(list.map((e) => e.id ?? "")),
+        entities: Map<String, RenderEvent>.fromIterable(list, key: (e) => e.id),
+      ));
+      return state;
+    } catch (e) {
+      debugPrint("Error fetching event list: $e");
+    }
+    return state;
+  }
 }
 
 final eventsProvider =

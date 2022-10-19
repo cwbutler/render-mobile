@@ -1,12 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:heroicons/heroicons.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:render/components/coming_soon.dart';
 
-class RenderBottomNav extends StatelessWidget {
-  const RenderBottomNav({Key? key}) : super(key: key);
+class RenderBottomNav extends HookConsumerWidget {
+  final int? currentIndex;
+  final void Function(int index)? setIndex;
+
+  const RenderBottomNav({
+    Key? key,
+    this.currentIndex,
+    this.setIndex,
+  }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12),
       child: Material(
@@ -17,6 +25,7 @@ class RenderBottomNav extends StatelessWidget {
               backgroundColor: Colors.transparent,
               unselectedItemColor: Colors.white,
               selectedItemColor: const Color(0xffFF88DF),
+              currentIndex: currentIndex ?? 0,
               onTap: (int index) {
                 const shape = RoundedRectangleBorder(
                   borderRadius: BorderRadius.only(
@@ -37,19 +46,8 @@ class RenderBottomNav extends StatelessWidget {
                       },
                     );
                     break;
-                  case 2:
-                    showModalBottomSheet(
-                      backgroundColor: Colors.white,
-                      isDismissible: true,
-                      context: context,
-                      isScrollControlled: true,
-                      shape: shape,
-                      builder: (BuildContext context) {
-                        return const RenderComingSoon();
-                      },
-                    );
-                    break;
                   default:
+                    if (setIndex != null) setIndex!(index);
                     break;
                 }
               },
