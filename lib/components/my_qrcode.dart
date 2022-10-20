@@ -22,7 +22,7 @@ class MyQRCode extends HookConsumerWidget {
       if (cameras.isNotEmpty) {
         try {
           cameraController = CameraController(
-            cameras[0],
+            cameras.first,
             ResolutionPreset.max,
             imageFormatGroup: ImageFormatGroup.bgra8888,
           );

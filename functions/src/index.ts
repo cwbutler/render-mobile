@@ -56,12 +56,26 @@ export const fetchMeetupEvents = functions.https.onRequest(async (_, res) => {
 /**
  * Function to rsvp user to event.
  */
- export const rsvpEvent = functions.https.onRequest(async (req, res) => {
+ export const rsvpEvent = functions.https.onCall(async (data) => {
   try {
-    const data = await api.rsvpEvent(req.body);
-    res.send({ data });
+    await api.rsvpEvent(data);
+    return true;
   } catch (e) {
-    res.status(500).send(`Could not rsvp user to event ${e}`);
+    return false;
+  }
+});
+
+/**
+ * Function to check user rsvp to event.
+ */
+ export const checkRSVP = functions.https.onCall(async (data) => {
+  try {
+    const result = await api.checkRSVP(data);
+    console.log("check result", result);
+    return result;
+  } catch (e) {
+    console.log("error checking rsvp", e);
+    return false;
   }
 });
 

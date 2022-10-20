@@ -149,5 +149,43 @@ export async function rsvpEvent(data: any) {
         endpointUrl: 'https://api.airtable.com',
         apiKey: process.env.RENDER_AIRTABLE_KEY,
     });
-    const base = Airtable.base('app0Zd3TKjPbrlPZA');
+    const base = Airtable.base('appo8ITXRoiHVVPoe');
+
+    return new Promise(async (resolve, reject) => {
+        if (await checkRSVP(data)) {
+            resolve(true);
+        }
+
+        base('Events').create([{
+            fields: {
+                "UserID": data.userId,
+                "EventID": data.eventId,
+            }
+        }], (err: any) => {
+            if (err) { console.log(err); return reject(err); }
+            resolve(true);
+        })
+    });
+}
+
+export async function checkRSVP(data: any) {
+    // Initialize airtable
+    Airtable.configure({
+        endpointUrl: 'https://api.airtable.com',
+        apiKey: process.env.RENDER_AIRTABLE_KEY,
+    });
+    const base = Airtable.base('appo8ITXRoiHVVPoe');
+
+    return new Promise((resolve) => {
+        base('Events').select({
+            view: "Grid view",
+            filterByFormula: `AND(UserID = '${data.userId}', EventID = '${data.eventId}')`,
+        }).firstPage((err, records=[]) => {
+            if (err) {
+                console.log("Error checking rsvp: ", err);
+                return resolve(false);
+            }
+            resolve(records?.length > 0)
+        });
+    });
 }

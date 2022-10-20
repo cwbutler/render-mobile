@@ -160,6 +160,22 @@ class RenderEvent {
       ),
     );
   }
+
+  RenderEvent setRSVP(bool value) {
+    return RenderEvent(
+      id: id,
+      title: title,
+      eventUrl: eventUrl,
+      description: description,
+      shortDescription: shortDescription,
+      dateTime: dateTime,
+      venue: venue,
+      status: status,
+      duration: duration,
+      images: images,
+      rsvp: value,
+    );
+  }
 }
 
 @immutable
@@ -215,10 +231,40 @@ class RenderEventNotifier extends StateNotifier<RenderEvents> {
     required String eventId,
     required String userId,
   }) async {
-    final result =
-        await FirebaseFunctions.instance.httpsCallable('rsvpEvent').call();
-    final data = json.decode(json.encode(result.data));
+    final event = state.getEvent(eventId);
+
+    if (event != null) {
+      await FirebaseFunctions.instance.httpsCallable('rsvpEvent').call({
+        "eventId": eventId,
+        "userId": userId,
+      });
+      state = state.copyWith(
+        RenderEvents(entities: {eventId: event.setRSVP(true)}),
+      );
+    }
+
     return state;
+  }
+
+  Future<bool> checkRSVP({
+    required String eventId,
+    required String userId,
+  }) async {
+    final event = state.getEvent(eventId);
+
+    if (event != null) {
+      final result =
+          await FirebaseFunctions.instance.httpsCallable('checkRSVP').call({
+        "eventId": eventId,
+        "userId": userId,
+      });
+      state = state.copyWith(
+        RenderEvents(entities: {eventId: event.setRSVP(result.data)}),
+      );
+      return result.data;
+    }
+
+    return false;
   }
 }
 

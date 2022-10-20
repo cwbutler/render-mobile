@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:camera/camera.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -8,6 +9,32 @@ import 'package:uni_links/uni_links.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class RenderAppModel {
+  static List<CameraDescription> cameras = [];
+  static CameraDescription? camera;
+  static late CameraController cameraController;
+
+  const RenderAppModel();
+
+  static Future<CameraController> getCameraController() async {
+    if (camera != null) return cameraController;
+
+    // Ensure that plugin services are initialized so that `availableCameras()`
+    // can be called before `runApp()`
+    WidgetsFlutterBinding.ensureInitialized();
+
+    // Obtain a list of the available cameras on the device.
+    cameras = await availableCameras();
+
+    // Get a specific camera from the list of available cameras.
+    camera = cameras.first;
+
+    cameraController = CameraController(camera!, ResolutionPreset.max);
+
+    await cameraController.initialize();
+
+    return cameraController;
+  }
+
   static Future<File?> getImageFromDevice() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.image,

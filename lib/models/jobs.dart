@@ -47,10 +47,12 @@ class RenderJob {
 class RenderJobs {
   final Map<String, RenderJob> entities;
   final List<String> ids;
+  final bool? isLoading;
 
   const RenderJobs({
     this.entities = const {},
     this.ids = const [],
+    this.isLoading,
   });
 
   Iterable<RenderJob?> listJobs() {
@@ -63,6 +65,7 @@ class RenderJobs {
 
   RenderJobs copyWith(RenderJobs state) {
     return RenderJobs(
+      isLoading: state.isLoading ?? isLoading,
       ids: [...ids, ...state.ids],
       entities: {...entities, ...state.entities},
     );

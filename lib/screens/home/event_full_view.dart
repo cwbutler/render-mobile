@@ -1,16 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:heroicons/heroicons.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:render/models/auth.dart';
 import 'package:render/models/events.dart';
 
-class RenderEventFullView extends StatelessWidget {
+class RenderEventFullView extends HookConsumerWidget {
   final RenderEvent? event;
   const RenderEventFullView({super.key, this.event});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final checkRSVP = ref.read(eventsProvider.notifier).checkRSVP;
+    final rsvp = ref.read(eventsProvider.notifier).rsvpEvent;
+    final userId = ref.read(userProvider).userProfile.id;
     final image =
         "${event?.images?[0].baseUrl}${event?.images?[0].id}/${MediaQuery.of(context).size.width.toInt()}x200.jpg";
     final DateFormat format = DateFormat('E, MMMM d, y');
+    final hasRsvp = useState(event?.rsvp != null && event!.rsvp!);
+
+    useEffect(() {
+      if (event?.id != null && userId != null) {
+        checkRSVP(eventId: event!.id!, userId: userId).then(
+          (value) {
+            hasRsvp.value = value;
+          },
+        );
+      }
+      return;
+    }, [event?.id, userId, event?.rsvp]);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -18,10 +37,23 @@ class RenderEventFullView extends StatelessWidget {
         Container(
           width: double.infinity,
           height: 200,
+          alignment: Alignment.centerLeft,
           decoration: BoxDecoration(
             image: DecorationImage(
               image: NetworkImage(image),
               fit: BoxFit.cover,
+            ),
+          ),
+          child: Container(
+            margin: const EdgeInsets.only(left: 16, bottom: 70),
+            child: IconButton(
+              onPressed: () => Navigator.pop(context),
+              icon: const HeroIcon(
+                HeroIcons.xCircle,
+                solid: true,
+                color: Colors.white,
+                size: 36,
+              ),
             ),
           ),
         ),
@@ -123,20 +155,27 @@ class RenderEventFullView extends StatelessWidget {
               const EdgeInsets.only(left: 20, right: 20, bottom: 30, top: 10),
           width: double.infinity,
           child: ElevatedButton(
-            onPressed: () {},
+            onPressed: () async {
+              if (!hasRsvp.value && userId != null && event?.id != null) {
+                await rsvp(userId: userId, eventId: event!.id!);
+                hasRsvp.value = true;
+              }
+            },
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xffFF88DF),
+              backgroundColor:
+                  (hasRsvp.value) ? Colors.black : const Color(0xffFF88DF),
               padding: const EdgeInsets.all(20),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(100),
               ),
             ),
-            child: const Text(
-              "RSVP",
+            child: Text(
+              (hasRsvp.value) ? "You’re all set!" : "RSVP",
               style: TextStyle(
                 fontFamily: "Mortend",
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
+                color: (hasRsvp.value) ? Colors.white : Colors.black,
               ),
             ),
           ),
