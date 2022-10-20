@@ -142,3 +142,12 @@ export async function fetchJobs() {
         });
     });
 }
+
+export async function rsvpEvent(data: any) {
+    // Initialize airtable
+    Airtable.configure({
+        endpointUrl: 'https://api.airtable.com',
+        apiKey: process.env.RENDER_AIRTABLE_KEY,
+    });
+    const base = Airtable.base('app0Zd3TKjPbrlPZA');
+}

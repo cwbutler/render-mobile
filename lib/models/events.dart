@@ -126,6 +126,7 @@ class RenderEvent {
   final String? dateTime;
   final String? status;
   final String? duration;
+  final bool? rsvp;
   final RenderEventVenue? venue;
   final List<RenderEventImage>? images;
 
@@ -140,6 +141,7 @@ class RenderEvent {
     this.status,
     this.duration,
     this.images,
+    this.rsvp,
   });
 
   static RenderEvent fromMap(Map<String, dynamic> data) {
@@ -198,14 +200,24 @@ class RenderEventNotifier extends StateNotifier<RenderEvents> {
       final List<RenderEvent> list = List.from(
         List.from(data).map((item) => RenderEvent.fromMap(item["node"])),
       );
-      state = state.copyWith(RenderEvents(
+      state = RenderEvents(
         ids: List<String>.from(list.map((e) => e.id ?? "")),
         entities: Map<String, RenderEvent>.fromIterable(list, key: (e) => e.id),
-      ));
+      );
       return state;
     } catch (e) {
       debugPrint("Error fetching event list: $e");
     }
+    return state;
+  }
+
+  Future<RenderEvents> rsvpEvent({
+    required String eventId,
+    required String userId,
+  }) async {
+    final result =
+        await FirebaseFunctions.instance.httpsCallable('rsvpEvent').call();
+    final data = json.decode(json.encode(result.data));
     return state;
   }
 }

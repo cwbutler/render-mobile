@@ -31,7 +31,7 @@ class RenderApp extends HookConsumerWidget {
       theme: ThemeData(
         brightness: Brightness.dark,
         primaryColor: const Color(0xffff88df),
-        backgroundColor: Colors.black,
+        colorScheme: const ColorScheme.dark(background: Colors.black),
         fontFamily: 'Gothic A1',
         disabledColor: Colors.black,
         splashColor: Colors.transparent,

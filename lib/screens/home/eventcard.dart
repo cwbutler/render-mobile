@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:render/models/events.dart';
+import 'package:render/screens/home/event_full_view.dart';
 
 class RenderEventCard extends StatelessWidget {
   final RenderEvent event;
@@ -19,70 +20,82 @@ class RenderEventCard extends StatelessWidget {
       fontWeight: FontWeight.w800,
     );
 
-    return Container(
-      width: double.infinity,
-      height: 140,
-      margin: const EdgeInsets.only(bottom: 24),
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.black,
-        image: DecorationImage(
-          image: NetworkImage(image),
-          fit: BoxFit.cover,
-          colorFilter: ColorFilter.mode(
-            Colors.black.withOpacity(0.73),
-            BlendMode.dstATop,
-          ),
-        ),
-        borderRadius: const BorderRadius.all(
-          Radius.circular(12),
-        ),
-      ),
-      child: Stack(
-        children: [
-          Positioned(
-            top: 0,
-            child: Column(
-              children: [
-                Text(
-                  date.day.toString().padLeft(2, "0"),
-                  style: const TextStyle(
-                    fontFamily: 'Inter',
-                    color: Colors.white,
-                    fontSize: 22,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-                Text(
-                  getMonth(date.month),
-                  style: textStyle,
-                )
-              ],
+    return GestureDetector(
+      onTap: () {
+        showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          backgroundColor: Colors.white,
+          builder: (context) {
+            return RenderEventFullView(event: event);
+          },
+        );
+      },
+      child: Container(
+        width: double.infinity,
+        height: 140,
+        margin: const EdgeInsets.only(bottom: 24),
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: Colors.black,
+          image: DecorationImage(
+            image: NetworkImage(image),
+            fit: BoxFit.cover,
+            colorFilter: ColorFilter.mode(
+              Colors.black.withOpacity(0.73),
+              BlendMode.dstATop,
             ),
           ),
-          Positioned(
-            bottom: 0,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  event.title ?? "",
-                  style: textStyle,
-                ),
-                Row(children: [
-                  Container(
-                    margin: const EdgeInsets.only(right: 4),
-                    child: SvgPicture.asset("assets/svgs/location.svg"),
+          borderRadius: const BorderRadius.all(
+            Radius.circular(12),
+          ),
+        ),
+        child: Stack(
+          children: [
+            Positioned(
+              top: 0,
+              child: Column(
+                children: [
+                  Text(
+                    date.day.toString().padLeft(2, "0"),
+                    style: const TextStyle(
+                      fontFamily: 'Inter',
+                      color: Colors.white,
+                      fontSize: 22,
+                      fontWeight: FontWeight.w800,
+                    ),
                   ),
                   Text(
-                    "${event.venue?.city}, ${event.venue?.state}",
+                    getMonth(date.month),
                     style: textStyle,
                   )
-                ])
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+            Positioned(
+              bottom: 0,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    event.title ?? "",
+                    style: textStyle,
+                  ),
+                  Row(children: [
+                    Container(
+                      margin: const EdgeInsets.only(right: 4),
+                      child: SvgPicture.asset("assets/svgs/location.svg"),
+                    ),
+                    Text(
+                      "${event.venue?.city}, ${event.venue?.state}",
+                      style: textStyle,
+                    )
+                  ])
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

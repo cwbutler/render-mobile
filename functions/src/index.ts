@@ -53,6 +53,18 @@ export const fetchMeetupEvents = functions.https.onRequest(async (_, res) => {
   }
 });
 
+/**
+ * Function to rsvp user to event.
+ */
+ export const rsvpEvent = functions.https.onRequest(async (req, res) => {
+  try {
+    const data = await api.rsvpEvent(req.body);
+    res.send({ data });
+  } catch (e) {
+    res.status(500).send(`Could not rsvp user to event ${e}`);
+  }
+});
+
 export const createUser = functions.firestore
     .document('users/{userId}')
     .onCreate(async (snap: { data: () => any; }) => {
