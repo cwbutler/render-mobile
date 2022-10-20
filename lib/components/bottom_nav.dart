@@ -27,25 +27,7 @@ class RenderBottomNav extends HookConsumerWidget {
               selectedItemColor: const Color(0xffFF88DF),
               currentIndex: currentIndex ?? 0,
               onTap: (int index) {
-                const shape = RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(30.0),
-                    topRight: Radius.circular(30.0),
-                  ),
-                );
                 switch (index) {
-                  case 1:
-                    showModalBottomSheet(
-                      backgroundColor: Colors.white,
-                      isDismissible: true,
-                      isScrollControlled: true,
-                      context: context,
-                      shape: shape,
-                      builder: (BuildContext context) {
-                        return const RenderComingSoon();
-                      },
-                    );
-                    break;
                   default:
                     if (setIndex != null) setIndex!(index);
                     break;

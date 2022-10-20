@@ -1,6 +1,10 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:uni_links/uni_links.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class RenderAppModel {
@@ -34,5 +38,29 @@ class RenderAppModel {
     if (numOfDays >= 7) return "${(numOfDays / 7).floor()}w";
 
     return "${numOfDays}d";
+  }
+
+  static Future<StreamSubscription?> initUniLinks() async {
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      final initialLink = await getInitialUri();
+      if (initialLink != null) {
+        debugPrint(initialLink.toString());
+      }
+      // Attach a listener to the stream
+      final sub = uriLinkStream.listen((Uri? uri) {
+        // Use the uri and warn the user, if it is not correct
+      }, onError: (err) {
+        // Handle exception by warning the user their action did not succeed
+        debugPrint("sub error: ${err.toString()}");
+      });
+
+      return sub;
+    } on PlatformException {
+      // Handle exception by warning the user their action did not succeed
+      // return?
+      debugPrint("link error:");
+    }
+    return null;
   }
 }
