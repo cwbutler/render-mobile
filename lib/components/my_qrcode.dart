@@ -1,5 +1,6 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -11,6 +12,45 @@ class MyQRCode extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(userProvider).userProfile;
+    final appState = useAppLifecycleState();
+    // ignore: avoid_init_to_null
+    CameraController? cameraController = null;
+
+    void init() async {
+      final cameras = await availableCameras();
+
+      if (cameras.isNotEmpty) {
+        try {
+          cameraController = CameraController(
+            cameras[0],
+            ResolutionPreset.max,
+            imageFormatGroup: ImageFormatGroup.bgra8888,
+          );
+          await cameraController?.initialize();
+        } catch (e) {
+          debugPrint("Camera init error: ${e.toString()}");
+        }
+      }
+    }
+
+    void onAppStateChange() async {
+      debugPrint(appState.toString());
+      // App state changed before we got the chance to initialize.
+      if (cameraController == null || !cameraController!.value.isInitialized) {
+        return;
+      }
+
+      if (appState == AppLifecycleState.inactive) {
+        cameraController?.dispose();
+      } else if (appState == AppLifecycleState.resumed) {
+        //onNewCameraSelected(cameraController.description);
+      }
+    }
+
+    useEffect(() {
+      init();
+    }, []);
+
     return Container(
       height: 500,
       padding: const EdgeInsets.all(24),
@@ -40,18 +80,7 @@ class MyQRCode extends HookConsumerWidget {
           ),
         ),
         ElevatedButton(
-          onPressed: () async {
-            final cameras = await availableCameras();
-
-            if (cameras.isNotEmpty) {
-              final controller = CameraController(
-                cameras[1],
-                ResolutionPreset.max,
-                imageFormatGroup: ImageFormatGroup.bgra8888,
-              );
-              await controller.initialize();
-            }
-          },
+          onPressed: () async {},
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.white,
             padding: const EdgeInsets.all(14),
