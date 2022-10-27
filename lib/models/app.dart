@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:camera/camera.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -87,5 +88,16 @@ class RenderAppModel {
       debugPrint("link error:");
     }
     return null;
+  }
+
+  static Future<void> askTrackingPermissions() async {
+    // If the system can show an authorization request dialog
+    if (await AppTrackingTransparency.trackingAuthorizationStatus ==
+        TrackingStatus.notDetermined) {
+      // Wait for dialog popping animation
+      await Future.delayed(const Duration(milliseconds: 200));
+      // Request system's tracking authorization dialog
+      await AppTrackingTransparency.requestTrackingAuthorization();
+    }
   }
 }

@@ -23,14 +23,6 @@ class HomeScreen extends HookConsumerWidget {
       RenderJobScreen(),
     ];
 
-    useEffect(() {
-      StreamSubscription? sub;
-      RenderAppModel.initUniLinks().then((value) {
-        sub = value;
-      });
-      return () => sub?.cancel();
-    }, []);
-
     return SafeArea(
       child: DefaultTabController(
         length: 3,

@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
+import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -56,12 +57,17 @@ class RenderUser {
   }
 
   Future<void> saveUserProfile() async {
+    final data = userProfile.toMap();
+
+    // Add ad id
+    data["adID"] = await AppTrackingTransparency.getAdvertisingIdentifier();
+
     try {
       final db = FirebaseFirestore.instance;
       await db
           .collection("users")
           .doc(userProfile.id)
-          .set(userProfile.toMap(), SetOptions(merge: true))
+          .set(data, SetOptions(merge: true))
           .onError((error, stackTrace) => debugPrint(error.toString()));
     } catch (e) {
       debugPrint(e.toString());

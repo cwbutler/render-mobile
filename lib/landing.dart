@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:render/models/app.dart';
 import 'firebase_options.dart';
 import 'package:render/models/auth.dart';
 
@@ -23,12 +24,10 @@ class RenderAppLanding extends HookConsumerWidget {
         options: DefaultFirebaseOptions.currentPlatform,
       );
 
+      await RenderAppModel.askTrackingPermissions();
+
       final auth = await fetchCurrentUser();
       String nextRoute = (auth.hasProfile) ? 'home' : 'create';
-
-      if (auth.user == null || auth.user!.uid.isEmpty) {
-        return navigate('login');
-      }
 
       FirebaseMessaging.onMessage.listen((RemoteMessage message) {
         debugPrint('Got a message whilst in the foreground!');
@@ -41,7 +40,8 @@ class RenderAppLanding extends HookConsumerWidget {
         }
       });
 
-      navigate(nextRoute);
+      return navigate(
+          (auth.user == null || auth.user!.uid.isEmpty) ? 'login' : nextRoute);
     }
 
     useEffect(() {

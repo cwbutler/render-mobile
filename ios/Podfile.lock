@@ -1,4 +1,6 @@
 PODS:
+  - app_tracking_transparency (0.0.1):
+    - Flutter
   - AppAuth (1.6.0):
     - AppAuth/Core (= 1.6.0)
     - AppAuth/ExternalUserAgent (= 1.6.0)
@@ -245,6 +247,7 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
+  - app_tracking_transparency (from `.symlinks/plugins/app_tracking_transparency/ios`)
   - camera_avfoundation (from `.symlinks/plugins/camera_avfoundation/ios`)
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
   - cloud_functions (from `.symlinks/plugins/cloud_functions/ios`)
@@ -304,6 +307,8 @@ SPEC REPOS:
     - SwiftyGif
 
 EXTERNAL SOURCES:
+  app_tracking_transparency:
+    :path: ".symlinks/plugins/app_tracking_transparency/ios"
   camera_avfoundation:
     :path: ".symlinks/plugins/camera_avfoundation/ios"
   cloud_firestore:
@@ -348,6 +353,7 @@ CHECKOUT OPTIONS:
     :tag: 9.3.0
 
 SPEC CHECKSUMS:
+  app_tracking_transparency: 5b1745ef9ade815f7455cb6a0848349589afb7c5
   AppAuth: 8fca6b5563a5baef2c04bee27538025e4ceb2add
   camera_avfoundation: 07c77549ea54ad95d8581be86617c094a46280d9
   cloud_firestore: bc004ee2498babe8c3df4abfd68754939b398135

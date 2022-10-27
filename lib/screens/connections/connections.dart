@@ -76,7 +76,7 @@ class RenderConnectionsScreen extends HookConsumerWidget {
                         );
                       },
                       child: Container(
-                        margin: const EdgeInsets.only(bottom: 20),
+                        padding: const EdgeInsets.only(bottom: 20),
                         child: Row(
                           children: [
                             Container(

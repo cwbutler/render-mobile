@@ -83,7 +83,7 @@ export const fetchMeetupEvents = functions.https.onRequest(async (_, res) => {
  */
  export const saveUserToRender = functions.https.onCall(async (data) => {
   try {
-    const result = await api.checkRSVP(data);
+    const result = await api.saveUserToAirtable(data);
     return result;
   } catch (e) {
     console.log("error saving user data", e);

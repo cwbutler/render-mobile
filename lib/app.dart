@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:render/components/webview.dart';
 import 'package:render/landing.dart';
+import 'package:render/models/app.dart';
 import 'package:render/models/auth.dart';
 import 'package:render/screens/camera.dart';
 import 'package:render/screens/profile/edit.dart';
@@ -25,7 +28,15 @@ class RenderApp extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(userProvider).userProfile;
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+
+    useEffect(() {
+      StreamSubscription? sub;
+      RenderAppModel.initUniLinks().then((value) {
+        sub = value;
+      });
+      return () => sub?.cancel();
+    }, []);
+
     return MaterialApp(
       title: 'Render Conference App',
       theme: ThemeData(

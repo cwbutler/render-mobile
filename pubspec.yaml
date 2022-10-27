@@ -59,6 +59,7 @@ dependencies:
   uni_links: ^0.5.1
   intl: ^0.17.0
   mobile_scanner: ^2.0.0
+  app_tracking_transparency: ^2.0.3
 
 dev_dependencies:
   flutter_test:
