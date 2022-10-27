@@ -130,9 +130,11 @@ export const deleteUser = functions.firestore
     .onDelete(async (snap: { data: () => any; }) => {
       try {
         // Get an object representing the document
-        const newUser = snap.data();
-        await admin.firestore().collection('discountCodes').doc(newUser.email).delete();
-        await admin.firestore().doc(newUser.id).delete();
+        const user = snap.data();
+        await admin.firestore().collection('discountCodes').doc(user.email).delete();
+        await admin.firestore().collection('notifications').doc(user.email).delete();
+        await admin.firestore().doc(user.id).delete();
+        await api.removeUserFromAirtable(user);
       } catch (e) {
         console.log(e);
       }

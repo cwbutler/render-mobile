@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:notification_permissions/notification_permissions.dart';
 import 'package:render/models/user_profile.dart';
 import 'package:render/screens/create_user/layout.dart';
 import 'package:render/screens/create_user/next_button.dart';
@@ -67,7 +66,7 @@ class CreateUserProfilePic extends HookConsumerWidget {
                 PlatformFile file = result.files.first;
                 File fileData = File(file.path!);
                 isLoading.value = true;
-                final url = await saveImage(file: fileData);
+                await saveImage(file: fileData);
                 isLoading.value = false;
               } else {
                 // User canceled the picker

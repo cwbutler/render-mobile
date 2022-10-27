@@ -56,7 +56,7 @@ class RenderResumeInput extends HookConsumerWidget {
             onPressed: onPressed,
             style: ElevatedButton.styleFrom(
               minimumSize: const Size.fromHeight(65),
-              primary: (isActive)
+              backgroundColor: (isActive)
                   ? const Color.fromRGBO(255, 136, 223, 0.6)
                   : Colors.black,
               padding: const EdgeInsets.all(12),

@@ -21,7 +21,7 @@ class RenderConnectToUser extends HookConsumerWidget {
     }
 
     useEffect(() {
-      getUser(userId: userId).then((value) {
+      getUser(userId: userId, save: false).then((value) {
         user.value = value;
       });
       return;

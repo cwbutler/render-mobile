@@ -39,7 +39,7 @@ class RenderComingSoon extends StatelessWidget {
             width: double.infinity,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
-                primary: const Color(0xff3F3F3F),
+                backgroundColor: const Color(0xff3F3F3F),
                 padding: const EdgeInsets.all(15),
               ),
               onPressed: () => Navigator.pop(context),

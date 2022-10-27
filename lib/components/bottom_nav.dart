@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:render/components/coming_soon.dart';
 
 class RenderBottomNav extends HookConsumerWidget {
   final int? currentIndex;

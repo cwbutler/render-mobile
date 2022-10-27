@@ -17,7 +17,7 @@ class NextButton extends StatelessWidget {
     final ButtonStyle style = ElevatedButton.styleFrom(
       padding: const EdgeInsets.all(22),
       side: const BorderSide(width: 500),
-      primary: Colors.white,
+      backgroundColor: Colors.white,
       textStyle: const TextStyle(
           fontFamily: 'Mortend', fontSize: 20, fontWeight: FontWeight.w400),
       shape: RoundedRectangleBorder(

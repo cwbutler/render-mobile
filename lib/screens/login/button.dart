@@ -12,10 +12,10 @@ class LoginBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final style = ElevatedButton.styleFrom(
-        primary: Colors.white,
-        textStyle: const TextStyle(color: Colors.black),
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)));
+      backgroundColor: Colors.white,
+      textStyle: const TextStyle(color: Colors.black),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
+    );
 
     return Container(
         margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 12),

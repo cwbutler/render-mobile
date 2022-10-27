@@ -40,7 +40,7 @@ class RenderConnection {
 
 @immutable
 class RenderConnections {
-  final Map<String, RenderConnections> entities;
+  final Map<String, RenderConnection> entities;
   final List<String> ids;
   final bool? isLoading;
 
@@ -50,11 +50,11 @@ class RenderConnections {
     this.isLoading,
   });
 
-  Iterable<RenderConnections?> listConnections() {
+  Iterable<RenderConnection?> listConnections() {
     return ids.map((id) => entities[id]);
   }
 
-  RenderConnections? getConnection(String id) {
+  RenderConnection? getConnection(String id) {
     return entities[id];
   }
 
@@ -63,6 +63,27 @@ class RenderConnections {
       isLoading: state.isLoading ?? isLoading,
       ids: [...ids, ...state.ids],
       entities: {...entities, ...state.entities},
+    );
+  }
+
+  RenderConnections removeConnection(RenderConnection connection) {
+    entities.remove(connection);
+
+    return RenderConnections(
+      isLoading: isLoading,
+      ids: List<String>.from(entities.keys),
+      entities: entities,
+    );
+  }
+
+  static RenderConnections from(List<RenderConnection> data) {
+    return RenderConnections(
+      isLoading: false,
+      ids: List<String>.from(data.map((e) => e.id ?? "")),
+      entities: Map<String, RenderConnection>.fromIterable(
+        data,
+        key: (e) => e.id,
+      ),
     );
   }
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:heroicons/heroicons.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:render/components/connect_user.dart';
@@ -18,13 +17,14 @@ class RenderCamera extends HookConsumerWidget {
       controller: cameraController,
       onDetect: (barcode, args) async {
         if (barcode.rawValue != null && barcode.rawValue!.isNotEmpty) {
-          final params = barcode.rawValue!.split('/').toString();
+          final params = barcode.rawValue!.split('/');
+          final id = params[3];
           Navigator.pop(context);
           showModalBottomSheet(
             context: context,
             backgroundColor: Colors.white,
             builder: ((context) {
-              return RenderConnectToUser(userId: params[2]);
+              return RenderConnectToUser(userId: id);
             }),
           );
         }

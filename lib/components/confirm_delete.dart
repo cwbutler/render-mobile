@@ -64,7 +64,7 @@ class RenderConfirm extends StatelessWidget {
               onPressed: onConfirm,
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.all(17),
-                primary: confirmColor ?? const Color(0xffEA4335),
+                backgroundColor: confirmColor ?? const Color(0xffEA4335),
               ),
               child: Text(
                 confirm ?? "CONFIRM",
@@ -85,7 +85,7 @@ class RenderConfirm extends StatelessWidget {
               },
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.all(17),
-                primary: Colors.white,
+                backgroundColor: Colors.white,
                 side: const BorderSide(
                   color: Colors.black,
                   width: 1,

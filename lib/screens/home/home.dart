@@ -1,11 +1,8 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:render/components/app_bar.dart';
 import 'package:render/components/bottom_nav.dart';
-import 'package:render/models/app.dart';
 import 'package:render/screens/connections/connections.dart';
 import 'package:render/screens/home/home_tab.dart';
 import 'package:render/screens/jobs/jobs.dart';

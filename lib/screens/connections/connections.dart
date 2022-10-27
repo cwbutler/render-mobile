@@ -5,6 +5,7 @@ import 'package:render/components/avatar.dart';
 import 'package:render/components/full_screen_loader.dart';
 import 'package:render/components/view_connection.dart';
 import 'package:render/models/auth.dart';
+import 'package:render/models/connections.dart';
 
 class RenderConnectionsScreen extends HookConsumerWidget {
   const RenderConnectionsScreen({Key? key}) : super(key: key);
@@ -20,7 +21,7 @@ class RenderConnectionsScreen extends HookConsumerWidget {
         isLoading.value = false;
       });
       return;
-    });
+    }, []);
 
     return (isLoading.value)
         ? const RenderLoader()
@@ -43,7 +44,7 @@ class RenderConnectionsScreen extends HookConsumerWidget {
                       ),
                     ),
                     Text(
-                      "(${connections.length})",
+                      "(${connections.ids.length})",
                       style: const TextStyle(
                         fontFamily: "Gothic A1",
                         fontSize: 24,
@@ -56,9 +57,11 @@ class RenderConnectionsScreen extends HookConsumerWidget {
               ),
               Expanded(
                 child: ListView.builder(
-                  itemCount: connections.length,
+                  itemCount: connections.ids.length,
                   itemBuilder: ((context, index) {
-                    final user = connections[index];
+                    final id = connections.ids[index];
+                    final user =
+                        connections.entities[id] ?? const RenderConnection();
                     return GestureDetector(
                       onTap: () {
                         showModalBottomSheet(

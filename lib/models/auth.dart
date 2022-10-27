@@ -38,13 +38,13 @@ class RenderUser {
   final User? user;
   final UserProfile userProfile;
   final bool hasProfile;
-  final List<RenderConnection> connections;
+  final RenderConnections connections;
 
   const RenderUser({
     this.user,
     this.userProfile = const UserProfile(),
     this.hasProfile = false,
-    this.connections = const [],
+    this.connections = const RenderConnections(),
   });
 
   RenderUser copyWith(RenderUser user) {
@@ -52,7 +52,7 @@ class RenderUser {
       user: user.user ?? this.user,
       userProfile: userProfile.copyWith(user.userProfile),
       hasProfile: user.hasProfile,
-      connections: user.connections,
+      connections: connections.copyWith(user.connections),
     );
   }
 
@@ -202,8 +202,10 @@ class UserNotifier extends StateNotifier<RenderUser> {
     clearUser();
   }
 
-  Future<RenderUser> getUserProfile({String? userId}) async {
+  Future<RenderUser> getUserProfile({String? userId, bool? save}) async {
     final id = (userId == null) ? state.user?.uid : userId;
+    final saveToState = (save != null) ? save : true;
+
     try {
       final db = FirebaseFirestore.instance;
       final result = await db.collection("users").doc(id).get();
@@ -226,9 +228,11 @@ class UserNotifier extends StateNotifier<RenderUser> {
         );
 
         final user = RenderUser(userProfile: profile, hasProfile: true);
-        state = state.copyWith(user);
+        if (saveToState) state = state.copyWith(user);
         return user;
-      } else if (state.user != null && state.user!.uid.isNotEmpty) {
+      } else if (saveToState &&
+          state.user != null &&
+          state.user!.uid.isNotEmpty) {
         final name = state.user?.displayName?.split(" ");
         final user = RenderUser(
           hasProfile: false,
@@ -314,7 +318,6 @@ class UserNotifier extends StateNotifier<RenderUser> {
 
   Future<RenderUser> getUserConnections({String? userId}) async {
     final id = (userId == null) ? state.user?.uid : userId;
-    List<RenderConnection> connections = [];
 
     try {
       final db = FirebaseFirestore.instance;
@@ -322,10 +325,15 @@ class UserNotifier extends StateNotifier<RenderUser> {
           await db.collection("users").doc(id).collection('connections').get();
 
       if (result.docs.isNotEmpty) {
-        connections = List.from(
+        final connections = RenderConnections.from(List.from(
           result.docs.map((e) => RenderConnection.fromMap(e.data())),
+        ));
+        state = RenderUser(
+          user: state.user,
+          userProfile: state.userProfile,
+          hasProfile: state.hasProfile,
+          connections: connections,
         );
-        state = state.copyWith(RenderUser(connections: connections));
       }
 
       return state;
@@ -347,7 +355,9 @@ class UserNotifier extends StateNotifier<RenderUser> {
           .doc(user.id)
           .delete()
           .onError((error, stackTrace) => debugPrint(error.toString()));
-      await getUserConnections();
+      state = state.copyWith(
+        RenderUser(connections: state.connections.removeConnection(user)),
+      );
     } catch (e) {
       debugPrint(e.toString());
     }

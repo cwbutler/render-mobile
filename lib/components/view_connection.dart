@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:render/components/avatar.dart';
+import 'package:render/components/full_screen_loader.dart';
 import 'package:render/models/auth.dart';
 import 'package:render/models/connections.dart';
+import 'package:render/models/user_profile.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class RenderViewConnection extends HookConsumerWidget {
@@ -13,10 +16,19 @@ class RenderViewConnection extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final removeConnection =
         ref.read(userProvider.notifier).removeConnectionToUser;
+    final fetchUser = ref.read(userProvider.notifier).getUserProfile;
+    final profile = useState(const UserProfile());
 
     void navigateAway() {
       Navigator.pop(context);
     }
+
+    useEffect(() {
+      fetchUser(userId: user.id, save: false).then((value) {
+        profile.value = value.userProfile;
+      });
+      return;
+    }, [user]);
 
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
@@ -28,66 +40,68 @@ class RenderViewConnection extends HookConsumerWidget {
           topRight: Radius.circular(30),
         ),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Container(
-            margin: const EdgeInsets.only(bottom: 40),
-            child: Row(
+      child: (profile.value.id == null)
+          ? const RenderLoader()
+          : Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                GestureDetector(
-                  onTap: () => Navigator.pop(context),
-                  child: Image.asset('assets/images/close.png'),
+                Container(
+                  margin: const EdgeInsets.only(bottom: 40),
+                  child: Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () => Navigator.pop(context),
+                        child: Image.asset('assets/images/close.png'),
+                      ),
+                      const Spacer(),
+                      GestureDetector(
+                        onTap: () async {
+                          await removeConnection(user);
+                          navigateAway();
+                        },
+                        child: Image.asset('assets/images/removeUser.png'),
+                      ),
+                    ],
+                  ),
                 ),
-                const Spacer(),
-                GestureDetector(
-                  onTap: () async {
-                    await removeConnection(user);
-                    navigateAway();
-                  },
-                  child: Image.asset('assets/images/removeUser.png'),
+                Container(
+                  margin: const EdgeInsets.only(bottom: 20),
+                  child: RenderAvatar(
+                    pictureUrl: user.profile_photo_url,
+                    width: 64,
+                    height: 64,
+                  ),
                 ),
+                Container(
+                  margin: const EdgeInsets.only(bottom: 30),
+                  child: Text(
+                    "${user.first_name} ${user.last_name}",
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontFamily: "Gothic A1",
+                      fontWeight: FontWeight.w700,
+                      fontSize: 20,
+                    ),
+                  ),
+                ),
+                if (profile.value.website != null)
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 10),
+                    child: RenderConnectionBtn(
+                      label: "Website",
+                      url: profile.value.website!,
+                    ),
+                  ),
+                if (profile.value.linkedin_profile != null)
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 10),
+                    child: RenderConnectionBtn(
+                      label: "LinkedIn",
+                      url: profile.value.linkedin_profile!,
+                    ),
+                  )
               ],
             ),
-          ),
-          Container(
-            margin: const EdgeInsets.only(bottom: 20),
-            child: RenderAvatar(
-              pictureUrl: user.profile_photo_url,
-              width: 64,
-              height: 64,
-            ),
-          ),
-          Container(
-            margin: const EdgeInsets.only(bottom: 30),
-            child: Text(
-              "${user.first_name} ${user.last_name}",
-              style: const TextStyle(
-                color: Colors.black,
-                fontFamily: "Gothic A1",
-                fontWeight: FontWeight.w700,
-                fontSize: 20,
-              ),
-            ),
-          ),
-          if (user.website != null)
-            Container(
-              margin: const EdgeInsets.only(bottom: 10),
-              child: RenderConnectionBtn(
-                label: "Website",
-                url: user.website!,
-              ),
-            ),
-          if (user.linkedin_profile != null)
-            Container(
-              margin: const EdgeInsets.only(bottom: 10),
-              child: RenderConnectionBtn(
-                label: "LinkedIn",
-                url: user.linkedin_profile!,
-              ),
-            )
-        ],
-      ),
     );
   }
 }
@@ -106,7 +120,12 @@ class RenderConnectionBtn extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        final Uri launchUri = Uri.parse(url);
+        late Uri launchUri = Uri.parse(url);
+
+        if (!launchUri.hasScheme) {
+          launchUri = Uri.parse("http://$url");
+        }
+
         if (await canLaunchUrl(launchUri)) {
           await launchUrl(launchUri);
         }
