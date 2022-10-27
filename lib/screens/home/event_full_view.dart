@@ -19,6 +19,7 @@ class RenderEventFullView extends HookConsumerWidget {
         "${event?.images?[0].baseUrl}${event?.images?[0].id}/${MediaQuery.of(context).size.width.toInt()}x200.jpg";
     final DateFormat format = DateFormat('E, MMMM d, y');
     final hasRsvp = useState(event?.rsvp != null && event!.rsvp!);
+    final isSaving = useState(false);
 
     useEffect(() {
       if (event?.id != null && userId != null) {
@@ -157,8 +158,10 @@ class RenderEventFullView extends HookConsumerWidget {
           child: ElevatedButton(
             onPressed: () async {
               if (!hasRsvp.value && userId != null && event?.id != null) {
+                isSaving.value = true;
                 await rsvp(userId: userId, eventId: event!.id!);
                 hasRsvp.value = true;
+                isSaving.value = false;
               }
             },
             style: ElevatedButton.styleFrom(
@@ -169,15 +172,21 @@ class RenderEventFullView extends HookConsumerWidget {
                 borderRadius: BorderRadius.circular(100),
               ),
             ),
-            child: Text(
-              (hasRsvp.value) ? "You’re all set!" : "RSVP",
-              style: TextStyle(
-                fontFamily: "Mortend",
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-                color: (hasRsvp.value) ? Colors.white : Colors.black,
-              ),
-            ),
+            child: (isSaving.value)
+                ? const SizedBox(
+                    height: 20,
+                    width: 20,
+                    child: CircularProgressIndicator(),
+                  )
+                : Text(
+                    (hasRsvp.value) ? "You’re all set!" : "RSVP",
+                    style: TextStyle(
+                      fontFamily: "Mortend",
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: (hasRsvp.value) ? Colors.white : Colors.black,
+                    ),
+                  ),
           ),
         )
       ],

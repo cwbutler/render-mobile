@@ -76,6 +76,7 @@ class RenderMenu extends HookConsumerWidget {
                   ),
                   RenderMenuSettingsLink(
                     label: "BUY TICKETS",
+                    color: const Color(0xffff88df),
                     onPressed: () => Navigator.pushNamed(context, 'buyTickets'),
                   ),
                 ],
@@ -146,11 +147,13 @@ class RenderMenu extends HookConsumerWidget {
 
 class RenderMenuSettingsLink extends StatelessWidget {
   final void Function()? onPressed;
+  final Color? color;
   final String? label;
 
   const RenderMenuSettingsLink({
     Key? key,
     this.onPressed,
+    this.color,
     this.label,
   }) : super(key: key);
 
@@ -162,11 +165,11 @@ class RenderMenuSettingsLink extends StatelessWidget {
         onPressed: onPressed ?? () {},
         child: Text(
           label ?? "",
-          style: const TextStyle(
+          style: TextStyle(
             fontFamily: "Mortend",
             fontWeight: FontWeight.w700,
             fontSize: 20,
-            color: Colors.white,
+            color: (color == null) ? Colors.white : color,
           ),
         ),
       ),

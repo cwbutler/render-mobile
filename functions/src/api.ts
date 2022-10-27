@@ -189,3 +189,22 @@ export async function checkRSVP(data: any) {
         });
     });
 }
+
+export async function saveUserToAirtable(data: any) {
+    // Initialize airtable
+    Airtable.configure({
+        endpointUrl: 'https://api.airtable.com',
+        apiKey: process.env.RENDER_AIRTABLE_KEY,
+    });
+    const base = Airtable.base('appo8ITXRoiHVVPoe');
+
+    return new Promise((resolve) => {
+        base('Users').create([{fields: data}], (err: any, data: any) => {
+            if (err) {
+                console.error(err);
+                return;
+            }
+            resolve(data);
+        });
+    });
+}

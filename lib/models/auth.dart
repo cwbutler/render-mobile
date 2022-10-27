@@ -8,6 +8,7 @@ import 'package:flutter/foundation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crypto/crypto.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:render/models/connections.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -36,11 +37,13 @@ class RenderUser {
   final User? user;
   final UserProfile userProfile;
   final bool hasProfile;
+  final List<RenderConnection> connections;
 
   const RenderUser({
     this.user,
     this.userProfile = const UserProfile(),
     this.hasProfile = false,
+    this.connections = const [],
   });
 
   RenderUser copyWith(RenderUser user) {
@@ -48,6 +51,7 @@ class RenderUser {
       user: user.user ?? this.user,
       userProfile: userProfile.copyWith(user.userProfile),
       hasProfile: user.hasProfile,
+      connections: user.connections,
     );
   }
 
@@ -192,10 +196,11 @@ class UserNotifier extends StateNotifier<RenderUser> {
     clearUser();
   }
 
-  Future<RenderUser> getUserProfile() async {
+  Future<RenderUser> getUserProfile({String? userId}) async {
+    final id = (userId == null) ? state.user?.uid : userId;
     try {
       final db = FirebaseFirestore.instance;
-      final result = await db.collection("users").doc(state.user?.uid).get();
+      final result = await db.collection("users").doc(id).get();
 
       if (result.exists) {
         final data = result.data() as Map<String, dynamic>;
@@ -276,6 +281,53 @@ class UserNotifier extends StateNotifier<RenderUser> {
     } catch (e) {
       debugPrint(e.toString());
     }
+    return state;
+  }
+
+  Future<void> connectToUser(UserProfile user) async {
+    try {
+      final db = FirebaseFirestore.instance;
+      await db
+          .collection("users")
+          .doc(state.userProfile.id)
+          .collection("connections")
+          .doc(user.id)
+          .set({
+        "id": user.id,
+        "email": user.email,
+        "profile_photo_url": user.profile_photo_url,
+        "first_name": user.first_name,
+        "last_name": user.last_name,
+        "linkedin_profile": user.linkedin_profile,
+        "website": user.website,
+      }).onError((error, stackTrace) => debugPrint(error.toString()));
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  Future<RenderUser> getUserConnections({String? userId}) async {
+    final id = (userId == null) ? state.user?.uid : userId;
+    List<RenderConnection> connections = [];
+
+    try {
+      final db = FirebaseFirestore.instance;
+      final result =
+          await db.collection("users").doc(id).collection('connections').get();
+
+      if (result.docs.isNotEmpty) {
+        connections = List.from(
+          result.docs.map((e) => RenderConnection.fromMap(e.data())),
+        );
+        state = state.copyWith(RenderUser(connections: connections));
+      }
+
+      return state;
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+
+    state = state.copyWith(const RenderUser(hasProfile: false));
     return state;
   }
 }

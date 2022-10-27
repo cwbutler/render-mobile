@@ -4,7 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:render/components/webview.dart';
 import 'package:render/landing.dart';
 import 'package:render/models/auth.dart';
-import 'package:render/screens/jobs/jobs.dart';
+import 'package:render/screens/camera.dart';
 import 'package:render/screens/profile/edit.dart';
 import 'package:render/screens/profile/profile.dart';
 import 'package:render/screens/settings.dart';
@@ -130,6 +130,10 @@ class RenderApp extends HookConsumerWidget {
               builder: (context) => const RenderWebView(
                 url: "https://renderatl.com/terms",
               ),
+            );
+          case 'camera':
+            return MaterialPageRoute(
+              builder: (context) => const RenderCamera(),
             );
           default:
             return MaterialPageRoute(

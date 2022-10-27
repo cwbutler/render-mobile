@@ -8,6 +8,7 @@ class RenderAvatar extends HookConsumerWidget {
   final double? fontSize;
   final bool? showEdit;
   final bool? isLoading;
+  final String? pictureUrl;
 
   const RenderAvatar({
     Key? key,
@@ -16,13 +17,15 @@ class RenderAvatar extends HookConsumerWidget {
     this.fontSize,
     this.showEdit,
     this.isLoading,
+    this.pictureUrl,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(userProvider).userProfile;
-    final hasImage =
+    final hasImage = (pictureUrl != null) ||
         user.profile_photo_url != null && user.profile_photo_url!.isNotEmpty;
+    final image = (pictureUrl != null) ? pictureUrl : user.profile_photo_url;
 
     return Stack(
       alignment: Alignment.center,
@@ -32,8 +35,7 @@ class RenderAvatar extends HookConsumerWidget {
           height: height,
           child: CircleAvatar(
             backgroundColor: Colors.brown.shade800,
-            foregroundImage:
-                (hasImage) ? NetworkImage(user.profile_photo_url!) : null,
+            foregroundImage: (hasImage) ? NetworkImage(image!) : null,
             child: (hasImage)
                 ? null
                 : Center(

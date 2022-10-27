@@ -86,11 +86,13 @@ class RenderJobNotifier extends StateNotifier<RenderJobs> {
       state = state.copyWith(RenderJobs(
         ids: List<String>.from(list.map((e) => e.id ?? "")),
         entities: Map<String, RenderJob>.fromIterable(list, key: (e) => e.id),
+        isLoading: false,
       ));
       return state;
     } catch (e) {
       debugPrint("Error fetching jobs list: $e");
     }
+    state = state.copyWith(const RenderJobs(isLoading: false));
     return state;
   }
 }

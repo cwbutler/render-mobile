@@ -16,7 +16,7 @@ class RenderBuyTickets extends StatelessWidget {
           ),
         ),
         child: Text(
-          "buy conference tickets".toUpperCase(),
+          "BUY CONFERENCE TICKETS".toUpperCase(),
           style: TextStyle(
             fontFamily: 'Mortend',
             fontSize: 8,

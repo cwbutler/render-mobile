@@ -15,7 +15,7 @@ class RenderAppModel {
 
   const RenderAppModel();
 
-  static Future<CameraController> getCameraController() async {
+  static Future<CameraController> initializeCameras() async {
     if (camera != null) return cameraController;
 
     // Ensure that plugin services are initialized so that `availableCameras()`
@@ -29,8 +29,6 @@ class RenderAppModel {
     camera = cameras.first;
 
     cameraController = CameraController(camera!, ResolutionPreset.max);
-
-    await cameraController.initialize();
 
     return cameraController;
   }

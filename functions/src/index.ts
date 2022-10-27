@@ -71,7 +71,6 @@ export const fetchMeetupEvents = functions.https.onRequest(async (_, res) => {
  export const checkRSVP = functions.https.onCall(async (data) => {
   try {
     const result = await api.checkRSVP(data);
-    console.log("check result", result);
     return result;
   } catch (e) {
     console.log("error checking rsvp", e);
@@ -79,24 +78,48 @@ export const fetchMeetupEvents = functions.https.onRequest(async (_, res) => {
   }
 });
 
+/**
+ * Function to save user data to airtable
+ */
+ export const saveUserToRender = functions.https.onCall(async (data) => {
+  try {
+    const result = await api.checkRSVP(data);
+    return result;
+  } catch (e) {
+    console.log("error saving user data", e);
+    return false;
+  }
+});
+
 export const createUser = functions.firestore
     .document('users/{userId}')
     .onCreate(async (snap: { data: () => any; }) => {
+      let result;
       try {
         // Get an object representing the document
         const newUser = snap.data();
-        await api.addToMailchimp({ email: newUser.email, firstName: newUser.first_name });
-        const result = await api.createDiscontCode({ email: newUser.email });
-        const message = {
-          notification: {
-            title: "Welcome to Render",
-            body: `Here is your discont code for Render Conference tickets! ${result.message.code}
-            Here is link to your code: ${result.message.link}`
-          },
-          token: newUser.fcmToken
-        };
-        await admin.messaging().send(message);
-        await admin.firestore().doc(newUser.id).collection("messages").add(message);
+        try {
+          await api.saveUserToAirtable(newUser);
+        } catch (e) { console.log(e); }
+        try {
+          await api.addToMailchimp({ email: newUser.email, firstName: newUser.first_name });
+        } catch (e) { console.log(e); }
+        try {
+          result = await api.createDiscontCode({ email: newUser.email });
+        } catch (e) { console.log(e); }
+        if (result?.message) {
+          const message = {
+            notification: {
+              title: "Welcome to Render",
+              body: `Here is your discont code for Render Conference tickets! ${result.message.code}
+              Here is link to your code: ${result.message.link}`
+            },
+            token: newUser.fcmToken
+          };
+          
+          await admin.messaging().send(message);
+          await admin.firestore().doc(newUser.id).collection("messages").add(message);
+        }
       } catch (e) {
         console.log(e);
       }

@@ -18,7 +18,7 @@ class RenderAppLanding extends HookConsumerWidget {
       Navigator.popAndPushNamed(context, routeName);
     }
 
-    Future<void> _init() async {
+    Future<void> init() async {
       await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform,
       );
@@ -45,7 +45,7 @@ class RenderAppLanding extends HookConsumerWidget {
     }
 
     useEffect(() {
-      _init();
+      init();
       return null;
     }, []);
 
