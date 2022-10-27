@@ -330,6 +330,22 @@ class UserNotifier extends StateNotifier<RenderUser> {
     state = state.copyWith(const RenderUser(hasProfile: false));
     return state;
   }
+
+  Future<void> removeConnectionToUser(RenderConnection user) async {
+    try {
+      final db = FirebaseFirestore.instance;
+      await db
+          .collection("users")
+          .doc(state.userProfile.id)
+          .collection("connections")
+          .doc(user.id)
+          .delete()
+          .onError((error, stackTrace) => debugPrint(error.toString()));
+      await getUserConnections();
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
 }
 
 final userProvider = StateNotifierProvider<UserNotifier, RenderUser>((ref) {

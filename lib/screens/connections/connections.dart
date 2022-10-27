@@ -3,6 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:render/components/avatar.dart';
 import 'package:render/components/full_screen_loader.dart';
+import 'package:render/components/view_connection.dart';
 import 'package:render/models/auth.dart';
 
 class RenderConnectionsScreen extends HookConsumerWidget {
@@ -62,9 +63,15 @@ class RenderConnectionsScreen extends HookConsumerWidget {
                       onTap: () {
                         showModalBottomSheet(
                           context: context,
-                          backgroundColor: Colors.white,
+                          isScrollControlled: true,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(30),
+                              topRight: Radius.circular(30),
+                            ),
+                          ),
                           builder: ((context) {
-                            return Container();
+                            return RenderViewConnection(user: user);
                           }),
                         );
                       },
