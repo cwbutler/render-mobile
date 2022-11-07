@@ -250,12 +250,13 @@ class RenderEventNotifier extends StateNotifier<RenderEvents> {
   Future<RenderEvents> rsvpEvent({
     required String eventId,
     required String userId,
+    required String recordId,
   }) async {
     final event = state.getEvent(eventId);
 
     if (event != null) {
       await FirebaseFunctions.instance.httpsCallable('rsvpEvent').call({
-        "eventId": eventId,
+        "eventId": recordId,
         "userId": userId,
       });
       state = state.copyWith(
@@ -287,7 +288,7 @@ class RenderEventNotifier extends StateNotifier<RenderEvents> {
     return false;
   }
 
-  Future<void> fetchAirtableEvent({required String eventId}) async {
+  Future<RenderEvents> fetchAirtableEvent({required String eventId}) async {
     final event = state.getEvent(eventId);
     if (event != null) {
       final result = await FirebaseFunctions.instance
@@ -305,6 +306,8 @@ class RenderEventNotifier extends StateNotifier<RenderEvents> {
         }),
       );
     }
+
+    return state;
   }
 
   Future<void> fetchEventInfo({

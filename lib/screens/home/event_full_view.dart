@@ -14,25 +14,26 @@ class RenderEventFullView extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final fetchEventInfo = ref.read(eventsProvider.notifier).fetchEventInfo;
-    ref.watch(eventsProvider);
+    final events = ref.watch(eventsProvider);
+    final data = events.getEvent(event?.id ?? "");
     final rsvp = ref.read(eventsProvider.notifier).rsvpEvent;
     final userId = ref.read(userProvider).userProfile.id;
     final image =
-        "${event?.images?[0].baseUrl}${event?.images?[0].id}/${MediaQuery.of(context).size.width.toInt()}x200.jpg";
+        "${data?.images?[0].baseUrl}${data?.images?[0].id}/${MediaQuery.of(context).size.width.toInt()}x200.jpg";
     final DateFormat format = DateFormat('E, MMMM d, y');
-    final hasRsvp = useState(event?.rsvp != null && event!.rsvp!);
+    final hasRsvp = useState(data?.rsvp != null && data!.rsvp!);
     final isSaving = useState(false);
     final isLoading = useState(true);
-    final isAvailable = event?.status != "Sold Out";
+    final isAvailable = data?.status != "Sold Out";
 
     useEffect(() {
-      if (event?.id != null && userId != null) {
-        fetchEventInfo(eventId: event!.id!, userId: userId).then((value) {
+      if (data?.id != null && userId != null) {
+        fetchEventInfo(eventId: data!.id!, userId: userId).then((value) {
           isLoading.value = false;
         });
       }
       return;
-    }, [event?.id, userId, event?.rsvp]);
+    }, [data?.id, userId, data?.rsvp]);
 
     return (isLoading.value)
         ? const RenderLoader()
@@ -71,7 +72,7 @@ class RenderEventFullView extends HookConsumerWidget {
                       Container(
                         margin: const EdgeInsets.only(bottom: 20),
                         child: Text(
-                          event?.title ?? "",
+                          data?.title ?? "",
                           style: const TextStyle(
                             color: Colors.black,
                             fontFamily: "Gothic A1",
@@ -95,8 +96,8 @@ class RenderEventFullView extends HookConsumerWidget {
                       Container(
                         margin: const EdgeInsets.only(bottom: 20),
                         child: Text(
-                          (event?.dateTime != null)
-                              ? format.format(DateTime.parse(event!.dateTime!))
+                          (data?.dateTime != null)
+                              ? format.format(DateTime.parse(data!.dateTime!))
                               : "",
                           style: const TextStyle(
                             color: Colors.black,
@@ -121,7 +122,7 @@ class RenderEventFullView extends HookConsumerWidget {
                       Container(
                         margin: const EdgeInsets.only(bottom: 30),
                         child: Text(
-                          event?.venue?.address ?? "",
+                          data?.venue?.address ?? "",
                           style: const TextStyle(
                             color: Colors.black,
                             fontFamily: "Gothic A1",
@@ -143,7 +144,7 @@ class RenderEventFullView extends HookConsumerWidget {
                         ),
                       ),
                       Text(
-                        event?.description ?? "",
+                        data?.description ?? "",
                         style: const TextStyle(
                           color: Colors.black,
                           fontFamily: "Gothic A1",
@@ -164,9 +165,13 @@ class RenderEventFullView extends HookConsumerWidget {
                     if (isAvailable &&
                         !hasRsvp.value &&
                         userId != null &&
-                        event?.recordID != null) {
+                        data?.recordID != null) {
                       isSaving.value = true;
-                      await rsvp(userId: userId, eventId: event!.recordID!);
+                      await rsvp(
+                        userId: userId,
+                        recordId: data!.recordID!,
+                        eventId: data.id!,
+                      );
                       hasRsvp.value = true;
                       isSaving.value = false;
                     }

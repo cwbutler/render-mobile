@@ -86,6 +86,29 @@ export async function fetchAirtableEvent(id: string) {
     });
 }
 
+export async function fetchAirtableUser(id: string): Promise<any> {
+    // Initialize airtable
+    Airtable.configure({
+        endpointUrl: 'https://api.airtable.com',
+        apiKey: process.env.RENDER_AIRTABLE_KEY,
+    });
+    const base = Airtable.base('appo8ITXRoiHVVPoe');
+
+    return new Promise(async (resolve, reject) => {
+        base('Users').select({
+            view: "Grid view",
+            filterByFormula: `{id} = '${id}'`,
+            maxRecords: 1
+        }).firstPage((err, records=[]) => {
+            if (err) {
+                console.log("Error selecting user: ", err);
+                return reject(false);
+            }
+            resolve(records[0]);
+        });
+    });
+}
+
 export async function addToMailchimp({ email, firstName, experience } : { email: string, firstName: string, experience?: string }) {
     try {
         const headers = { 'Content-Type': 'application/json', key: process.env.RENDER_SERVICE_KEY || "" };
@@ -114,10 +137,9 @@ export async function createDiscontCode({ email } : { email: string }) {
         const validateStatus = (status: number) => status >= 200 && status < 500;
         const params = {
             "eventSlug": "2023",
-            "discountCode": email,
+            "discountCode": `MobileApp+${email}`,
             "discountType": "MoneyOffDiscountCode",
             "discountAmount": "50.0",
-            "discountQuantity": "1",
             "ticketId": [1378784, 1378785, 1378775]
         };
         const result = await axios.post("https://adoring-newton-de5d6b.netlify.app/api/discount", params, { headers, validateStatus });
@@ -180,9 +202,12 @@ export async function rsvpEvent(data: any) {
             resolve(true);
         }
 
+        const user = await fetchAirtableUser(data.userId);
+
         base('Events RSVPs').create([{
             fields: {
                 "UserID": data.userId,
+                "ID Lookup": [user.id],
                 "EventID": [data.eventId],
             }
         }], (err: any) => {

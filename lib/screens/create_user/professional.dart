@@ -52,7 +52,9 @@ class CreateUserProfessional extends HookConsumerWidget {
             const Spacer(),
             Container(
               margin: const EdgeInsets.only(top: 50),
-              child: NextButton(onPressed: onNext),
+              child: NextButton(
+                onPressed: (profile.job_interest != null) ? onNext : null,
+              ),
             )
           ],
         )));

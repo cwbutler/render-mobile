@@ -126,7 +126,7 @@ class RenderApp extends HookConsumerWidget {
             return MaterialPageRoute(
               builder: (context) => RenderWebView(
                 url:
-                    "https://ti.to/render-atlanta/2023/discount/${user.email}+MobileApp",
+                    "https://ti.to/render-atlanta/2023/discount/MobileApp+${user.email}",
                 javascriptMode: JavascriptMode.unrestricted,
               ),
             );

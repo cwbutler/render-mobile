@@ -115,7 +115,7 @@ export const createUser = functions.firestore
           await api.addToMailchimp({ email: newUser.email, firstName: newUser.first_name });
         } catch (e) { console.log(e); }
         try {
-          result = await api.createDiscontCode({ email: `${newUser.email}+MobileApp` });
+          result = await api.createDiscontCode({ email: `${newUser.email}` });
         } catch (e) { console.log(e); }
         if (result?.message) {
           const message = {
