@@ -46,7 +46,7 @@ class RenderBottomNav extends HookConsumerWidget {
                     HeroIcons.collection,
                     solid: true,
                   ),
-                  label: "Job Boards",
+                  label: "Job Board",
                 ),
               ],
             ),

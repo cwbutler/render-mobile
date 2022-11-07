@@ -314,10 +314,8 @@ class RenderEventNotifier extends StateNotifier<RenderEvents> {
     required String eventId,
     required String userId,
   }) async {
-    await Future.wait([
-      fetchAirtableEvent(eventId: eventId),
-      checkRSVP(eventId: eventId, userId: userId),
-    ]);
+    await fetchAirtableEvent(eventId: eventId);
+    await checkRSVP(eventId: eventId, userId: userId);
   }
 }
 

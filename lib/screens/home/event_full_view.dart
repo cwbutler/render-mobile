@@ -33,7 +33,7 @@ class RenderEventFullView extends HookConsumerWidget {
         });
       }
       return;
-    }, [data?.id, userId, data?.rsvp]);
+    }, []);
 
     return (isLoading.value)
         ? const RenderLoader()
