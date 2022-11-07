@@ -35,7 +35,7 @@ export const refreshMeetupAccess = functions.https.onRequest(async (req, res) =>
 export const fetchMeetupEvents = functions.https.onRequest(async (_, res) => {
   try {
     const data = await api.fetchMeetupEvents();
-    res.send({ data: data.pastEvents.edges });
+    res.send({ data: data.upcomingEvents.edges });
   } catch (e) {
     res.status(500).send(`Could not fetch events from meetup.com ${e}`);
   }
@@ -91,6 +91,16 @@ export const fetchMeetupEvents = functions.https.onRequest(async (_, res) => {
   }
 });
 
+export const fetchAirtableEvent = functions.https.onCall(async (data) => {
+  try {
+    console.log("Searching for event ", data.eventId)
+    const res = await api.fetchAirtableEvent(data.eventId);
+    return res;
+  } catch (e) {
+    console.log(`Could not fetch event from airtable ${e}`);
+  }
+});
+
 export const createUser = functions.firestore
     .document('users/{userId}')
     .onCreate(async (snap: { data: () => any; }) => {
@@ -105,7 +115,7 @@ export const createUser = functions.firestore
           await api.addToMailchimp({ email: newUser.email, firstName: newUser.first_name });
         } catch (e) { console.log(e); }
         try {
-          result = await api.createDiscontCode({ email: newUser.email });
+          result = await api.createDiscontCode({ email: `${newUser.email}+MobileApp` });
         } catch (e) { console.log(e); }
         if (result?.message) {
           const message = {

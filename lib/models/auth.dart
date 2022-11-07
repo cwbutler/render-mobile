@@ -321,8 +321,11 @@ class UserNotifier extends StateNotifier<RenderUser> {
 
     try {
       final db = FirebaseFirestore.instance;
-      final result =
-          await db.collection("users").doc(id).collection('connections').get();
+      final result = await db
+          .collection("users")
+          .doc(id)
+          .collection('connections')
+          .get(const GetOptions(source: Source.server));
 
       if (result.docs.isNotEmpty) {
         final connections = RenderConnections.from(List.from(

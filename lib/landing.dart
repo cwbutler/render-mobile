@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:async';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +27,7 @@ class RenderAppLanding extends HookConsumerWidget {
       );
 
       await RenderAppModel.askTrackingPermissions();
+      await RenderAppModel.preloadImages(context);
 
       final auth = await fetchCurrentUser();
       String nextRoute = (auth.hasProfile) ? 'home' : 'create';

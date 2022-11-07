@@ -126,6 +126,7 @@ class RenderEvent {
   final String? dateTime;
   final String? status;
   final String? duration;
+  final String? recordID;
   final bool? rsvp;
   final RenderEventVenue? venue;
   final List<RenderEventImage>? images;
@@ -142,6 +143,7 @@ class RenderEvent {
     this.duration,
     this.images,
     this.rsvp,
+    this.recordID,
   });
 
   static RenderEvent fromMap(Map<String, dynamic> data) {
@@ -173,7 +175,25 @@ class RenderEvent {
       status: status,
       duration: duration,
       images: images,
+      recordID: recordID,
       rsvp: value,
+    );
+  }
+
+  RenderEvent copyWith(RenderEvent event) {
+    return RenderEvent(
+      id: event.id ?? id,
+      title: event.title ?? title,
+      eventUrl: event.eventUrl ?? eventUrl,
+      description: event.description ?? description,
+      shortDescription: event.shortDescription ?? shortDescription,
+      dateTime: event.dateTime ?? dateTime,
+      venue: event.venue ?? venue,
+      status: event.status ?? status,
+      duration: event.duration ?? duration,
+      images: event.images ?? images,
+      rsvp: event.rsvp ?? rsvp,
+      recordID: event.recordID ?? recordID,
     );
   }
 }
@@ -265,6 +285,36 @@ class RenderEventNotifier extends StateNotifier<RenderEvents> {
     }
 
     return false;
+  }
+
+  Future<void> fetchAirtableEvent({required String eventId}) async {
+    final event = state.getEvent(eventId);
+    if (event != null) {
+      final result = await FirebaseFunctions.instance
+          .httpsCallable('fetchAirtableEvent')
+          .call({"eventId": eventId});
+      final status =
+          (result.data != null && result.data["fields"]["Status"] == "Sold Out")
+              ? "Sold Out"
+              : "Available";
+      state = state.copyWith(
+        RenderEvents(entities: {
+          eventId: event.copyWith(
+            RenderEvent(status: status, recordID: result.data["id"]),
+          ),
+        }),
+      );
+    }
+  }
+
+  Future<void> fetchEventInfo({
+    required String eventId,
+    required String userId,
+  }) async {
+    await Future.wait([
+      fetchAirtableEvent(eventId: eventId),
+      checkRSVP(eventId: eventId, userId: userId),
+    ]);
   }
 }
 

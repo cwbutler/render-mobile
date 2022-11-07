@@ -53,13 +53,37 @@ export async function refreshJWT(refreshToken: string) {
 export async function fetchMeetupEvents() {
     const { access_token } = await fetchJWT();
     const headers = { 'Content-Type': 'application/json', 'Authorization': `Bearer ${access_token}` };
-    const params = { query: 'query { groupByUrlname(urlname: "renderatl") { id logo { baseUrl } upcomingEvents(input: {}) { edges { cursor node { id } } } pastEvents(input: {}) { edges { cursor node { id title eventUrl description shortDescription dateTime venue { id name address city state postalCode } images { id baseUrl } }} } } }' };
+    const params = { query: 'query { groupByUrlname(urlname: "renderatl") { id logo { baseUrl } upcomingEvents(input: {}) { edges { cursor node { id title eventUrl description shortDescription dateTime venue { id name address city state postalCode } images { id baseUrl } } } } pastEvents(input: {}) { edges { cursor node { id title eventUrl description shortDescription dateTime venue { id name address city state postalCode } images { id baseUrl } }} } } }' };
     const { data, ...result } = await axios.post("https://api.meetup.com/gql", params, { headers });
     if (data) {
         return data.data.groupByUrlname;
     } else {
         functions.logger.log(`Could not fetch events from meetup.com ${result}`);
     }
+}
+
+export async function fetchAirtableEvent(id: string) {
+    // Initialize airtable
+    Airtable.configure({
+        endpointUrl: 'https://api.airtable.com',
+        apiKey: process.env.RENDER_AIRTABLE_KEY,
+    });
+    const base = Airtable.base('appo8ITXRoiHVVPoe');
+
+    return new Promise(async (resolve, reject) => {
+        base('Events Lookup').select({
+            view: "Grid view",
+            filterByFormula: `{Event ID} = '${id}'`,
+            maxRecords: 1,
+            fields: ['Event ID', 'Event Name', 'Status']
+        }).firstPage((err, records=[]) => {
+            if (err) {
+                console.log("Error selecting event: ", err);
+                return reject(false);
+            }
+            resolve(records[0]);
+        });
+    });
 }
 
 export async function addToMailchimp({ email, firstName, experience } : { email: string, firstName: string, experience?: string }) {
@@ -156,10 +180,10 @@ export async function rsvpEvent(data: any) {
             resolve(true);
         }
 
-        base('Events').create([{
+        base('Events RSVPs').create([{
             fields: {
                 "UserID": data.userId,
-                "EventID": data.eventId,
+                "EventID": [data.eventId],
             }
         }], (err: any) => {
             if (err) { console.log(err); return reject(err); }
@@ -177,9 +201,10 @@ export async function checkRSVP(data: any) {
     const base = Airtable.base('appo8ITXRoiHVVPoe');
 
     return new Promise((resolve) => {
-        base('Events').select({
+        base('Events RSVPs').select({
             view: "Grid view",
             filterByFormula: `AND(UserID = '${data.userId}', EventID = '${data.eventId}')`,
+            maxRecords: 1,
         }).firstPage((err, records=[]) => {
             if (err) {
                 console.log("Error checking rsvp: ", err);

@@ -6,6 +6,7 @@ import 'package:render/components/full_screen_loader.dart';
 import 'package:render/components/view_connection.dart';
 import 'package:render/models/auth.dart';
 import 'package:render/models/connections.dart';
+import 'package:render/screens/connections/empty_connections.dart';
 
 class RenderConnectionsScreen extends HookConsumerWidget {
   const RenderConnectionsScreen({Key? key}) : super(key: key);
@@ -56,53 +57,55 @@ class RenderConnectionsScreen extends HookConsumerWidget {
                 ),
               ),
               Expanded(
-                child: ListView.builder(
-                  itemCount: connections.ids.length,
-                  itemBuilder: ((context, index) {
-                    final id = connections.ids[index];
-                    final user =
-                        connections.entities[id] ?? const RenderConnection();
-                    return GestureDetector(
-                      onTap: () {
-                        showModalBottomSheet(
-                          context: context,
-                          isScrollControlled: true,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(30),
-                              topRight: Radius.circular(30),
-                            ),
-                          ),
-                          builder: ((context) {
-                            return RenderViewConnection(user: user);
-                          }),
-                        );
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.only(bottom: 20),
-                        child: Row(
-                          children: [
-                            Container(
-                              margin: const EdgeInsets.only(right: 16),
-                              child: RenderAvatar(
-                                pictureUrl: user.profile_photo_url,
+                child: (connections.ids.isEmpty)
+                    ? const RenderEmptyConnections()
+                    : ListView.builder(
+                        itemCount: connections.ids.length,
+                        itemBuilder: ((context, index) {
+                          final id = connections.ids[index];
+                          final user = connections.entities[id] ??
+                              const RenderConnection();
+                          return GestureDetector(
+                            onTap: () {
+                              showModalBottomSheet(
+                                context: context,
+                                isScrollControlled: true,
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(30),
+                                    topRight: Radius.circular(30),
+                                  ),
+                                ),
+                                builder: ((context) {
+                                  return RenderViewConnection(user: user);
+                                }),
+                              );
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.only(bottom: 20),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    margin: const EdgeInsets.only(right: 16),
+                                    child: RenderAvatar(
+                                      pictureUrl: user.profile_photo_url,
+                                    ),
+                                  ),
+                                  Text(
+                                    "${user.first_name} ${user.last_name}",
+                                    style: const TextStyle(
+                                      fontFamily: "Gothic A1",
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  )
+                                ],
                               ),
                             ),
-                            Text(
-                              "${user.first_name} ${user.last_name}",
-                              style: const TextStyle(
-                                fontFamily: "Gothic A1",
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            )
-                          ],
-                        ),
+                          );
+                        }),
                       ),
-                    );
-                  }),
-                ),
               )
             ],
           );

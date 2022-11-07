@@ -5,6 +5,7 @@ import 'package:render/models/auth.dart';
 import 'package:render/models/user_profile.dart';
 
 const List<String> jobInterest = <String>[
+  'Please Select',
   'Front End Role',
   'Back End Role',
   'Manager Role',
@@ -55,7 +56,11 @@ class RenderPicker extends HookConsumerWidget {
                     itemExtent: 32,
                     onSelectedItemChanged: (int selectedItem) {
                       updateUser(
-                        UserProfile(job_interest: jobInterest[selectedItem]),
+                        UserProfile(
+                          job_interest: (selectedItem > 0)
+                              ? jobInterest[selectedItem]
+                              : null,
+                        ),
                       );
                     },
                     children: List<Widget>.generate(

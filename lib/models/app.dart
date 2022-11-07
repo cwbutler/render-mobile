@@ -100,4 +100,11 @@ class RenderAppModel {
       await AppTrackingTransparency.requestTrackingAuthorization();
     }
   }
+
+  static Future<void> preloadImages(context) async {
+    precacheImage(
+      const AssetImage('assets/images/connections_empty.png'),
+      context,
+    );
+  }
 }
